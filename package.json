@@ -1,0 +1,20 @@
+{
+  "name": "back-end-node-v2",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon server.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/express": "^4.17.13",
+    "@types/express-fileupload": "^1.2.2",
+    "@types/node": "^17.0.8",
+    "dotenv": "^11.0.0",
+    "express": "^4.17.2",
+    "express-fileupload": "^1.2.1"
+  }
+}
