@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { UploadedFile } from "express-fileupload";
 import RaportService from "../services/RaportService";
 
 class RaportController{
@@ -8,12 +9,17 @@ class RaportController{
             res.status(400).send("No files were uploaded!");
         }
         else{
-            const raportFile = req.files.raport;
-
             try{
-                const fileData = RaportService.getDataString(raportFile);
-                
-                res.status(200).end(fileData);
+                if(Array.isArray(req.files.raport)){
+                    throw new Error("Can not accept several files. Please send me just one file.")
+                }
+                else{
+                    const raportFile: UploadedFile = req.files.raport;
+                    const xmlResultData = RaportService.generateXmlResultFileData(raportFile);
+    
+                    res.attachment(raportFile.name); // res.setHeader('Content-type', "application/octet-stream"); res.setHeader('Content-disposition', 'attachment; filename=file.txt');
+                    res.status(200).send(xmlResultData);
+                }
             }
             catch(error: any | unknown){
                 res.status(500).end(error.message);

@@ -1,29 +1,11 @@
 import { UploadedFile } from "express-fileupload";
-import path from "path";
-import { SalesRaportFileInfo } from "../interfaces/Files";
-
-const RAPORT_FILE_DIRECTORY = path.resolve(`${process.cwd()}`, "public");
+import { SalesRaportFileDateInfo } from "../interfaces/Files";
+import xml2js, { Builder } from 'xml2js';
 
 class RaportService{
-    saveFile(file: UploadedFile | UploadedFile[]): SalesRaportFileInfo {
-        if(Array.isArray(file)){
-            throw new Error("Can not work with array right now.")
-        }
-        else{
-            const fileInfo: SalesRaportFileInfo = {
-                filePath: this.#createFilePathToSave(file.name, file.mimetype),
-                originFileName: file.name
-            }
-
-            file.mv(fileInfo.filePath);
-
-            return fileInfo;
-        }
-    }
-
     getDataString(file: UploadedFile | UploadedFile[]): string {
         if(Array.isArray(file)){
-            throw new Error("Can not work with array right now.")
+            throw new Error("Can not work with array right now.");
         }
         else{
             const fileString: string = file.data.toString('utf-8');
@@ -32,16 +14,80 @@ class RaportService{
         }
     }
 
-    convertXmlToJsObject(data: string){
+    getFileName(file: UploadedFile): string{
+        return file.name;
+    }
+
+    convertJsObjectToXml(dataJs: Object): string {return new Builder().buildObject(dataJs)};
+
+    convertXmlToJsObject(dataXml: string): Object{
+        let result = {};
+        xml2js.parseString(dataXml, (error, xmlObject: Object) => {
+            if(error){
+                throw new Error("Error with parsing string to json.")
+            }
+            else{
+                result = xmlObject;
+            }
+        });
+
+        return result;
+    }
+
+    updateXmlObject(xmlObject: Object | any){
+        let REJESTR_SPRZEDAZY_VAT: any[] = xmlObject.ROOT.REJESTRY_SPRZEDAZY_VAT[0].REJESTR_SPRZEDAZY_VAT; // this variable is a array of objects with sales
+        REJESTR_SPRZEDAZY_VAT.forEach( sale => {
+            sale.FORMA_PLATNOSCI = this.#updateXmlPositionFormaPlat(sale.FORMA_PLATNOSCI);
+            sale.NIP_KRAJ = this.#updateXmlPositionNip(sale.NIP_KRAJ);
+            sale.NIP = this.#updateXmlPositionNip(sale.NIP);
+        });
+    }
+
+    generateXmlResultFileData(raportFile: UploadedFile): string{
+        const fileDataXml = this.getDataString(raportFile);
+
+        const jsObject: SalesRaportFileDateInfo = {
+            data: this.convertXmlToJsObject(fileDataXml),
+            originFileName: this.getFileName(raportFile)
+        }
+
+        this.updateXmlObject(jsObject.data);
+
+        return this.convertJsObjectToXml(jsObject.data);
+    }
+
+    #updateXmlPositionNip(xmlPos: Object): Object{
+        const defaultVat = "0000000000";
+        const xmlPosString = xmlPos.toString();
+        
+        if(xmlPosString === ''){
+            return [defaultVat];
+        }
+        else{
+            return xmlPos;
+        }
 
     }
 
-    #createFilePathToSave(fileName: string, mimetype: string): string{
-        if(mimetype === 'application/xml'){
-            return path.resolve(RAPORT_FILE_DIRECTORY, `${fileName}`);
+    #updateXmlPositionFormaPlat(xmlPos: Object): Object{
+        const xmlPosString: string = xmlPos.toString();
+        const przelew: string = "Przelew";
+        const pobranie: string = "Pobranie";
+        const changeToPobranie = ['Za pobraniem', 'Plata ramburs'];
+        const changeToPrzelew = ['', 'Carte de credit'];
+
+        if(xmlPosString === przelew || xmlPosString === pobranie)
+        {
+            return xmlPos;
+        }
+        else if(changeToPrzelew.includes(xmlPosString)){
+            return [przelew];
+        }
+        else if(changeToPobranie.includes(xmlPosString)){
+            return [pobranie];
         }
         else{
-            throw new Error(`Can not understand file type. File type is ${mimetype}.`);
+            throw new Error(`Do not undertand FORMA_PLATNOSCI position with value ${xmlPosString}`);
         }
     }
 }
