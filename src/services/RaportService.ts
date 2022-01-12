@@ -5,9 +5,9 @@ import { SalesRaportFileInfo } from "../interfaces/Files";
 const RAPORT_FILE_DIRECTORY = path.resolve(`${process.cwd()}`, "public");
 
 class RaportService{
-    saveFile(file: UploadedFile | UploadedFile[]): SalesRaportFileInfo | undefined{
+    saveFile(file: UploadedFile | UploadedFile[]): SalesRaportFileInfo {
         if(Array.isArray(file)){
-            //to do
+            throw new Error("Can not work with array right now.")
         }
         else{
             const fileInfo: SalesRaportFileInfo = {
@@ -19,6 +19,21 @@ class RaportService{
 
             return fileInfo;
         }
+    }
+
+    getDataString(file: UploadedFile | UploadedFile[]): string {
+        if(Array.isArray(file)){
+            throw new Error("Can not work with array right now.")
+        }
+        else{
+            const fileString: string = file.data.toString('utf-8');
+
+            return fileString;
+        }
+    }
+
+    convertXmlToJsObject(data: string){
+
     }
 
     #createFilePathToSave(fileName: string, mimetype: string): string{

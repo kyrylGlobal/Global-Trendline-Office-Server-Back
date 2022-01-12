@@ -11,8 +11,9 @@ class RaportController{
             const raportFile = req.files.raport;
 
             try{
-                const fileInfo = RaportService.saveFile(raportFile);
-                res.status(200).end("File was saved succesfully.");
+                const fileData = RaportService.getDataString(raportFile);
+                
+                res.status(200).end(fileData);
             }
             catch(error: any | unknown){
                 res.status(500).end(error.message);
