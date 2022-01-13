@@ -22,7 +22,10 @@ class RaportController{
                 }
             }
             catch(error: any | unknown){
-                res.status(500).end(error.message);
+                console.log(error.message);
+                res.status(500).send({
+                    message: error.message
+                });
             }
         }
     }

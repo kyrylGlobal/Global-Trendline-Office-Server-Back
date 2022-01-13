@@ -2,6 +2,7 @@ import express, {Request, Response, Express} from "express";
 import dotenv from "dotenv";
 import raportRouter from "./src/routers/raportRouter";
 import fileUpload from "express-fileupload";
+import cors from 'cors';
 
 dotenv.config();
 
@@ -10,6 +11,7 @@ const PORT: string | undefined = process.env.PORT;
 const app: Express = express();
 
 app.use(fileUpload());
+app.use(cors());
 
 app.use("/api/raport", raportRouter);
 

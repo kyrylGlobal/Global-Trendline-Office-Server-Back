@@ -44,6 +44,9 @@ class RaportService{
     }
 
     generateXmlResultFileData(raportFile: UploadedFile): string{
+        
+        this.#checkFileExtention(raportFile.mimetype);
+
         const fileDataXml = this.getDataString(raportFile);
 
         const jsObject: SalesRaportFileDateInfo = {
@@ -88,6 +91,17 @@ class RaportService{
         }
         else{
             throw new Error(`Do not undertand FORMA_PLATNOSCI position with value ${xmlPosString}`);
+        }
+    }
+
+    #checkFileExtention(extention: string){
+        const availableExtentions: string[] = ["text/xml"];
+        
+        if(availableExtentions.includes(extention)){
+            return true;
+        }
+        else{
+            throw new Error(`Can not read file extention -> ${extention}`);
         }
     }
 }
