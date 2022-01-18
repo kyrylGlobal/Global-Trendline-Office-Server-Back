@@ -76,8 +76,8 @@ class RaportService{
         const xmlPosString: string = xmlPos.toString();
         const przelew: string = "Przelew";
         const pobranie: string = "Pobranie";
-        const changeToPobranie = ['Za pobraniem', 'Plata ramburs'];
-        const changeToPrzelew = ['', 'Carte de credit'];
+        const changeToPobranie = ['Za pobraniem', 'Plata ramburs', 'za pobraniem'];
+        const changeToPrzelew = ['', 'Carte de credit', " zwrot za pobranie - DUONET 03.11.2021"];
 
         if(xmlPosString === przelew || xmlPosString === pobranie)
         {
@@ -90,7 +90,7 @@ class RaportService{
             return [pobranie];
         }
         else{
-            throw new Error(`Do not undertand FORMA_PLATNOSCI position with value ${xmlPosString}`);
+            throw new Error(`Do not undertand FORMA_PLATNOSCI position with value [${xmlPosString}]`);
         }
     }
 

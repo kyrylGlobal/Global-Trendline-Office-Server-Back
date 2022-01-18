@@ -1,10 +1,10 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { UploadedFile } from "express-fileupload";
 import RaportService from "../services/RaportService";
 
 class RaportController{
 
-    raportSales(req: Request,res: Response){
+    raportSales(req: Request,res: Response, next: NextFunction){
         if(!req.files){
             res.status(400).send("No files were uploaded!");
         }
@@ -22,10 +22,7 @@ class RaportController{
                 }
             }
             catch(error: any | unknown){
-                console.log(error.message);
-                res.status(500).send({
-                    message: error.message
-                });
+                next(new Error(error.message));
             }
         }
     }
