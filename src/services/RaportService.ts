@@ -1,6 +1,7 @@
 import { UploadedFile } from "express-fileupload";
 import { SalesRaportFileDateInfo } from "../interfaces/Files";
 import xml2js, { Builder } from 'xml2js';
+import StringUpdateOption from "../interfaces/StringUpdateOption";
 
 class RaportService{
     getDataString(file: UploadedFile | UploadedFile[]): string {
@@ -22,7 +23,7 @@ class RaportService{
 
     convertXmlToJsObject(dataXml: string): Object{
         let result = {};
-        xml2js.parseString(dataXml, (error, xmlObject: Object) => {
+        xml2js.parseString(dataXml, (error, xmlObject: Object ) => {
             if(error){
                 throw new Error("Error with parsing string to json.")
             }
@@ -34,13 +35,49 @@ class RaportService{
         return result;
     }
 
-    updateXmlObject(xmlObject: Object | any){
-        let REJESTR_SPRZEDAZY_VAT: any[] = xmlObject.ROOT.REJESTRY_SPRZEDAZY_VAT[0].REJESTR_SPRZEDAZY_VAT; // this variable is a array of objects with sales
-        REJESTR_SPRZEDAZY_VAT.forEach( sale => {
-            sale.FORMA_PLATNOSCI = this.#updateXmlPositionFormaPlat(sale.FORMA_PLATNOSCI);
-            sale.NIP_KRAJ = this.#updateXmlPositionNip(sale.NIP_KRAJ);
-            sale.NIP = this.#updateXmlPositionNip(sale.NIP);
-        });
+    private updateXMLString(jsObject: SalesRaportFileDateInfo): void {
+        const przelew: string = "Przelew";
+        const pobranie: string = "Pobranie";
+        const changeToPobranie = ['Za pobraniem', 'Plata ramburs', 'za pobraniem', ''];
+        const changeToPrzelew = ['', 'Carte de credit', " zwrot za pobranie - DUONET 03.11.2021"];
+        const updaterOptions: StringUpdateOption[] = [
+            {
+                from: ['<NIP><!\\[CDATA\\[\\]\\]><\/NIP>'],
+                to: '<NIP><![CDATA[0000000000]]></NIP>'
+            },
+            {
+                from: (function (): string[] {
+                    let przelewCases: string[] = [];
+                    changeToPrzelew.forEach( option => {
+                        przelewCases.push(`<FORMA_PLATNOSCI><!\\[CDATA\\[${option}\\]\\]><\\/FORMA_PLATNOSCI>`);
+                    })
+
+                    return przelewCases;
+                })(),
+                to: `<FORMA_PLATNOSCI><![CDATA[${przelew}]]></FORMA_PLATNOSCI>`
+            },
+            {
+                from: (function (): string[] {
+                    let pobranieCases: string[] = [];
+                    changeToPobranie.forEach( option => {
+                        pobranieCases.push(`<FORMA_PLATNOSCI><!\\[CDATA\\[${option}\\]\\]><\\/FORMA_PLATNOSCI>`);
+                    })
+
+                    return pobranieCases;
+                })(),
+                to: `<FORMA_PLATNOSCI><![CDATA[${pobranie}]]></FORMA_PLATNOSCI>`
+            }
+        ]
+
+        updaterOptions.forEach( option => {
+            option.from.forEach( from => {
+                let regex = new RegExp(from, 'g');
+                let a = jsObject.data.search(regex);
+                jsObject.data = jsObject.data.replace(new RegExp(from, 'g'), option.to);
+            })
+        })
+        console.log();
+        
     }
 
     generateXmlResultFileData(raportFile: UploadedFile): string{
@@ -50,47 +87,41 @@ class RaportService{
         const fileDataXml = this.getDataString(raportFile);
 
         const jsObject: SalesRaportFileDateInfo = {
-            data: this.convertXmlToJsObject(fileDataXml),
+            data: fileDataXml,
             originFileName: this.getFileName(raportFile)
         }
 
-        this.updateXmlObject(jsObject.data);
+        this.updateXMLString(jsObject);
 
-        return this.convertJsObjectToXml(jsObject.data);
+        this.checkFinalResult(jsObject);
+
+        return jsObject.data;
     }
 
-    #updateXmlPositionNip(xmlPos: Object): Object{
-        const defaultVat = "0000000000";
-        const xmlPosString = xmlPos.toString();
+    private checkFinalResult(jsObject: SalesRaportFileDateInfo){
+        this.checkVatNumber(jsObject);
+        this.checkPaymentType(jsObject);
+    }
+
+    private checkPaymentType(jsObject: SalesRaportFileDateInfo){
+        const vatNumberRegex = /<FORMA_PLATNOSCI><!\[CDATA\[(.*)\]\]><\/FORMA_PLATNOSCI>/g;
+
+        const lookingStrings: string[] = ['Przelew', 'Pobranie'];
+
+        let regexResult: RegExpExecArray | null;
+        while(regexResult = vatNumberRegex.exec(jsObject.data)){
+            if(regexResult && !lookingStrings.includes(regexResult[1])){
+                throw new Error(`Please specify payment method types. Problem with FORMA_PLATNOŚCI. Problem string is [${regexResult[1]}]`);
+            }
+        }
         
-        if(xmlPosString === ''){
-            return [defaultVat];
-        }
-        else{
-            return xmlPos;
-        }
-
     }
 
-    #updateXmlPositionFormaPlat(xmlPos: Object): Object{
-        const xmlPosString: string = xmlPos.toString();
-        const przelew: string = "Przelew";
-        const pobranie: string = "Pobranie";
-        const changeToPobranie = ['Za pobraniem', 'Plata ramburs', 'za pobraniem'];
-        const changeToPrzelew = ['', 'Carte de credit', " zwrot za pobranie - DUONET 03.11.2021"];
+    private checkVatNumber(jsObject: SalesRaportFileDateInfo){
+        const vatNumberRegex = /<NIP><!\[CDATA\[]]><\/NIP>/;
 
-        if(xmlPosString === przelew || xmlPosString === pobranie)
-        {
-            return xmlPos;
-        }
-        else if(changeToPrzelew.includes(xmlPosString)){
-            return [przelew];
-        }
-        else if(changeToPobranie.includes(xmlPosString)){
-            return [pobranie];
-        }
-        else{
-            throw new Error(`Do not undertand FORMA_PLATNOSCI position with value [${xmlPosString}]`);
+        if(jsObject.data.search(vatNumberRegex) > 0){
+            throw new Error(`Please replace all NIP fild wihite spaces with 0000000000`);
         }
     }
 

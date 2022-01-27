@@ -1,4 +1,4 @@
 export interface SalesRaportFileDateInfo{
     originFileName: string;
-    data: Object;
+    data: string;
 }
