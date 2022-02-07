@@ -2,8 +2,31 @@ import { UploadedFile } from "express-fileupload";
 import { SalesRaportFileDateInfo } from "../interfaces/Files";
 import xml2js, { Builder } from 'xml2js';
 import StringUpdateOption from "../interfaces/StringUpdateOption";
+import { PositionRaportData, SalesRaportData } from "../interfaces/SalesRaportData";
+import { getData, getDataArray } from "../utils/regex-helper";
 
 class RaportService{
+
+    generateXmlResultFileData(raportFile: UploadedFile): string{
+        
+        this.checkFileExtention(raportFile.mimetype);
+
+        const fileDataXml = this.getDataString(raportFile);
+
+        const jsObject: SalesRaportFileDateInfo = {
+            data: fileDataXml,
+            originFileName: this.getFileName(raportFile)
+        }
+
+        this.checkXmlSumm(jsObject);
+
+        this.updateXMLString(jsObject);
+
+        this.checkFinalResult(jsObject);
+
+        return jsObject.data;
+    }
+
     getDataString(file: UploadedFile | UploadedFile[]): string {
         if(Array.isArray(file)){
             throw new Error("Can not work with array right now.");
@@ -80,25 +103,167 @@ class RaportService{
         
     }
 
-    generateXmlResultFileData(raportFile: UploadedFile): string{
-        
-        this.#checkFileExtention(raportFile.mimetype);
+    private checkXmlSumm(jsObject: SalesRaportFileDateInfo) {
+        const regexForGettingSalesInvoices = /<REJESTR_SPRZEDAZY_VAT>[\s\S]*?<\/REJESTR_SPRZEDAZY_VAT>/g;
+        let invoicesObjects: SalesRaportData[] = this.getXmlRaportSalesData(regexForGettingSalesInvoices, jsObject);
 
-        const fileDataXml = this.getDataString(raportFile);
-
-        const jsObject: SalesRaportFileDateInfo = {
-            data: fileDataXml,
-            originFileName: this.getFileName(raportFile)
-        }
-
-        this.updateXMLString(jsObject);
-
-        this.checkFinalResult(jsObject);
-
-        return jsObject.data;
+        this.updateRaportsSumm(invoicesObjects);
+        this.updateRaportsCorrectionSumm(invoicesObjects);
+        this.updateInvoicesObject(jsObject, invoicesObjects);
     }
 
-    private checkFinalResult(jsObject: SalesRaportFileDateInfo){
+    private updateRaportsCorrectionSumm(invoicesObjects: SalesRaportData[]): void {
+        invoicesObjects.forEach( invoiceObject => {
+            const isCorrectionString = "<KOREKTA>Tak</KOREKTA>";
+            const isPostionsChangingString = "<POZYCJA>";
+            if(invoiceObject.baseContent.includes(isCorrectionString) && invoiceObject.baseContent.includes(isPostionsChangingString)) {
+                const positionsRaportData: PositionRaportData[] = this.getSalesRaportInvoicePositions(invoiceObject);
+                const fullSummByPositions: number = this.getFullSummByPositions(invoiceObject);
+
+                if(fullSummByPositions != 0) {
+                    this.updatePositionsSumm(positionsRaportData);
+                    this.updateSalesRaportData(invoiceObject, positionsRaportData)
+                }
+            }
+        });
+    }
+
+    private updatePositionsSumm(positionRaportData: PositionRaportData[]) {
+        const basePositions: PositionRaportData[] = positionRaportData.slice(0, positionRaportData.length / 2);
+        const correctPositions: PositionRaportData[] = positionRaportData.slice(positionRaportData.length / 2, positionRaportData.length);
+
+        if(basePositions.length === correctPositions.length) {
+            for(let i = 0; i < basePositions.length; i++) {
+                const difference: number = parseFloat(Math.abs(basePositions[i].fullSumm + correctPositions[i].fullSumm).toFixed(2));
+                const curCorrectionIndex: number = positionRaportData.length / 2 + i;
+                const newNettoSumm: number =  parseFloat((correctPositions[i].netto + difference).toFixed(2));
+                if(difference != 0) {
+                    positionRaportData[curCorrectionIndex].newContent = positionRaportData[curCorrectionIndex].baseContent.replace(`<NETTO>${correctPositions[i].netto}</NETTO>`, `<NETTO>${newNettoSumm}</NETTO>`) // to do not full summ but summ of netto
+                }
+            }
+        }
+    }
+
+    private getSalesRaportInvoicePositions(invoiceObj: SalesRaportData): PositionRaportData[] {
+        const invoicePositionsArray: PositionRaportData[] = [];
+        const regexPosition = /<POZYCJA>[\s\S]*?<\/POZYCJA>/g;
+
+        let regexResult: RegExpExecArray | null;
+
+        while(regexResult = regexPosition.exec(invoiceObj.baseContent)) {
+            if(regexResult && regexResult[0]) {
+                invoicePositionsArray.push( {
+                    baseContent: regexResult[0],
+                    fullSumm: this.getPositionFullSumm(regexResult[0]),
+                    netto: parseFloat(getData(/<NETTO>([\s\S]*?)<\/NETTO>/, regexResult[0]))
+                });
+            }
+        }
+
+        return invoicePositionsArray;
+    }
+
+    private getPositionFullSumm(positionData: string): number {
+        const regexPositions: RegExp[] = [
+            /<NETTO>([\s\S]*?)<\/NETTO>/,
+            /<VAT>([\s\S]*?)<\/VAT>/
+        ];
+        let result: number = 0;
+
+        regexPositions.forEach( regexPosition => {
+            result += parseFloat(getData(regexPosition, positionData));
+        })
+
+        return result;
+
+    }
+
+    private updateInvoicesObject(jsObject: SalesRaportFileDateInfo, invoicesObjects: SalesRaportData[]) {
+        invoicesObjects.forEach( invoiceObject => {
+            if(invoiceObject.newContent) {
+                jsObject.data = jsObject.data.replace(invoiceObject.baseContent, invoiceObject.newContent);
+            }
+        })
+    }
+
+    private updateSalesRaportData(base: SalesRaportData, parts: SalesRaportData[]) {
+        parts.forEach( part => {
+            if(base.newContent && part.newContent) {
+                base.newContent = base.newContent.replace(part.baseContent, part.newContent);
+            } else if(!base.newContent && part.newContent) {
+                base.newContent = base.baseContent.replace(part.baseContent, part.newContent);
+            }
+        });
+    }
+
+    private updateRaportsSumm(invoicesObjects: SalesRaportData[]) {
+        invoicesObjects.forEach( invoiceObj => {
+            let baseFullSymm: number | undefined = this.getFullSumOfInvoice(invoiceObj);
+            const fullSummByPositions: number = parseFloat(this.getFullSummByPositions(invoiceObj).toFixed(2));
+
+            if(baseFullSymm  && fullSummByPositions &&  baseFullSymm != fullSummByPositions) {
+                const from = `<KWOTA_PLAT>${baseFullSymm.toFixed(2)}</KWOTA_PLAT>`;
+                const to = `<KWOTA_PLAT>${fullSummByPositions.toString()}</KWOTA_PLAT>`;
+                invoiceObj.newContent = invoiceObj.baseContent.replace(from, to);
+            }
+        })
+    }
+
+    private getFullSummByPositions(invoicesObject: SalesRaportData): number {
+        let fullPosSumm: number = 0;
+        const regexPositions: RegExp[] = [
+            /<NETTO>([\s\S]*?)<\/NETTO>/g,
+            /<VAT>([\s\S]*?)<\/VAT>/g
+        ];
+
+        regexPositions.forEach( regex => {
+            const arrayOfStringNumbers: string[] = getDataArray(regex, invoicesObject.baseContent);
+            arrayOfStringNumbers.forEach( stringNumber => {
+                fullPosSumm += parseFloat(stringNumber);
+            });
+        });
+
+        return fullPosSumm;
+    }
+
+    private getFullSumOfInvoice(invoiceObj: SalesRaportData): number | undefined {
+        let fullSumInvoice: number;
+        const regexFullSum = /<KWOTA_PLAT>([\s\S]*?)<\/KWOTA_PLAT>/;
+        const regexResult: RegExpExecArray | null = regexFullSum.exec(invoiceObj.baseContent);
+
+        if(regexResult && regexResult[1]){
+            fullSumInvoice = parseFloat(regexResult[1]);
+            return fullSumInvoice;
+        } // else {
+        //     throw new Error("No data incide <KWOTA_PLAT>. Need it to check summ proper. ");
+        // }
+    }
+
+    private getXmlRaportSalesData(regex: RegExp, jsObject?: SalesRaportFileDateInfo, salesRaportData?: SalesRaportData): SalesRaportData[] {
+        let dataObjects: SalesRaportData[] = [];
+
+        let regexResult: RegExpExecArray | null;
+
+        let data = "";
+
+        if(jsObject) {
+            data = jsObject.data;
+        } else if(salesRaportData) {
+            data = salesRaportData.baseContent;
+        }
+
+        while( regexResult = regex.exec(data)) {
+            if(regexResult[0]) {
+                dataObjects.push({
+                    baseContent: regexResult[0]
+                });
+            }
+        }
+
+        return dataObjects;
+    }
+
+    private checkFinalResult(jsObject: SalesRaportFileDateInfo) {
         this.checkVatNumber(jsObject);
         this.checkPaymentType(jsObject);
     }
@@ -125,7 +290,7 @@ class RaportService{
         }
     }
 
-    #checkFileExtention(extention: string){
+    private checkFileExtention(extention: string){
         const availableExtentions: string[] = ["text/xml"];
         
         if(availableExtentions.includes(extention)){
