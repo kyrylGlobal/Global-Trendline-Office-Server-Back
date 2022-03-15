@@ -4,6 +4,7 @@ import xml2js, { Builder } from 'xml2js';
 import StringUpdateOption from "../interfaces/StringUpdateOption";
 import { PositionRaportData, SalesRaportData } from "../interfaces/SalesRaportData";
 import { getData, getDataArray } from "../utils/regex-helper";
+import { country, Country } from "../data/country";
 
 class RaportService{
 
@@ -99,8 +100,6 @@ class RaportService{
                 jsObject.data = jsObject.data.replace(new RegExp(from, 'g'), option.to);
             })
         })
-        console.log();
-        
     }
 
     private checkXmlSumm(jsObject: SalesRaportFileDateInfo) {
@@ -109,7 +108,53 @@ class RaportService{
 
         this.updateRaportsSumm(invoicesObjects);
         this.updateRaportsCorrectionSumm(invoicesObjects);
+        this.updateVatCountry(invoicesObjects);
+
         this.updateInvoicesObject(jsObject, invoicesObjects);
+    }
+
+    private updateVatCountry(invoicesObjects: SalesRaportData[]) {
+        invoicesObjects.forEach( invoice => {
+            const countryName: string = this.getCurrentInvoiceCountry(invoice);
+            let countryWasFound: boolean = false;
+            country.every( countryElement => {
+                if(countryElement.name === countryName) {
+                    countryWasFound = true;
+                    this.updateInvoiceCountryString(invoice, countryElement);
+                    
+                    return false;
+                }
+                return true;
+            })
+
+            if(!countryWasFound) {
+                throw new Error(`${countryName} was not regestrated as looking country. Please update "country" data.`)
+            }
+        })
+    }
+
+    private updateInvoiceCountryString(invoiceObject: SalesRaportData, country: Country) {
+        if(invoiceObject.newContent) {
+            invoiceObject.newContent = invoiceObject.newContent.replace(
+                `<NIP_KRAJ><![CDATA[]]></NIP_KRAJ>`,
+                `<NIP_KRAJ><![CDATA[${country.shortName}]]></NIP_KRAJ>`
+            )
+        } else {
+            invoiceObject.newContent = invoiceObject.baseContent.replace(
+                `<NIP_KRAJ><![CDATA[]]></NIP_KRAJ>`,
+                `<NIP_KRAJ><![CDATA[${country.shortName}]]></NIP_KRAJ>`
+            )
+        }
+    }
+
+    private getCurrentInvoiceCountry(invoiceObject: SalesRaportData): string {
+        const getCountryRegex: RegExp = /<KRAJ><!\[CDATA\[([AaĄąBbCcĆćDdEeĘęFfGgHhIiJjKkLlŁłMmNnŃńOoÓóPpRrSsŚśTtUuWwYyZzŹźŻż]+)]]><\/KRAJ>/;
+        const regexResult: RegExpExecArray | null = getCountryRegex.exec(invoiceObject.baseContent);
+        if(regexResult && regexResult[1]) {
+            return regexResult[1];
+        } else {
+            return "Polska";
+        }
     }
 
     private updateRaportsCorrectionSumm(invoicesObjects: SalesRaportData[]): void {
@@ -201,7 +246,7 @@ class RaportService{
             let baseFullSymm: number | undefined = this.getFullSumOfInvoice(invoiceObj);
             const fullSummByPositions: number = parseFloat(this.getFullSummByPositions(invoiceObj).toFixed(2));
 
-            if(baseFullSymm  && fullSummByPositions &&  baseFullSymm != fullSummByPositions) {
+            if(baseFullSymm  && fullSummByPositions &&  Math.abs(baseFullSymm) != Math.abs(fullSummByPositions)) {
                 const from = `<KWOTA_PLAT>${baseFullSymm.toFixed(2)}</KWOTA_PLAT>`;
                 const to = `<KWOTA_PLAT>${fullSummByPositions.toString()}</KWOTA_PLAT>`;
                 invoiceObj.newContent = invoiceObj.baseContent.replace(from, to);
