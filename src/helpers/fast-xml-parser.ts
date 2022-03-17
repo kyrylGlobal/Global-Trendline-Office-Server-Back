@@ -64,6 +64,11 @@ function updateVatCountry(invoiceObject: any) {
         }
     }
 }
+function updateVatNumber(invoiceObject: any) {
+    if(!invoiceObject.NIP) {
+        invoiceObject.NIP = "0000000000";
+    }
+}
 function replaceData(data: string, dataToReplace: KeyAndValue[]) {
     for(const replace of dataToReplace) {
         data = data.replace(new RegExp(replace.key, "g"), replace.value);
