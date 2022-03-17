@@ -47,6 +47,23 @@ function updateInvoiceDates(invoiceObject: any) {
 function updatePaymentType(invoiceObject: any) {
     invoiceObject.FORMA_PLATNOSCI = "Przelew";
 }
+
+function updateVatCountry(invoiceObject: any) {
+    if(!invoiceObject.NIP_KRAJ) {
+        for(const countryElement of country) {
+            if(countryElement.name === invoiceObject.KRAJ) {
+                invoiceObject.NIP_KRAJ = countryElement.shortName;
+                return;
+            }
+        }
+
+        if(!invoiceObject.KRAJ) {
+            throw new Error(`Invoice with number ${invoiceObject.ID_ZRODLA} does not contain invoice country`);
+        } else {
+            throw new Error(`Can not find country of invoice with number ${invoiceObject.ID_ZRODLA} inside country config. Please add ${invoiceObject.KRAJ} to config.`);
+        }
+    }
+}
 function replaceData(data: string, dataToReplace: KeyAndValue[]) {
     for(const replace of dataToReplace) {
         data = data.replace(new RegExp(replace.key, "g"), replace.value);
