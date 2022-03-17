@@ -44,6 +44,9 @@ function updateInvoiceDates(invoiceObject: any) {
     }
 }
 
+function updatePaymentType(invoiceObject: any) {
+    invoiceObject.FORMA_PLATNOSCI = "Przelew";
+}
 function replaceData(data: string, dataToReplace: KeyAndValue[]) {
     for(const replace of dataToReplace) {
         data = data.replace(new RegExp(replace.key, "g"), replace.value);
