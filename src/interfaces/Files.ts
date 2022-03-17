@@ -1,4 +1,4 @@
 export interface SalesRaportFileDateInfo{
+    xmlObject: any;
     originFileName: string;
-    data: string;
 }

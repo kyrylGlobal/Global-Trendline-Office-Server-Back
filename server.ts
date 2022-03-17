@@ -6,6 +6,9 @@ import Logger from "./src/utils/Logger";
 import cors from 'cors';
 import Cors from "./src/utils/Cors";
 import Errors from "./src/utils/Errors";
+import Files from "./src/utils/Files";
+import { X2jOptions, XMLBuilder, XmlBuilderOptions, XMLParser } from "fast-xml-parser";
+import { resolveSalesRaport } from "./src/helpers/fast-xml-parser";
 
 dotenv.config();
 
@@ -27,4 +30,9 @@ app.get('/', (req: Request, res: Response) => {
 
 app.use(Errors.errorHandler);
 
-app.listen(PORT, () => console.log(`Server running on port - ${PORT}.\nLink - http://localhost:${PORT}`));
+app.listen(PORT, () => {
+    console.log(`Server running on port - ${PORT}.\nLink - http://localhost:${PORT}`);
+    const fileDataXml = Files.readFileSync("./public/testFIles/at_test.xml");
+    const xmlResult = resolveSalesRaport(fileDataXml);
+    Files.writeFileSync('./public/testFIles/finish_at_test.xml', xmlResult);
+});
