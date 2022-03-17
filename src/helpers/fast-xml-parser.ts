@@ -1,0 +1,65 @@
+export function resolveSalesRaport(xmlStringata: string): string {
+    const xmlParseOption: Partial<X2jOptions> = {
+        ignoreAttributes: false,
+        parseAttributeValue: false,
+        allowBooleanAttributes: true, // atributes without value,
+        unpairedTags: ["ATRYBUTY"]
+    }
+    const xmlBuilderOption: Partial<XmlBuilderOptions> = {
+        format: true,
+        ignoreAttributes: false,
+        unpairedTags: ["ATRYBUTY", "KWOTY_DODATKOWE"],
+        suppressUnpairedNode: false
+    }
+
+    const xmlObject: any = new XMLParser(xmlParseOption).parse(xmlStringata);
+    
+    updateInvoices(xmlObject);
+    
+    let xmlResult = new XMLBuilder(xmlBuilderOption).build(xmlObject);
+    xmlResult = replaceData(
+        xmlResult,
+        [
+            {
+                key: "&lt;",
+                value: "<"
+            }, 
+            {
+                key: "&gt;",
+                value: ">"
+            }
+        ]
+    )
+
+    return xmlResult;
+}
+function updateInvoiceDates(invoiceObject: any) {
+    if(invoiceObject.DATA_WYSTAWIENIA != invoiceObject.DATA_SPRZEDAZY) {
+        invoiceObject.DATA_SPRZEDAZY = invoiceObject.DATA_WYSTAWIENIA;
+        invoiceObject.TERMIN = invoiceObject.DATA_WYSTAWIENIA;
+        invoiceObject.DATA_DATAOBOWIAZKUPODATKOWEGO = invoiceObject.DATA_WYSTAWIENIA;
+        invoiceObject.DATA_DATAPRAWAODLICZENIA = invoiceObject.DATA_WYSTAWIENIA;
+        invoiceObject.PLATNOSCI.PLATNOSC.TERMIN_PLAT = invoiceObject.DATA_WYSTAWIENIA;
+        invoiceObject.PLATNOSCI.PLATNOSC.DATA_KURSU_PLAT = invoiceObject.DATA_KURSU;
+    }
+}
+
+function replaceData(data: string, dataToReplace: KeyAndValue[]) {
+    for(const replace of dataToReplace) {
+        data = data.replace(new RegExp(replace.key, "g"), replace.value);
+    }
+
+    return data;
+}
+
+function addCdata(jXmlObject: any) { // change values to CDATA by config cdataRows
+    for(const [key, value] of Object.entries(jXmlObject)) {
+        if(typeof jXmlObject[key] !== "object") {
+            if(cDataRows.includes(key)) {
+                jXmlObject[key] = `<![CDATA[${value}]]>`;
+            }
+        } else if (typeof jXmlObject[key] === "object") {
+            addCdata(jXmlObject[key]);
+        }
+    }
+}
