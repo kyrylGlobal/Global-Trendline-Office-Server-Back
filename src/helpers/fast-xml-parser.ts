@@ -89,6 +89,11 @@ function updateVatNumber(invoiceObject: any) {
         invoiceObject.NIP = "0000000000";
     }
 }
+
+function updateFinishedJObject(invoiceObject: any) {
+    addCdata(invoiceObject);
+}
+
 function replaceData(data: string, dataToReplace: KeyAndValue[]) {
     for(const replace of dataToReplace) {
         data = data.replace(new RegExp(replace.key, "g"), replace.value);
