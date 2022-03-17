@@ -33,6 +33,26 @@ export function resolveSalesRaport(xmlStringata: string): string {
 
     return xmlResult;
 }
+function updateInvoices(xmlObject: any) {
+
+    if(Array.isArray(xmlObject.ROOT.REJESTRY_SPRZEDAZY_VAT)) {
+        (xmlObject.ROOT.REJESTRY_SPRZEDAZY_VAT as Array<any>).forEach( invoiceObject => {
+            updateInvoice(invoiceObject);
+        })
+    } else {
+        updateInvoice(xmlObject.ROOT.REJESTRY_SPRZEDAZY_VAT.REJESTR_SPRZEDAZY_VAT);
+    }
+}
+
+function updateInvoice(invoiceObject: any) {
+    updatePaymentType(invoiceObject);
+    updateVatNumber(invoiceObject);
+    updateVatCountry(invoiceObject);
+    updateInvoiceDates(invoiceObject);
+    updatePrices(invoiceObject);
+
+    updateFinishedJObject(invoiceObject);
+}
 function updateInvoiceDates(invoiceObject: any) {
     if(invoiceObject.DATA_WYSTAWIENIA != invoiceObject.DATA_SPRZEDAZY) {
         invoiceObject.DATA_SPRZEDAZY = invoiceObject.DATA_WYSTAWIENIA;
