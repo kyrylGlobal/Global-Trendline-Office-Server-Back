@@ -1,3 +1,12 @@
+import { X2jOptions, XMLBuilder, XmlBuilderOptions, XMLParser } from "fast-xml-parser";
+import cDataRows from "../config/c-data-rows";
+import country from "../config/country";
+
+interface KeyAndValue {
+    key: string,
+    value: string
+}
+
 export function resolveSalesRaport(xmlStringata: string): string {
     const xmlParseOption: Partial<X2jOptions> = {
         ignoreAttributes: false,
@@ -33,6 +42,7 @@ export function resolveSalesRaport(xmlStringata: string): string {
 
     return xmlResult;
 }
+
 function updateInvoices(xmlObject: any) {
 
     if(Array.isArray(xmlObject.ROOT.REJESTRY_SPRZEDAZY_VAT)) {
@@ -53,6 +63,25 @@ function updateInvoice(invoiceObject: any) {
 
     updateFinishedJObject(invoiceObject);
 }
+
+function updatePrices(invoiceObject: any) {
+    if(invoiceObject.KOREKTA === "Nie") {
+        let sumFromPos: number = 0;
+        let sumFromInvoice = invoiceObject.PLATNOSCI.PLATNOSC.KWOTA_PLAT;
+        for(let pos of invoiceObject.POZYCJE.POZYCJA) {
+            sumFromPos += pos.NETTO + pos.VAT;
+        }
+
+        if(sumFromPos !== sumFromInvoice) {
+            const difference = +((sumFromInvoice - sumFromPos).toFixed(2));
+            console.log(difference);
+            invoiceObject.POZYCJE.POZYCJA[0].NETTO += difference;
+        } 
+    } else {
+
+    }
+}
+
 function updateInvoiceDates(invoiceObject: any) {
     if(invoiceObject.DATA_WYSTAWIENIA != invoiceObject.DATA_SPRZEDAZY) {
         invoiceObject.DATA_SPRZEDAZY = invoiceObject.DATA_WYSTAWIENIA;
@@ -84,6 +113,7 @@ function updateVatCountry(invoiceObject: any) {
         }
     }
 }
+
 function updateVatNumber(invoiceObject: any) {
     if(!invoiceObject.NIP) {
         invoiceObject.NIP = "0000000000";
