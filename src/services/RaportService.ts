@@ -2,6 +2,7 @@ import { UploadedFile } from "express-fileupload";
 import { SalesRaportFileDateInfo } from "../interfaces/Files";
 import { XMLParser, XMLBuilder, XMLValidator} from 'fast-xml-parser';
 import Files from "../utils/Files";
+import { resolveSalesRaport } from "../helpers/fast-xml-parser";
 
 class RaportService{
 
@@ -9,22 +10,11 @@ class RaportService{
         
         this.checkFileExtention(raportFile.mimetype);
 
-        // const fileDataXml = this.getDataString(raportFile);
-        const fileDataXml = Files.readFileSync("../../public/testFIles/at_test.xml");
-        console.log
+        const fileDataXml = this.getDataString(raportFile);
 
-        const xmlObject: any = new XMLParser().parse(fileDataXml);
+        const xmlResult = resolveSalesRaport(fileDataXml);
 
-        const jsXmlObject: SalesRaportFileDateInfo = {
-            xmlObject,
-            originFileName: this.getFileName(raportFile)
-        }
-
-        const xmlResult = new XMLBuilder().build(jsXmlObject.xmlObject);
-
-        console.log(xmlResult);
-
-        throw Error("Function not implemented.")
+        return xmlResult;
     }
 
 

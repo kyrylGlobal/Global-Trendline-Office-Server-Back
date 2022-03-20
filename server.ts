@@ -32,7 +32,7 @@ app.use(Errors.errorHandler);
 
 app.listen(PORT, () => {
     console.log(`Server running on port - ${PORT}.\nLink - http://localhost:${PORT}`);
-    const fileDataXml = Files.readFileSync("./public/testFIles/at_test.xml");
-    const xmlResult = resolveSalesRaport(fileDataXml);
-    Files.writeFileSync('./public/testFIles/finish_at_test.xml', xmlResult);
+    // const fileDataXml = Files.readFileSync("./public/testFIles/at_test.xml");
+    // const xmlResult = resolveSalesRaport(fileDataXml);
+    // Files.writeFileSync('./public/testFIles/finish_at_test.xml', xmlResult);
 });

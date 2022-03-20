@@ -45,8 +45,8 @@ export function resolveSalesRaport(xmlStringata: string): string {
 
 function updateInvoices(xmlObject: any) {
 
-    if(Array.isArray(xmlObject.ROOT.REJESTRY_SPRZEDAZY_VAT)) {
-        (xmlObject.ROOT.REJESTRY_SPRZEDAZY_VAT as Array<any>).forEach( invoiceObject => {
+    if(Array.isArray(xmlObject.ROOT.REJESTRY_SPRZEDAZY_VAT.REJESTR_SPRZEDAZY_VAT)) {
+        (xmlObject.ROOT.REJESTRY_SPRZEDAZY_VAT.REJESTR_SPRZEDAZY_VAT as Array<any>).forEach( invoiceObject => {
             updateInvoice(invoiceObject);
         })
     } else {
@@ -65,31 +65,40 @@ function updateInvoice(invoiceObject: any) {
 }
 
 function updatePrices(invoiceObject: any) {
+    const invoicePositions = invoiceObject.POZYCJE.POZYCJA;
+
     if(invoiceObject.KOREKTA === "Nie") {
-        let sumFromPos: number = 0;
-        let sumFromInvoice = invoiceObject.PLATNOSCI.PLATNOSC.KWOTA_PLAT;
-        for(let pos of invoiceObject.POZYCJE.POZYCJA) {
-            sumFromPos += pos.NETTO + pos.VAT;
+        if(Array.isArray(invoiceObject.POZYCJE.POZYCJA)) {
+            let sumFromPos: number = 0;
+            let sumFromInvoice = invoiceObject.PLATNOSCI.PLATNOSC.KWOTA_PLAT;
+            for(let pos of invoiceObject.POZYCJE.POZYCJA) {
+                sumFromPos += pos.NETTO + pos.VAT;
+            }
+
+            if(sumFromPos !== sumFromInvoice) {
+                const difference = +((sumFromInvoice - sumFromPos).toFixed(2));
+                invoiceObject.POZYCJE.POZYCJA[0].NETTO = +((invoiceObject.POZYCJE.POZYCJA[0].NETTO + difference).toFixed(2));
+            }
         }
-
-        if(sumFromPos !== sumFromInvoice) {
-            const difference = +((sumFromInvoice - sumFromPos).toFixed(2));
-            console.log(difference);
-            invoiceObject.POZYCJE.POZYCJA[0].NETTO += difference;
-        } 
-    } else {
-
+    } else if(invoiceObject.KOREKTA === "Tak" && Array.isArray(invoicePositions)) {
+        let difference = 0;
+        (invoicePositions as Array<any>).forEach( position => difference += position.NETTO + position.VAT);
+        if(difference !== 0) {
+            invoicePositions[0].NETTO = +((invoicePositions[0].NETTO - difference)).toFixed(2);
+        }
     }
 }
 
 function updateInvoiceDates(invoiceObject: any) {
-    if(invoiceObject.DATA_WYSTAWIENIA != invoiceObject.DATA_SPRZEDAZY) {
-        invoiceObject.DATA_SPRZEDAZY = invoiceObject.DATA_WYSTAWIENIA;
-        invoiceObject.TERMIN = invoiceObject.DATA_WYSTAWIENIA;
-        invoiceObject.DATA_DATAOBOWIAZKUPODATKOWEGO = invoiceObject.DATA_WYSTAWIENIA;
-        invoiceObject.DATA_DATAPRAWAODLICZENIA = invoiceObject.DATA_WYSTAWIENIA;
-        invoiceObject.PLATNOSCI.PLATNOSC.TERMIN_PLAT = invoiceObject.DATA_WYSTAWIENIA;
-        invoiceObject.PLATNOSCI.PLATNOSC.DATA_KURSU_PLAT = invoiceObject.DATA_KURSU;
+    if(invoiceObject.KOREKTA === "Nie") {
+        if(invoiceObject.DATA_WYSTAWIENIA != invoiceObject.DATA_SPRZEDAZY) {
+            invoiceObject.DATA_SPRZEDAZY = invoiceObject.DATA_WYSTAWIENIA;
+            invoiceObject.TERMIN = invoiceObject.DATA_WYSTAWIENIA;
+            invoiceObject.DATA_DATAOBOWIAZKUPODATKOWEGO = invoiceObject.DATA_WYSTAWIENIA;
+            invoiceObject.DATA_DATAPRAWAODLICZENIA = invoiceObject.DATA_WYSTAWIENIA;
+            invoiceObject.PLATNOSCI.PLATNOSC.TERMIN_PLAT = invoiceObject.DATA_WYSTAWIENIA;
+            invoiceObject.PLATNOSCI.PLATNOSC.DATA_KURSU_PLAT = invoiceObject.DATA_KURSU;
+        }   
     }
 }
 
