@@ -6,9 +6,7 @@ import Logger from "./src/utils/Logger";
 import cors from 'cors';
 import Cors from "./src/utils/Cors";
 import Errors from "./src/utils/Errors";
-import Files from "./src/utils/Files";
-import { X2jOptions, XMLBuilder, XmlBuilderOptions, XMLParser } from "fast-xml-parser";
-import { resolveSalesRaport } from "./src/helpers/fast-xml-parser";
+import baselinkerRouter from "./src/routers/baselinkerRouter";
 
 dotenv.config();
 
@@ -24,9 +22,11 @@ app.use(fileUpload());
 
 app.use("/api/raport", raportRouter);
 
+app.use("/api/baselinker", baselinkerRouter);
+
 app.get('/', (req: Request, res: Response) => {
-    res.end("It is work");
-})
+    res.end("Works!");
+});
 
 app.use(Errors.errorHandler);
 
