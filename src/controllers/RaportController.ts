@@ -2,9 +2,9 @@ import { NextFunction, Request, Response } from "express";
 import { UploadedFile } from "express-fileupload";
 import RaportService from "../services/RaportService";
 
-class RaportController{
+class RaportController {
 
-    raportSales(req: Request,res: Response, next: NextFunction){
+    raportSales(req: Request, res: Response, next: NextFunction){
         if(!req.files){
             res.status(400).send("No files were uploaded!");
         }

@@ -1,9 +1,9 @@
-export interface Country {
+interface Country {
     name: string,
     shortName: string
 }
 
-export const country: Country[] = [
+const country: Country[] = [
     {
         name: "Polska",
         shortName: "PL"
@@ -45,3 +45,5 @@ export const country: Country[] = [
         shortName: "HR"
     }
 ];
+
+export default country;
