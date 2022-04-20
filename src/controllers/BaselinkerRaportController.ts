@@ -67,8 +67,6 @@ class BaselinkerRaportController {
                 })
             })
 
-            console.log(params.toString())
-
             axios.post('https://api.baselinker.com/connector.php', params.toString())
             .then( res => res.data)
             .then( async data => {
