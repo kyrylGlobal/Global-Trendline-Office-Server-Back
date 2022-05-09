@@ -1,48 +1,64 @@
 interface Country {
     name: string,
-    shortName: string
+    shortName: string,
+    currency: string
 }
 
 const country: Country[] = [
     {
         name: "Polska",
-        shortName: "PL"
+        shortName: "PL",
+        currency: "PLN"
     },
     {
         name: "Czechy",
-        shortName: "CZ"
+        shortName: "CZ",
+        currency: "CZK"
     },
     {
         name: "Węgry",
-        shortName: "HU"
+        shortName: "HU",
+        currency: "HUF"
     },
     {
         name: "Rumunia",
-        shortName: "RO"
+        shortName: "RO",
+        currency: "RON"
     },
     {
         name: "Słowacja",
-        shortName: "SK"
+        shortName: "SK",
+        currency: "EUR"
     },
     {
         name: "Bułgaria",
-        shortName: "BG"
+        shortName: "BG",
+        currency: "BGN"
     },
     {
         name: "Litwa",
-        shortName: "LT"
+        shortName: "LT",
+        currency: "EUR"
     },
     {
         name: "Austria",
-        shortName: "AT"
+        shortName: "AT",
+        currency: "EUR"
     },
     {
         name: "Niemcy",
-        shortName: "DE"
+        shortName: "DE",
+        currency: "EUR"
     },
     {
         name: "Chorwacja",
-        shortName: "HR"
+        shortName: "HR",
+        currency: "EUR"
+    },
+    {
+        name: "Łotwa",
+        shortName: "LV",
+        currency: "EUR"
     }
 ];
 

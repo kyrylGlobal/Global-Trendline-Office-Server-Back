@@ -72,6 +72,31 @@ class BaselinkerApiController {
         return this.makeBaselinkerPost(params);
     }
 
+    public async addOrders(orders: any[]) {
+        orders.forEach( async order => {
+            let params = this.createBaselinkerApiParams(
+                "addOrder",
+                order
+            )
+            
+            let result = await this.makeBaselinkerPost(params);
+            if(result) {
+                console.log()
+            } else {
+                console.log()
+            }
+        })
+    }
+
+    public async getOrderStatusIdByName(orderName: string) {
+        let orderStatuses = (await this.getStatuses()).statuses;
+        for( let orderStatusData of orderStatuses) {
+            if(orderStatusData.name === orderName) {
+                return orderStatusData.id;
+            }
+        }
+    }
+
     private async makeBaselinkerPost(params: string): Promise<any> {
         return await axios.post('https://api.baselinker.com/connector.php', params)
         .then( res => res.data)
