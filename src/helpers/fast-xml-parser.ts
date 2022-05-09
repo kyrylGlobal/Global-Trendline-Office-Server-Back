@@ -1,7 +1,6 @@
 import { X2jOptions, XMLBuilder, XmlBuilderOptions, XMLParser } from "fast-xml-parser";
 import cDataRows from "../config/c-data-rows";
 import country from "../config/config";
-import {countryCurrency} from "../config/config"
 import {checkVAT} from 'jsvat'
 
 interface KeyAndValue {
@@ -90,9 +89,9 @@ function checkCurrencyAndCountry(invoiceObject: any) {
 
         let countryWasFounded = false;
 
-        countryCurrency.every( currencyElement => {
-            if (currencyElement.country === invoiceCountry) {
-                if( currencyElement.currency === invoiceCurrency) {
+        country.every( countryElement => {
+            if (countryElement.name === invoiceCountry) {
+                if( countryElement.currency === invoiceCurrency) {
                     countryWasFounded = true;
                     return false;
                 } else {

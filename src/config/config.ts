@@ -1,67 +1,85 @@
-import {Country, czechRepublic, hungary, romania, slovakiaRepublic, bulgaria, lithuania, austria, germany, croatia, greece, poland} from 'jsvat'
+import {Country, czechRepublic, hungary, romania, slovakiaRepublic, bulgaria, lithuania, austria, germany, croatia, greece, poland, latvia} from 'jsvat'
 
 
 interface BaselinkerCountry {
     name: string,
     shortName: string,
-    viesConfig: Country
+    viesConfig: Country,
+    currency: string
 }
 
 const country: BaselinkerCountry[] = [
     {
         name: "Polska",
         shortName: "PL",
-        viesConfig: poland
+        viesConfig: poland, 
+        currency: "PLN"
     },
     {
         name: "Czechy",
         shortName: "CZ",
-        viesConfig: czechRepublic
+        viesConfig: czechRepublic, 
+        currency: "CZK"
     },
     {
         name: "Węgry",
         shortName: "HU",
-        viesConfig: hungary
+        viesConfig: hungary, 
+        currency: "HUF"
     },
     {
         name: "Rumunia",
         shortName: "RO",
-        viesConfig: romania
+        viesConfig: romania, 
+        currency: "RON"
     },
     {
         name: "Słowacja",
         shortName: "SK",
-        viesConfig: slovakiaRepublic
+        viesConfig: slovakiaRepublic, 
+        currency: "EUR"
     },
     {
         name: "Bułgaria",
         shortName: "BG",
-        viesConfig: bulgaria
+        viesConfig: bulgaria, 
+        currency: "BGN"
     },
     {
         name: "Litwa",
         shortName: "LT",
-        viesConfig: lithuania
+        viesConfig: lithuania, 
+        currency: "EUR"
     },
     {
         name: "Austria",
         shortName: "AT",
-        viesConfig: austria
+        viesConfig: austria, 
+        currency: "EUR"
     },
     {
         name: "Niemcy",
         shortName: "DE",
-        viesConfig: germany
+        viesConfig: germany, 
+        currency: ""
     },
     {
         name: "Chorwacja",
         shortName: "HR",
-        viesConfig: croatia
+        viesConfig: croatia, 
+        currency: "HRK"
     },
     {
         name: "Grecja",
         shortName: "GR",
-        viesConfig: greece
+        viesConfig: greece, 
+        currency: "EUR"
+    },
+    {
+        name: "Łotwa",
+        shortName: "LV",
+        viesConfig: latvia,
+        currency: "EUR"
     }
 ];
 
