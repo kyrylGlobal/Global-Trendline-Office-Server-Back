@@ -1,6 +1,7 @@
 import { X2jOptions, XMLBuilder, XmlBuilderOptions, XMLParser } from "fast-xml-parser";
 import cDataRows from "../config/c-data-rows";
-import country from "../config/country";
+import country from "../config/config";
+import {checkVAT} from 'jsvat'
 
 interface KeyAndValue {
     key: string,
@@ -43,16 +44,87 @@ export function resolveSalesRaport(xmlStringata: string): string {
     return xmlResult;
 }
 
+function checkVatNumber(invoiceObject: any) {
+    const pozycje = invoiceObject.POZYCJE;
+    if(invoiceObject.KRAJ !== "Polska" && invoiceObject.NIP !== "0000000000" && invoiceObject.NIP !== "") {
+        let countryWasFounded = false;
+        for(let countryElement of country) {
+            if(countryElement.name === invoiceObject.KRAJ) {
+                if(pozycje.POZYCJA) { // optimise
+                    let vatCheckResult = checkVAT(`${countryElement.shortName}${invoiceObject.NIP}`, [countryElement.viesConfig])
+                    if(invoiceObject.KOREKTA === "Tak") {
+                        if(pozycje.POZYCJA.length > 1 && ((pozycje.POZYCJA.length % 2) === 0)) {
+                            const pozSum = (pozycje.POZYCJA as Array<any>).reduce((previous, current) => { return previous + current}, 0)
+                            if((pozSum > -1 && pozSum < 1)) {
+                                if(!vatCheckResult.isValid && pozycje.POZYCJA[pozycje.POZYCJA.length / 2].STAWKA_VAT !== 0) {
+                                    throw new Error(`Error! Please check vat rate for invoice ${invoiceObject.ID_ZRODŁA}. Vat rate should be 0%`);
+                                } 
+                            }
+                        }
+                    } else {
+                        if(pozycje.POZYCJA.length > 0 && pozycje.POZYCJA[0].STAWKA_VAT != 0) {
+                            throw new Error(`Error! Please check vat rate for invoice ${invoiceObject.ID_ZRODŁA}. Vat rate should be 0%`);
+                        }
+                    }
+                }
+                countryWasFounded = true;
+            }
+        }
+
+        if(!countryWasFounded) {
+            throw new Error(`Error! Please check country configuration in config file. Invoice ${invoiceObject.ID_ZRODLA} with country ${invoiceObject.KRAJ}`);
+        }
+    }
+}
+
+function checkInvoice(invoiceObject: any) {
+    checkCurrencyAndCountry(invoiceObject);
+    checkVatNumber(invoiceObject);
+}
+
+function checkCurrencyAndCountry(invoiceObject: any) {
+    try {
+        let invoiceCurrency = invoiceObject.PLATNOSCI.PLATNOSC.WALUTA_PLAT;
+        let invoiceCountry = invoiceObject.KRAJ;
+
+        let countryWasFounded = false;
+
+        country.every( countryElement => {
+            if (countryElement.name === invoiceCountry) {
+                if( countryElement.currency === invoiceCurrency) {
+                    countryWasFounded = true;
+                    return false;
+                } else {
+                    throw new Error(`Error! Facture ${invoiceObject.ID_ZRODLA} contain country ${invoiceCountry} with ${invoiceCurrency}`)
+                }
+            }
+            return true;
+        })
+
+        if (!countryWasFounded) {
+            throw new Error(`Error! Can not found config for counry ${invoiceCountry} and currency ${invoiceCurrency}`)
+        }
+    }
+    catch(error: any) {
+        console.log(error)
+    }
+}
+
 function updateInvoices(xmlObject: any) {
 
     if(Array.isArray(xmlObject.ROOT.REJESTRY_SPRZEDAZY_VAT.REJESTR_SPRZEDAZY_VAT)) {
         (xmlObject.ROOT.REJESTRY_SPRZEDAZY_VAT.REJESTR_SPRZEDAZY_VAT as Array<any>).forEach( invoiceObject => {
+            checkInvoice(invoiceObject);
             updateInvoice(invoiceObject);
+
         })
     } else {
-        updateInvoice(xmlObject.ROOT.REJESTRY_SPRZEDAZY_VAT.REJESTR_SPRZEDAZY_VAT);
+        let invoiceObject = xmlObject.ROOT.REJESTRY_SPRZEDAZY_VAT.REJESTR_SPRZEDAZY_VAT;
+        checkInvoice(invoiceObject)
+        updateInvoice(invoiceObject);
     }
 }
+
 
 function updateInvoice(invoiceObject: any) {
     updatePaymentType(invoiceObject);
@@ -83,7 +155,10 @@ function updatePrices(invoiceObject: any) {
     } else if(invoiceObject.KOREKTA === "Tak" && Array.isArray(invoicePositions)) {
         let difference = 0;
         (invoicePositions as Array<any>).forEach( position => difference += position.NETTO + position.VAT);
-        if(difference !== 0) {
+        if(invoiceObject.ID_ZRODLA === "49/11/2021/K/RO") {
+            console.log();
+        }
+        if(difference > -1 && difference < 1) {
             invoicePositions[0].NETTO = +((invoicePositions[0].NETTO - difference)).toFixed(2);
         }
     }

@@ -23,7 +23,7 @@ app.use(Logger.logRequest())
 
 app.use(fileUpload());
 
-app.use("/api/raport", raportRouter);
+app.use("/api/raport/", raportRouter);
 
 app.use("/api/baselinker", baselinkerRouter);
 
