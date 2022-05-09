@@ -1,5 +1,7 @@
 import internal from "stream";
 import country from "../config/country";
+import BaselinkerApiController from "../services/BaselinkerApiController";
+import Files from "../utils/Files";
 
 interface BaselinkerOrder {
     order_status_id: number,
@@ -148,3 +150,23 @@ export function parseWoocomersJsonOrdersToBaselinker(woocomerceOrders: any[], or
     console.log();
     return baselinkerOrders;
 }
+
+export async function addOrdersToBaselinker() { // Add arders which does not exist in folder, getting orders from file
+    const baselinkerApiController = new BaselinkerApiController();
+    const baselinkerStatusForAdding = "New Orders";
+    const baselinkerStatusForChecking = "Return by code";
+    const fileWithWoocomerceJsonData = './src/db/orders/orders.json';
+    const woocomerceOrders = JSON.parse(Files.readFileSync(fileWithWoocomerceJsonData));
+    let parsedBaselinkerOrders = parseWoocomersJsonOrdersToBaselinker(woocomerceOrders, await (baselinkerApiController.getOrderStatusIdByName(baselinkerStatusForAdding)));
+    const baselinkerOrdersFromFolder = await baselinkerApiController.getOrders(await (baselinkerApiController.getOrderStatusIdByName(baselinkerStatusForChecking)));
+    parsedBaselinkerOrders = parsedBaselinkerOrders.filter( order => {
+        for(let folderOrders of baselinkerOrdersFromFolder) {
+            if(folderOrders.shop_order_id.toString() === order.custom_source_id?.toString()) {
+                return false;
+            }
+        }
+        return true;
+    })
+    baselinkerApiController.addOrders(parsedBaselinkerOrders);
+}
+
