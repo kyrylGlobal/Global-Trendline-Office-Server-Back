@@ -10,7 +10,8 @@ import baselinkerRouter from "./src/routers/baselinkerRouter";
 import BaselinkerApiController from "./src/services/BaselinkerApiController";
 import Files from "./src/utils/Files";
 import { addOrdersToBaselinker, parseWoocomersJsonOrdersToBaselinker } from "./src/helpers/baselinker";
-import { sendMailsFromCSV } from "./src/helpers/mailSender";
+import { sendGmail, sendMailsFromCSV } from "./src/helpers/mailSender";
+import country from "./src/config/config";
 
 dotenv.config();
 
@@ -39,7 +40,7 @@ app.listen(PORT, async () => {
     // const fileDataXml = Files.readFileSync("./public/testFIles/at_test.xml");
     // const xmlResult = resolveSalesRaport(fileDataXml);
     // addOrdersToBaselinker();
-    // sendMailsFromCSV('./src/db/mails/mails.csv');
+    sendMailsFromCSV('./src/db/mails/mails.csv');
 
     // Files.writeFileSync('./public/testFIles/finish_at_test.xml', xmlResult);
 });

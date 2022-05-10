@@ -49,26 +49,28 @@ function checkVatNumber(invoiceObject: any) {
     if(invoiceObject.KRAJ !== "Polska" && invoiceObject.NIP !== "0000000000" && invoiceObject.NIP !== "") {
         let countryWasFounded = false;
         for(let countryElement of country) {
-            if(countryElement.name === invoiceObject.KRAJ) {
-                if(pozycje.POZYCJA) { // optimise
-                    let vatCheckResult = checkVAT(`${countryElement.shortName}${invoiceObject.NIP}`, [countryElement.viesConfig])
-                    if(invoiceObject.KOREKTA === "Tak") {
-                        if(pozycje.POZYCJA.length > 1 && ((pozycje.POZYCJA.length % 2) === 0)) {
-                            const pozSum = (pozycje.POZYCJA as Array<any>).reduce((previous, current) => { return previous + current}, 0)
-                            if((pozSum > -1 && pozSum < 1)) {
-                                if(!vatCheckResult.isValid && pozycje.POZYCJA[pozycje.POZYCJA.length / 2].STAWKA_VAT !== 0) {
-                                    throw new Error(`Error! Please check vat rate for invoice ${invoiceObject.ID_ZRODŁA}. Vat rate should be 0%`);
-                                } 
+            countryElement.names.forEach( countryName => {
+                if(countryName === invoiceObject.KRAJ) {
+                    if(pozycje.POZYCJA) { // optimise
+                        let vatCheckResult = checkVAT(`${countryElement.shortName}${invoiceObject.NIP}`, [countryElement.viesConfig])
+                        if(invoiceObject.KOREKTA === "Tak") {
+                            if(pozycje.POZYCJA.length > 1 && ((pozycje.POZYCJA.length % 2) === 0)) {
+                                const pozSum = (pozycje.POZYCJA as Array<any>).reduce((previous, current) => { return previous + current}, 0)
+                                if((pozSum > -1 && pozSum < 1)) {
+                                    if(!vatCheckResult.isValid && pozycje.POZYCJA[pozycje.POZYCJA.length / 2].STAWKA_VAT !== 0) {
+                                        throw new Error(`Error! Please check vat rate for invoice ${invoiceObject.ID_ZRODŁA}. Vat rate should be 0%`);
+                                    } 
+                                }
+                            }
+                        } else {
+                            if(pozycje.POZYCJA.length > 0 && pozycje.POZYCJA[0].STAWKA_VAT != 0) {
+                                throw new Error(`Error! Please check vat rate for invoice ${invoiceObject.ID_ZRODŁA}. Vat rate should be 0%`);
                             }
                         }
-                    } else {
-                        if(pozycje.POZYCJA.length > 0 && pozycje.POZYCJA[0].STAWKA_VAT != 0) {
-                            throw new Error(`Error! Please check vat rate for invoice ${invoiceObject.ID_ZRODŁA}. Vat rate should be 0%`);
-                        }
                     }
+                    countryWasFounded = true;
                 }
-                countryWasFounded = true;
-            }
+            })
         }
 
         if(!countryWasFounded) {
@@ -90,14 +92,16 @@ function checkCurrencyAndCountry(invoiceObject: any) {
         let countryWasFounded = false;
 
         country.every( countryElement => {
-            if (countryElement.name === invoiceCountry) {
-                if( countryElement.currency === invoiceCurrency) {
-                    countryWasFounded = true;
-                    return false;
-                } else {
-                    throw new Error(`Error! Facture ${invoiceObject.ID_ZRODLA} contain country ${invoiceCountry} with ${invoiceCurrency}`)
+            countryElement.names.forEach( countryName => {
+                if (countryName === invoiceCountry) {
+                    if( countryElement.currency === invoiceCurrency) {
+                        countryWasFounded = true;
+                        return false;
+                    } else {
+                        throw new Error(`Error! Facture ${invoiceObject.ID_ZRODLA} contain country ${invoiceCountry} with ${invoiceCurrency}`)
+                    }
                 }
-            }
+            })
             return true;
         })
 
@@ -184,10 +188,12 @@ function updatePaymentType(invoiceObject: any) {
 function updateVatCountry(invoiceObject: any) {
     if(!invoiceObject.NIP_KRAJ) {
         for(const countryElement of country) {
-            if(countryElement.name === invoiceObject.KRAJ) {
-                invoiceObject.NIP_KRAJ = countryElement.shortName;
-                return;
-            }
+            countryElement.names.forEach( countryName => {
+                if(countryName === invoiceObject.KRAJ) {
+                    invoiceObject.NIP_KRAJ = countryElement.shortName;
+                    return;
+                }
+            })
         }
 
         if(!invoiceObject.KRAJ) {

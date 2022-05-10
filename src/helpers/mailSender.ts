@@ -3,10 +3,12 @@ import Mail from 'nodemailer/lib/mailer';
 import fs from 'fs';
 import csv from 'csv-parser'
 import { on } from 'events';
+import country from '../config/config';
 
 interface Gmail {
     log: string,
     pass: string,
+    from: string,
     to: string,
     title: string,
     content: string
@@ -22,9 +24,9 @@ export function sendGmail(data: Gmail) {
     })
 
     var mailOptions: Mail.Options = {
-        from: data.log,
+        from: data.from,
         to: data.to,
-        subject: "Raport",
+        subject: data.title,
         text: data.content 
     }
 
@@ -32,7 +34,7 @@ export function sendGmail(data: Gmail) {
         if(error) {
             console.log(error);
         } else {
-            console.log("Mail was succesfully sended.")
+            console.log(`Mail from ${data.log} was succesfully sended.`);
         }
     })
 }
@@ -47,12 +49,32 @@ export function sendMailsFromCSV(filePath: string) {
     fs.createReadStream(filePath)
     .pipe(csv())
     .on('data', (row: BaselinkerMailsData) => {
-        sendGmail({
-            log: 'kyryl.global@gmail.com',
-            pass: 'Whatareyoudoingglobal03011973',
-            to: row.email,
-            content: `Hello ${row.name}. Just testing`
-        })
+        let countryWasFounded = false;
+        for(let contryElement of country) {
+            for(let countryName of contryElement.names) {
+                if(countryName === row.country) {
+                    countryWasFounded = true;
+                    if(true) {
+                        sendGmail({
+                            log: contryElement.supportEmail.log,
+                            pass: contryElement.supportEmail.pas,
+                            from: `EasyShop <${contryElement.supportEmail.log}>`,
+                            to: row.email,
+                            content: `${row.name}, ${contryElement.mailText}`,
+                            title: contryElement.productName
+                        })
+                    }
+                }
+
+                if(countryWasFounded) {
+                    break;
+                }
+            }
+
+            if(countryWasFounded) {
+                break;
+            }
+        }
     })
     .on('end', () => {
         console.log('Done reading!')
