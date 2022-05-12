@@ -22,8 +22,8 @@ export async function sendGmail(data: Gmail) {
     var transporter = nodemailer.createTransport({
         service: "gmail",
         auth: {
-            user: "kyryl.global@gmail.com",//data.log,
-            pass: "Whatareyoudoingglobal03011973"//data.pass
+            user: data.log,
+            pass: data.pass
         }
     })
 
@@ -84,7 +84,7 @@ function cleanData(data: BaselinkerMailsData[]) {
 }
 
 export async function sendMailsFromCSV(filePath: string) {
-
+    let rejectedMails: BaselinkerMailsData[] = []
     const mailsData = await getCsvData(filePath);
     const cleanedData = cleanData(mailsData);
     let countSendedMails = 0;
@@ -92,26 +92,37 @@ export async function sendMailsFromCSV(filePath: string) {
     for(let mailData of cleanedData) {
         for(let countryElement of country) {
             for(let countryName of countryElement.names) {
+                let mailSended = false;
                 if(countryName === mailData.country) {
-                    await timeout(150);
+                    await timeout(200);
                     console.log("Start sending");
-                    let mailSended = await sendGmail({
-                        log: countryElement.supportEmail.log,
-                        pass: countryElement.supportEmail.pas,
-                        from: `EasyShop <${countryElement.supportEmail.log}>`,
-                        to: mailData.email,
-                        content: `${mailData.name}, ${countryElement.mailText}`,
-                        title: countryElement.productName
-                    })
+                    try {
+                        mailSended = await sendGmail({
+                            log: countryElement.supportEmail.log,
+                            pass: countryElement.supportEmail.pas,
+                            from: `EasyShop <${countryElement.supportEmail.log}>`,
+                            to: mailData.email,
+                            content: `${mailData.name}, ${countryElement.mailText}`,
+                            title: countryElement.productName
+                        })
+                    } catch {
+                        console.log("Failed sending");
+                    }
                     
                     if(mailSended) {
                         countSendedMails++;
                         console.log(`Mail was sended. nr. ${countSendedMails}`);
                         sendedMailsCount[mailData.country] = sendedMailsCount[mailData.country] ? sendedMailsCount[mailData.country] + 1 : 1;
+                    } else {
+                        rejectedMails.push(mailData);
                     }
                 }
             }
         }
     }
-    console.log(sendedMailsCount);
+    for(let key of Object.keys(sendedMailsCount)) {
+        console.log(`${key} -> ${sendedMailsCount[key]}`);
+    }
+    console.log(`Rejected - ${rejectedMails.length}`);
+    console.log(rejectedMails.length > 0 ? JSON.stringify(rejectedMails) : "");
 }
