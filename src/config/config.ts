@@ -206,7 +206,7 @@ Kitą darbo dieną išsiųsime jums pažadėtą 3 m tunelį prioritetine tvarka 
 
 Jei norite pirkti dideliais kiekiais, susisiekite su mumis el. pašto adresu: logist@easy-shop.eu.`
     },
-    {
+    {//Can not find country of invoice with number 1/4/2022/AT inside country config. Please add Austria to config.
         names: ["Austria"],
         shortName: "AT",
         viesConfig: austria, 

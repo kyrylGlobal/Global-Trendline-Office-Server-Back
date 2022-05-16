@@ -81,7 +81,7 @@ function checkVatNumber(invoiceObject: any) {
 
 function checkInvoice(invoiceObject: any) {
     checkCurrencyAndCountry(invoiceObject);
-    checkVatNumber(invoiceObject);
+    //checkVatNumber(invoiceObject);
 }
 
 function checkCurrencyAndCountry(invoiceObject: any) {
@@ -188,12 +188,12 @@ function updatePaymentType(invoiceObject: any) {
 function updateVatCountry(invoiceObject: any) {
     if(!invoiceObject.NIP_KRAJ) {
         for(const countryElement of country) {
-            countryElement.names.forEach( countryName => {
+            for(let countryName of countryElement.names) {
                 if(countryName === invoiceObject.KRAJ) {
                     invoiceObject.NIP_KRAJ = countryElement.shortName;
                     return;
                 }
-            })
+            }
         }
 
         if(!invoiceObject.KRAJ) {
