@@ -64,6 +64,11 @@ async function getCsvData(filePath: string): Promise<BaselinkerMailsData[]> {
     })
 }
 
+function jsonData(filePath: string): any {
+    let fileData = fs.readFileSync(filePath, {encoding: 'utf8'});
+    return JSON.parse(fileData);
+}
+
 function cleanData(data: BaselinkerMailsData[]) {
     let cleanedData: BaselinkerMailsData[] = [];
 
@@ -85,7 +90,7 @@ function cleanData(data: BaselinkerMailsData[]) {
 
 export async function sendMailsFromCSV(filePath: string) {
     let rejectedMails: BaselinkerMailsData[] = []
-    const mailsData = await getCsvData(filePath);
+    const mailsData = jsonData(filePath);
     const cleanedData = cleanData(mailsData);
     let countSendedMails = 0;
     let sendedMailsCount: any = {};
@@ -94,7 +99,7 @@ export async function sendMailsFromCSV(filePath: string) {
             for(let countryName of countryElement.names) {
                 let mailSended = false;
                 if(countryName === mailData.country) {
-                    await timeout(200);
+                    await timeout(500);
                     console.log("Start sending");
                     try {
                         mailSended = await sendGmail({

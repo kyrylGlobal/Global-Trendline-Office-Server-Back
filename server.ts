@@ -40,8 +40,8 @@ app.listen(PORT, async () => {
     console.log(`Server running on port - ${PORT}.\nLink - http://localhost:${PORT}`);
     // const fileDataXml = Files.readFileSync("./public/testFIles/at_test.xml");
     // const xmlResult = resolveSalesRaport(fileDataXml);
-    addOrdersToBaselinker();
-    // sendMailsFromCSV('./src/db/mails/mails.csv');
+    // addOrdersToBaselinker();
+    // sendMailsFromCSV('./src/db/mails/mails.json');
 
     // Files.writeFileSync('./public/testFIles/finish_at_test.xml', xmlResult);
 });
