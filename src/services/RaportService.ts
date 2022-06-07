@@ -6,13 +6,13 @@ import { resolveSalesRaport } from "../helpers/fast-xml-parser";
 
 class RaportService{
 
-    generateXmlResultFileData(raportFile: UploadedFile): string {
+    async generateXmlResultFileData(raportFile: UploadedFile): Promise<string> {
         
         this.checkFileExtention(raportFile.mimetype);
 
         const fileDataXml = this.getDataString(raportFile);
 
-        const xmlResult = resolveSalesRaport(fileDataXml);
+        const xmlResult = await resolveSalesRaport(fileDataXml);
 
         return xmlResult;
     }

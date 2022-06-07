@@ -1,14 +1,16 @@
 import { X2jOptions, XMLBuilder, XmlBuilderOptions, XMLParser } from "fast-xml-parser";
 import cDataRows from "../config/c-data-rows";
-import country from "../config/config";
+import country, {ifContainCountryName, getCountryObjectIfName} from "../config/config";
 import {checkVAT} from 'jsvat'
+import axios from "axios";
+import DateTime from "../utils/DateTime";
 
 interface KeyAndValue {
     key: string,
     value: string
 }
 
-export function resolveSalesRaport(xmlStringata: string): string {
+export async function resolveSalesRaport(xmlStringata: string): Promise<string> {
     const xmlParseOption: Partial<X2jOptions> = {
         ignoreAttributes: false,
         parseAttributeValue: false,
@@ -24,9 +26,11 @@ export function resolveSalesRaport(xmlStringata: string): string {
 
     const xmlObject: any = new XMLParser(xmlParseOption).parse(xmlStringata);
     
-    updateInvoices(xmlObject);
+    await updateInvoices(xmlObject); // here is the problem need to resolve async
     
     let xmlResult = new XMLBuilder(xmlBuilderOption).build(xmlObject);
+    console.log("On the way to give back");
+    
     xmlResult = replaceData(
         xmlResult,
         [
@@ -114,10 +118,10 @@ function checkCurrencyAndCountry(invoiceObject: any) {
     }
 }
 
-function updateInvoices(xmlObject: any) {
+async function updateInvoices(xmlObject: any) {
 
     if(Array.isArray(xmlObject.ROOT.REJESTRY_SPRZEDAZY_VAT.REJESTR_SPRZEDAZY_VAT)) {
-        (xmlObject.ROOT.REJESTRY_SPRZEDAZY_VAT.REJESTR_SPRZEDAZY_VAT as Array<any>).forEach( invoiceObject => {
+        (xmlObject.ROOT.REJESTRY_SPRZEDAZY_VAT.REJESTR_SPRZEDAZY_VAT as Array<any>).forEach( async invoiceObject => {
             checkInvoice(invoiceObject);
             updateInvoice(invoiceObject);
 
@@ -130,7 +134,9 @@ function updateInvoices(xmlObject: any) {
 }
 
 
-function updateInvoice(invoiceObject: any) {
+async function updateInvoice(invoiceObject: any) {
+    await updateConversion(invoiceObject);
+    console.log("Betwen")
     updatePaymentType(invoiceObject);
     updateVatNumber(invoiceObject);
     updateVatCountry(invoiceObject);
@@ -138,6 +144,37 @@ function updateInvoice(invoiceObject: any) {
     updatePrices(invoiceObject);
 
     updateFinishedJObject(invoiceObject);
+}
+
+async function updateConversion(invoiceObject: any) {
+    if(invoiceObject.NOTOWANIE_WALUTY_ILE_2 === 0) {
+        const lookingCountryObj = getCountryObjectIfName(invoiceObject.KRAJ);
+        if(lookingCountryObj) {
+            const midRate = await getMidRate(lookingCountryObj.convCurGetRequestWay, invoiceObject.DATA_KURSU); //(await axios.get(`${lookingCountryObj.convCurGetRequestWay}/${invoiceObject.DATA_KURSU}`, {params: {format: "json"}})).data.rates[0].mid; 
+            if(midRate) {
+                invoiceObject.NOTOWANIE_WALUTY_ILE_2 = midRate;
+                invoiceObject.NOTOWANIE_WALUTY_ILE_PLAT = midRate;
+                invoiceObject.PLATNOSCI.PLATNOSC.KWOTA_PLN_PLAT = parseFloat((midRate * invoiceObject.PLATNOSCI.PLATNOSC.KWOTA_PLAT).toFixed(2));
+            } else {
+                throw new Error(`Can not get conversion data for invoice ${invoiceObject.ID_ZRODLA}. Please try by your own.`);
+            }
+        } else {
+            throw new Error(`Error! Please add ${invoiceObject.KRAJ} to config names`);
+        }
+    }
+}
+//NOTOWANIE_WALUTY_ILE_2 - mid rate
+//PLATNOSCI -> PLATNOSC -> NOTOWANIE_WALUTY_ILE_PLAT - mid rate
+//PLATNOSCI -> PLATNOSC -> KWOTA_PLN_PLAT - (PLATNOSCI -> PLATNOSC -> NOTOWANIE_WALUTY_ILE_PLAT) * (PLATNOSCI -> PLATNOSC -> KWOTA_PLAT)
+
+async function getMidRate(adres: string, date: string): Promise<number> {
+    try {
+        const midRate = (await axios.get(`${adres}/${date}`, {params: {format: "json"}})).data.rates[0].mid;
+        return midRate;
+    } catch {
+        console.log(`Problem with adres ${adres}/${date}`);
+        return getMidRate(adres, DateTime.updateDate(date, {days: -1, mounth: 0, years: 0}));
+    }
 }
 
 function updatePrices(invoiceObject: any) {

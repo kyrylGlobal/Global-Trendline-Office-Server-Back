@@ -1,3 +1,9 @@
+interface UpdaterInfo {
+    days: number,
+    mounth: number,
+    years: number
+}
+
 class DateTime{
 
     /**
@@ -24,6 +30,27 @@ class DateTime{
         const seconds = dateTime.getSeconds() < 10 ? `0${dateTime.getSeconds()}`: dateTime.getSeconds().toString();
         
         return `${hours}:${minutes}:${seconds}`;
+    }
+
+    updateDate(dateString: string, updaterInfo: UpdaterInfo) {
+        let dateArray = dateString.split("-");
+        let date = new Date(parseInt(dateArray[0]), parseInt(dateArray[1]) - 1, parseInt(dateArray[2]));
+        date.setDate(date.getDate() + updaterInfo.days);
+        date.setMonth(date.getMonth() + updaterInfo.mounth);
+        date.setFullYear(date.getFullYear() + updaterInfo.years)
+        let day = date.getDate().toString();
+        let mounth = (date.getMonth() + 1).toString();
+        let year = date.getFullYear().toString();
+        if(parseInt(day) < 10) {
+            day = 0 + day;
+        }
+        if(parseInt(mounth) < 10) {
+            mounth = 0 + mounth;
+        }
+        if(mounth === "00") {
+            mounth = "01";
+        }
+        return `${year}-${mounth}-${day}`
     }
 }
 

@@ -4,7 +4,7 @@ import RaportService from "../services/RaportService";
 
 class RaportController {
 
-    raportSales(req: Request, res: Response, next: NextFunction){
+    async raportSales(req: Request, res: Response, next: NextFunction) {
         if(!req.files){
             res.status(400).send("No files were uploaded!");
         }
@@ -15,7 +15,7 @@ class RaportController {
                 }
                 else{
                     const raportFile: UploadedFile = req.files.raport;
-                    const xmlResultData = RaportService.generateXmlResultFileData(raportFile);
+                    const xmlResultData = await RaportService.generateXmlResultFileData(raportFile);
     
                     res.attachment(raportFile.name); // res.setHeader('Content-type', "application/octet-stream"); res.setHeader('Content-disposition', 'attachment; filename=file.txt');
                     res.status(200).send(xmlResultData);

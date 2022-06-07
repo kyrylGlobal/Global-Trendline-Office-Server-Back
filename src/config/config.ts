@@ -8,7 +8,8 @@ interface BaselinkerCountry {
     currency: string,
     supportEmail: Email,
     productName: string,
-    mailText: string
+    mailText: string,
+    convCurGetRequestWay: string
 }
 
 interface Email {
@@ -45,7 +46,8 @@ Ważne:
 Gotową wideo-recenzję trzeba wysłać nam w formacie pliku (bez kompresji, w oryginalnym rozmiarze) na nasz adres mailowy info@easy-shop.eu 
 W następnym dniu roboczym priorytetowo wyślemy Wam obiecany tunel 3m z opłatą tylko za wysyłkę
 
-W sprawie zakupów hurtowych prosimy o kontakt  na nasz adres mailowy: logist@easy-shop.eu`
+W sprawie zakupów hurtowych prosimy o kontakt  na nasz adres mailowy: logist@easy-shop.eu`,
+        convCurGetRequestWay: ""
     },
     {
         names: ["Czechy", "Czech Republic"],
@@ -74,7 +76,8 @@ Důležité:
 Hotovou videorecenzi nám musíte zaslat ve formátu souboru (nekomprimovaného, v původní velikosti) na naši e-mailovou adresu: cz.easyshop@gmail.com. 
 Následující pracovní den vám zašleme slíbený 3m tunel prioritně a pouze za poštovné.
 
-V případě hromadných nákupů nás prosím kontaktujte na naší e-mailové adrese: logist@easy-shop.eu.`
+V případě hromadných nákupů nás prosím kontaktujte na naší e-mailové adrese: logist@easy-shop.eu.`,
+        convCurGetRequestWay: ""
     },
     {
         names: ["Węgry", "Hungary"],
@@ -104,7 +107,8 @@ Fontos:
 Az elkészült videó-kritikát fájl formátumban (tömörítés nélkül, eredeti méretben) kell elküldeni nekünk az hu.easyshop@gmail.com e-mail címünkre.
 A következő munkanapon kiküldjük Önnek az ígért 3 m-es alagutat, amelynek csak szállítási díjat kell fizetni.
 
-Nagykereskedelmi vásárlás esetén kérjük, vegye fel velünk a kapcsolatot e-mailben: logist@easy-shop.eu`
+Nagykereskedelmi vásárlás esetén kérjük, vegye fel velünk a kapcsolatot e-mailben: logist@easy-shop.eu`,
+        convCurGetRequestWay: ""
     },
     {
         names: ["Rumunia"],
@@ -117,7 +121,8 @@ Nagykereskedelmi vásárlás esetén kérjük, vegye fel velünk a kapcsolatot e
             allowMailSending: false
         },
         productName: "",
-        mailText: ``
+        mailText: ``,
+        convCurGetRequestWay: ""
     },
     {
         names: ["Słowacja", "Slovakia"],
@@ -146,7 +151,8 @@ Důležité:
 Hotovou videorecenzi nám musíte zaslat ve formátu souboru (nekomprimovaného, v původní velikosti) na naši e-mailovou adresu: sk.easyshop.info@gmail.com. 
 Následující pracovní den vám zašleme slíbený 3m tunel prioritně a pouze za poštovné.
 
-V případě hromadných nákupů nás prosím kontaktujte na naší e-mailové adrese: logist@easy-shop.eu.`
+V případě hromadných nákupů nás prosím kontaktujte na naší e-mailové adrese: logist@easy-shop.eu.`,
+        convCurGetRequestWay: ""
     },
     {
         names: ["Bułgaria", "Bulgaria"],
@@ -175,7 +181,8 @@ V případě hromadných nákupů nás prosím kontaktujte na naší e-mailové 
 Изпратете ни готовия видеопреглед във файлов формат (некомпресиран, в оригинален размер) на нашия имейл адрес: bg.easyshop.info@gmail.com
 На следващия работен ден ще ви изпратим обещания тунел 3 м с приоритет и само с такси за доставка.
 
-За покупки на едро, моля, свържете се с нас на нашия имейл адрес: logist@easy-shop.eu`
+За покупки на едро, моля, свържете се с нас на нашия имейл адрес: logist@easy-shop.eu`,
+        convCurGetRequestWay: ""
     },
     {
         names: ["Litwa", "Lithuania"],
@@ -204,7 +211,8 @@ Svarbu:
 Paruoštą vaizdo įrašo peržiūrą turite atsiųsti mums failo formatu (nesuspaustą, originalaus dydžio) mūsų el. pašto adresu: lt.easyshop.info@gmail.com 
 Kitą darbo dieną išsiųsime jums pažadėtą 3 m tunelį prioritetine tvarka ir sumokėsite tik siuntimo mokesčius.
 
-Jei norite pirkti dideliais kiekiais, susisiekite su mumis el. pašto adresu: logist@easy-shop.eu.`
+Jei norite pirkti dideliais kiekiais, susisiekite su mumis el. pašto adresu: logist@easy-shop.eu.`,
+        convCurGetRequestWay: "http://api.nbp.pl/api/exchangerates/rates/a/eur"
     },
     {//Can not find country of invoice with number 1/4/2022/AT inside country config. Please add Austria to config.
         names: ["Austria"],
@@ -233,7 +241,8 @@ Das ist wichtig:
 Senden Sie uns den fertigen Videobeitrag im Dateiformat (unkomprimiert, Originalgröße) an unsere E-Mail-Adresse: at.easyshop.info@gmail.com 
 Am nächsten Werktag senden wir Ihnen den versprochenen Tunnel 3m als Priority mit nur Versandgebühren
 
-Für Großeinkäufe kontaktieren Sie uns bitte unter unserer E-Mail-Adresse: logist@easy-shop.eu`
+Für Großeinkäufe kontaktieren Sie uns bitte unter unserer E-Mail-Adresse: logist@easy-shop.eu`,
+    convCurGetRequestWay: ""
     },
     {
         names: ["Niemcy"],
@@ -246,7 +255,8 @@ Für Großeinkäufe kontaktieren Sie uns bitte unter unserer E-Mail-Adresse: log
             allowMailSending: false
         },
         productName: "",
-        mailText: ``
+        mailText: ``,
+        convCurGetRequestWay: ""
     },
     {
         names: ["Chorwacja"],
@@ -259,7 +269,8 @@ Für Großeinkäufe kontaktieren Sie uns bitte unter unserer E-Mail-Adresse: log
             allowMailSending: false
         },
         productName: "",
-        mailText: ``
+        mailText: ``,
+        convCurGetRequestWay: ""
     },
     {
         names: ["Grecja"],
@@ -272,7 +283,8 @@ Für Großeinkäufe kontaktieren Sie uns bitte unter unserer E-Mail-Adresse: log
             allowMailSending: false
         },
         productName: "",
-        mailText: ``
+        mailText: ``,
+        convCurGetRequestWay: ""
     },
     {
         names: ["Łotwa"],
@@ -285,8 +297,32 @@ Für Großeinkäufe kontaktieren Sie uns bitte unter unserer E-Mail-Adresse: log
             allowMailSending: false
         },
         productName: "",
-        mailText: ``
+        mailText: ``,
+        convCurGetRequestWay: ""
     }
 ];
+
+export function ifContainCountryName(lookingName: string): boolean {
+    for(let countryElement of country) {
+        for(let countryName of countryElement.names) {
+            if(countryName === lookingName) {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+export function getCountryObjectIfName(lookingName: string): BaselinkerCountry | null {
+    for(let countryElement of country) {
+        for(let countryName of countryElement.names) {
+            if(countryName === lookingName) {
+                return countryElement;
+            }
+        }
+    }
+    return null;
+}
 
 export default country;
