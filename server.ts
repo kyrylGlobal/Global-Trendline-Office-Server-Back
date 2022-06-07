@@ -12,6 +12,7 @@ import Files from "./src/utils/Files";
 import { addOrdersToBaselinker, parseWoocomersJsonOrdersToBaselinker } from "./src/helpers/baselinker";
 import { sendGmail, sendMailsFromCSV } from "./src/helpers/mailSender";
 import country from "./src/config/config";
+import { resolveSalesRaport } from "./src/helpers/fast-xml-parser";
 
 dotenv.config();
 
@@ -39,8 +40,8 @@ app.listen(PORT, async () => {
     console.log(`Server running on port - ${PORT}.\nLink - http://localhost:${PORT}`);
     // const fileDataXml = Files.readFileSync("./public/testFIles/at_test.xml");
     // const xmlResult = resolveSalesRaport(fileDataXml);
-    // addOrdersToBaselinker();
-    sendMailsFromCSV('./src/db/mails/mails.csv');
+    addOrdersToBaselinker();
+    // sendMailsFromCSV('./src/db/mails/mails.csv');
 
     // Files.writeFileSync('./public/testFIles/finish_at_test.xml', xmlResult);
 });

@@ -1,5 +1,5 @@
 import internal from "stream";
-import country from "../config/country";
+import country from "../config/config";
 import BaselinkerApiController from "../services/BaselinkerApiController";
 import Files from "../utils/Files";
 
@@ -56,7 +56,7 @@ interface BaselinkerProduct {
     price_brutto: number,
     tax_rate: number,
     quantity: number,
-    weight?: number,
+    weight?: number
 }
 
 
@@ -153,7 +153,7 @@ export function parseWoocomersJsonOrdersToBaselinker(woocomerceOrders: any[], or
 
 export async function addOrdersToBaselinker() { // Add arders which does not exist in folder, getting orders from file
     const baselinkerApiController = new BaselinkerApiController();
-    const baselinkerStatusForAdding = "New Orders";
+    const baselinkerStatusForAdding = "Not Confirmed";
     const baselinkerStatusForChecking = "Return by code";
     const fileWithWoocomerceJsonData = './src/db/orders/orders.json';
     const woocomerceOrders = JSON.parse(Files.readFileSync(fileWithWoocomerceJsonData));

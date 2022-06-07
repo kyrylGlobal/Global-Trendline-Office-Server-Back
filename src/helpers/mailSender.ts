@@ -89,7 +89,7 @@ export async function sendMailsFromCSV(filePath: string) {
     const cleanedData = cleanData(mailsData);
     let countSendedMails = 0;
     let sendedMailsCount: any = {};
-    for(let mailData of cleanedData) {
+    for(let mailData of mailsData) {
         for(let countryElement of country) {
             for(let countryName of countryElement.names) {
                 let mailSended = false;
@@ -105,7 +105,7 @@ export async function sendMailsFromCSV(filePath: string) {
                             content: `${mailData.name}, ${countryElement.mailText}`,
                             title: countryElement.productName
                         })
-                    } catch {
+                    } catch(error: any) {
                         console.log("Failed sending");
                     }
                     
