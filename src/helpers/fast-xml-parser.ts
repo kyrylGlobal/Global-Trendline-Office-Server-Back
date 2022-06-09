@@ -29,7 +29,6 @@ export async function resolveSalesRaport(xmlStringata: string): Promise<string> 
     await updateInvoices(xmlObject); // here is the problem need to resolve async
     
     let xmlResult = new XMLBuilder(xmlBuilderOption).build(xmlObject);
-    console.log("On the way to give back");
     
     xmlResult = replaceData(
         xmlResult,
@@ -90,27 +89,29 @@ function checkInvoice(invoiceObject: any) {
 
 function checkCurrencyAndCountry(invoiceObject: any) {
     try {
-        let invoiceCurrency = invoiceObject.PLATNOSCI.PLATNOSC.WALUTA_PLAT;
-        let invoiceCountry = invoiceObject.KRAJ;
+        if(invoiceObject.PLATNOSCI.PLATNOSC) {
+            let invoiceCurrency = invoiceObject.PLATNOSCI.PLATNOSC.WALUTA_PLAT;
+            let invoiceCountry = invoiceObject.KRAJ;
 
-        let countryWasFounded = false;
+            let countryWasFounded = false;
 
-        country.every( countryElement => {
-            countryElement.names.forEach( countryName => {
-                if (countryName === invoiceCountry) {
-                    if( countryElement.currency === invoiceCurrency) {
-                        countryWasFounded = true;
-                        return false;
-                    } else {
-                        throw new Error(`Error! Facture ${invoiceObject.ID_ZRODLA} contain country ${invoiceCountry} with ${invoiceCurrency}`)
+            country.every( countryElement => {
+                countryElement.names.forEach( countryName => {
+                    if (countryName === invoiceCountry) {
+                        if( countryElement.currency === invoiceCurrency) {
+                            countryWasFounded = true;
+                            return false;
+                        } else {
+                            throw new Error(`Error! Facture ${invoiceObject.ID_ZRODLA} contain country ${invoiceCountry} with ${invoiceCurrency}`)
+                        }
                     }
-                }
+                })
+                return true;
             })
-            return true;
-        })
 
-        if (!countryWasFounded) {
-            throw new Error(`Error! Can not found config for counry ${invoiceCountry} and currency ${invoiceCurrency}`)
+            if (!countryWasFounded) {
+                throw new Error(`Error! Can not found config for counry ${invoiceCountry} and currency ${invoiceCurrency}`)
+            }
         }
     }
     catch(error: any) {
@@ -121,45 +122,59 @@ function checkCurrencyAndCountry(invoiceObject: any) {
 async function updateInvoices(xmlObject: any) {
 
     if(Array.isArray(xmlObject.ROOT.REJESTRY_SPRZEDAZY_VAT.REJESTR_SPRZEDAZY_VAT)) {
-        (xmlObject.ROOT.REJESTRY_SPRZEDAZY_VAT.REJESTR_SPRZEDAZY_VAT as Array<any>).forEach( async invoiceObject => {
-            checkInvoice(invoiceObject);
-            updateInvoice(invoiceObject);
-
-        })
+        for(let invoiceObject of (xmlObject.ROOT.REJESTRY_SPRZEDAZY_VAT.REJESTR_SPRZEDAZY_VAT as Array<any>)) {
+            await updateInvoice(invoiceObject);
+        }
     } else {
         let invoiceObject = xmlObject.ROOT.REJESTRY_SPRZEDAZY_VAT.REJESTR_SPRZEDAZY_VAT;
-        checkInvoice(invoiceObject)
-        updateInvoice(invoiceObject);
+        await updateInvoice(invoiceObject);
     }
 }
 
 
 async function updateInvoice(invoiceObject: any) {
     await updateConversion(invoiceObject);
-    console.log("Betwen")
     updatePaymentType(invoiceObject);
     updateVatNumber(invoiceObject);
     updateVatCountry(invoiceObject);
     updateInvoiceDates(invoiceObject);
     updatePrices(invoiceObject);
+    updatePaymentData(invoiceObject);
+
+    checkInvoice(invoiceObject);
 
     updateFinishedJObject(invoiceObject);
+}
+
+async function updatePaymentData(invoiceObject: any) {
+    if(invoiceObject.PLATNOSCI.PLATNOSC) {
+        if(invoiceObject.PLATNOSCI.PLATNOSC.WALUTA_PLAT === "") {
+            const countryObject = getCountryObjectIfName(invoiceObject.KRAJ);
+            if(countryObject) {
+                invoiceObject.PLATNOSCI.PLATNOSC.WALUTA_PLAT = countryObject.currency;
+            }
+        }
+    }
 }
 
 async function updateConversion(invoiceObject: any) {
     if(invoiceObject.NOTOWANIE_WALUTY_ILE_2 === 0) {
         const lookingCountryObj = getCountryObjectIfName(invoiceObject.KRAJ);
-        if(lookingCountryObj) {
-            const midRate = await getMidRate(lookingCountryObj.convCurGetRequestWay, invoiceObject.DATA_KURSU); //(await axios.get(`${lookingCountryObj.convCurGetRequestWay}/${invoiceObject.DATA_KURSU}`, {params: {format: "json"}})).data.rates[0].mid; 
-            if(midRate) {
-                invoiceObject.NOTOWANIE_WALUTY_ILE_2 = midRate;
-                invoiceObject.NOTOWANIE_WALUTY_ILE_PLAT = midRate;
-                invoiceObject.PLATNOSCI.PLATNOSC.KWOTA_PLN_PLAT = parseFloat((midRate * invoiceObject.PLATNOSCI.PLATNOSC.KWOTA_PLAT).toFixed(2));
+        if(lookingCountryObj && !lookingCountryObj.names.includes("Polska")) {
+            if(lookingCountryObj) {
+                const midRate = await getMidRate(lookingCountryObj.convCurGetRequestWay, invoiceObject.DATA_KURSU); //(await axios.get(`${lookingCountryObj.convCurGetRequestWay}/${invoiceObject.DATA_KURSU}`, {params: {format: "json"}})).data.rates[0].mid; 
+                if(midRate) {
+                    invoiceObject.NOTOWANIE_WALUTY_ILE_2 = midRate;
+                    invoiceObject.NOTOWANIE_WALUTY_ILE_PLAT = midRate;
+                    if(invoiceObject.PLATNOSCI.PLATNOSC) {
+                        invoiceObject.PLATNOSCI.PLATNOSC.KWOTA_PLN_PLAT = parseFloat((midRate * invoiceObject.PLATNOSCI.PLATNOSC.KWOTA_PLAT).toFixed(2));
+                    }
+                } else {
+                    throw new Error(`Can not get conversion data for invoice ${invoiceObject.ID_ZRODLA}. Please try by your own.`);
+                }
             } else {
-                throw new Error(`Can not get conversion data for invoice ${invoiceObject.ID_ZRODLA}. Please try by your own.`);
-            }
-        } else {
-            throw new Error(`Error! Please add ${invoiceObject.KRAJ} to config names`);
+                throw new Error(`Error! Please add ${invoiceObject.KRAJ} to config names`);
+            }   
         }
     }
 }
@@ -168,11 +183,20 @@ async function updateConversion(invoiceObject: any) {
 //PLATNOSCI -> PLATNOSC -> KWOTA_PLN_PLAT - (PLATNOSCI -> PLATNOSC -> NOTOWANIE_WALUTY_ILE_PLAT) * (PLATNOSCI -> PLATNOSC -> KWOTA_PLAT)
 
 async function getMidRate(adres: string, date: string): Promise<number> {
+    if(!adres) {
+        throw new Error("Error! Please add convCurGetRequestWay par. data to this country.")
+    }
     try {
         const midRate = (await axios.get(`${adres}/${date}`, {params: {format: "json"}})).data.rates[0].mid;
         return midRate;
-    } catch {
+    } catch(error: any | undefined) {
         console.log(`Problem with adres ${adres}/${date}`);
+        if(error?.response?.status === 429) {
+            await (async function() {
+                return new Promise((res, rej) => setTimeout(res, 2000))
+            })()
+            return getMidRate(adres, date);
+        }
         return getMidRate(adres, DateTime.updateDate(date, {days: -1, mounth: 0, years: 0}));
     }
 }

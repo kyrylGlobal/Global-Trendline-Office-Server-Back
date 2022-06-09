@@ -1,4 +1,4 @@
-import {Country, czechRepublic, hungary, romania, slovakiaRepublic, bulgaria, lithuania, austria, germany, croatia, greece, poland, latvia} from 'jsvat'
+import {Country, czechRepublic, hungary, romania, slovakiaRepublic, bulgaria, lithuania, austria, germany, croatia, greece, poland, latvia, estonia} from 'jsvat'
 
 
 interface BaselinkerCountry {
@@ -77,7 +77,7 @@ Hotovou videorecenzi nám musíte zaslat ve formátu souboru (nekomprimovaného,
 Následující pracovní den vám zašleme slíbený 3m tunel prioritně a pouze za poštovné.
 
 V případě hromadných nákupů nás prosím kontaktujte na naší e-mailové adrese: logist@easy-shop.eu.`,
-        convCurGetRequestWay: ""
+        convCurGetRequestWay: "http://api.nbp.pl/api/exchangerates/rates/a/czk"
     },
     {
         names: ["Węgry", "Hungary"],
@@ -108,7 +108,7 @@ Az elkészült videó-kritikát fájl formátumban (tömörítés nélkül, ered
 A következő munkanapon kiküldjük Önnek az ígért 3 m-es alagutat, amelynek csak szállítási díjat kell fizetni.
 
 Nagykereskedelmi vásárlás esetén kérjük, vegye fel velünk a kapcsolatot e-mailben: logist@easy-shop.eu`,
-        convCurGetRequestWay: ""
+        convCurGetRequestWay: "http://api.nbp.pl/api/exchangerates/rates/a/huf"
     },
     {
         names: ["Rumunia"],
@@ -122,7 +122,7 @@ Nagykereskedelmi vásárlás esetén kérjük, vegye fel velünk a kapcsolatot e
         },
         productName: "",
         mailText: ``,
-        convCurGetRequestWay: ""
+        convCurGetRequestWay: "http://api.nbp.pl/api/exchangerates/rates/a/ron"
     },
     {
         names: ["Słowacja", "Slovakia"],
@@ -152,7 +152,7 @@ Hotovou videorecenzi nám musíte zaslat ve formátu souboru (nekomprimovaného,
 Následující pracovní den vám zašleme slíbený 3m tunel prioritně a pouze za poštovné.
 
 V případě hromadných nákupů nás prosím kontaktujte na naší e-mailové adrese: logist@easy-shop.eu.`,
-        convCurGetRequestWay: ""
+        convCurGetRequestWay: "http://api.nbp.pl/api/exchangerates/rates/a/eur"
     },
     {
         names: ["Bułgaria", "Bulgaria"],
@@ -182,7 +182,7 @@ V případě hromadných nákupů nás prosím kontaktujte na naší e-mailové 
 На следващия работен ден ще ви изпратим обещания тунел 3 м с приоритет и само с такси за доставка.
 
 За покупки на едро, моля, свържете се с нас на нашия имейл адрес: logist@easy-shop.eu`,
-        convCurGetRequestWay: ""
+        convCurGetRequestWay: "http://api.nbp.pl/api/exchangerates/rates/a/bgn"
     },
     {
         names: ["Litwa", "Lithuania"],
@@ -242,13 +242,13 @@ Senden Sie uns den fertigen Videobeitrag im Dateiformat (unkomprimiert, Original
 Am nächsten Werktag senden wir Ihnen den versprochenen Tunnel 3m als Priority mit nur Versandgebühren
 
 Für Großeinkäufe kontaktieren Sie uns bitte unter unserer E-Mail-Adresse: logist@easy-shop.eu`,
-    convCurGetRequestWay: ""
+    convCurGetRequestWay: "http://api.nbp.pl/api/exchangerates/rates/a/eur"
     },
     {
         names: ["Niemcy"],
         shortName: "DE",
         viesConfig: germany, 
-        currency: "",
+        currency: "EUR",
         supportEmail: {
             log: "de.easyshop.info@gmail.com",
             pas: "Globalde2021",
@@ -256,7 +256,7 @@ Für Großeinkäufe kontaktieren Sie uns bitte unter unserer E-Mail-Adresse: log
         },
         productName: "",
         mailText: ``,
-        convCurGetRequestWay: ""
+        convCurGetRequestWay: "http://api.nbp.pl/api/exchangerates/rates/a/eur"
     },
     {
         names: ["Chorwacja"],
@@ -270,7 +270,7 @@ Für Großeinkäufe kontaktieren Sie uns bitte unter unserer E-Mail-Adresse: log
         },
         productName: "",
         mailText: ``,
-        convCurGetRequestWay: ""
+        convCurGetRequestWay: "http://api.nbp.pl/api/exchangerates/rates/a/hrk"
     },
     {
         names: ["Grecja"],
@@ -284,7 +284,7 @@ Für Großeinkäufe kontaktieren Sie uns bitte unter unserer E-Mail-Adresse: log
         },
         productName: "",
         mailText: ``,
-        convCurGetRequestWay: ""
+        convCurGetRequestWay: "http://api.nbp.pl/api/exchangerates/rates/a/eur"
     },
     {
         names: ["Łotwa"],
@@ -298,7 +298,21 @@ Für Großeinkäufe kontaktieren Sie uns bitte unter unserer E-Mail-Adresse: log
         },
         productName: "",
         mailText: ``,
-        convCurGetRequestWay: ""
+        convCurGetRequestWay: "http://api.nbp.pl/api/exchangerates/rates/a/eur"
+    },
+    {
+        names: ["Estonia"],
+        shortName: "EE",
+        viesConfig: estonia,
+        currency: "EUR",
+        supportEmail: {
+            log: "",
+            pas: "",
+            allowMailSending: false
+        },
+        productName: "",
+        mailText: ``,
+        convCurGetRequestWay: "http://api.nbp.pl/api/exchangerates/rates/a/eur"
     }
 ];
 
