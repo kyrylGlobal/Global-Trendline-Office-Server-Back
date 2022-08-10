@@ -2,6 +2,14 @@ import internal from "stream";
 import country from "../config/config";
 import BaselinkerApiController from "../services/BaselinkerApiController";
 import Files from "../utils/Files";
+import {readFileSync, writeFileSync} from 'fs';
+import path from "path";
+
+interface ProductBySku {
+    options: string[],
+    exact: boolean,
+    officialName: string
+}
 
 interface BaselinkerOrder {
     order_status_id: number,
@@ -158,7 +166,9 @@ export async function addOrdersToBaselinker() { // Add arders which does not exi
     const fileWithWoocomerceJsonData = './src/db/orders/orders.json';
     const woocomerceOrders = JSON.parse(Files.readFileSync(fileWithWoocomerceJsonData));
     let parsedBaselinkerOrders = parseWoocomersJsonOrdersToBaselinker(woocomerceOrders, await (baselinkerApiController.getOrderStatusIdByName(baselinkerStatusForAdding)));
-    const baselinkerOrdersFromFolder = await baselinkerApiController.getOrders(await (baselinkerApiController.getOrderStatusIdByName(baselinkerStatusForChecking)));
+    const baselinkerOrdersFromFolder = await baselinkerApiController.getOrders({
+        statusId: await (baselinkerApiController.getOrderStatusIdByName(baselinkerStatusForChecking))
+    });
     parsedBaselinkerOrders = parsedBaselinkerOrders.filter( order => {
         for(let folderOrders of baselinkerOrdersFromFolder) {
             if(folderOrders.shop_order_id.toString() === order.custom_source_id?.toString()) {
@@ -169,4 +179,147 @@ export async function addOrdersToBaselinker() { // Add arders which does not exi
     })
     baselinkerApiController.addOrders(parsedBaselinkerOrders);
 }
+
+export function getSattisticsByName(orders: any[], productSkus: string[]): any {
+    let statistic: any = {}
+    let config: ProductBySku[] = [
+        {
+            options: ["easyheater", "easyheater-1"],
+            exact: true,
+            officialName: "kominek"
+        },
+        {
+            options: ["harmony"],
+            exact: false,
+            officialName: "harmony"
+        },
+        {
+            options: ["dove"],
+            exact: false,
+            officialName: "dove"
+        },
+        {
+            options: ["orchid"],
+            exact: false,
+            officialName: "orchid"
+        },
+        {
+            options: ["waterfall"],
+            exact: false,
+            officialName: "waterfall"
+        },
+        {
+            options: ["village"],
+            exact: false,
+            officialName: "village"
+        }
+    ]
+    for(let order of orders) {
+        if(true) {
+            if(order.order_id === 439316536){
+                console.log()
+            }
+            for(let product of order.products) {
+                for(let productConfig of config) {
+                    let wasFound = false;
+                    if(statistic[order.delivery_country]) {
+                        wasFound = addProduct(order, product, statistic, productConfig)
+                    } else {
+                        statistic[order.delivery_country] = {};
+                        wasFound = addProduct(order, product, statistic, productConfig);
+                    }
+                    if(wasFound) {
+                        break;
+                    }
+                }
+            }
+        }
+    }
+    return statistic;
+}
+
+function addProduct(order: any, product: any, statistic: any, productConfig: ProductBySku): boolean {
+    if((statistic[order.delivery_country])[productConfig.officialName]) {
+        if(productConfig.exact) {
+            if(productConfig.options.includes(product.sku)) {
+                (statistic[order.delivery_country])[productConfig.officialName] += product.quantity;
+                return true;
+            }
+        } else {
+            for(let option of productConfig.options) {
+                if((product.sku as Array<string>).includes(option)) {
+                    (statistic[order.delivery_country])[productConfig.officialName] += product.quantity;
+                    return true;
+                }
+            }
+        }
+    } else {
+        if(productConfig.exact) {
+            if(productConfig.options.includes(product.sku)) {
+                (statistic[order.delivery_country])[productConfig.officialName] = product.quantity;
+                return true;
+            }
+        }
+        else {
+            for(let option of productConfig.options) {
+                if((product.sku as Array<string>).includes(option)) {
+                    (statistic[order.delivery_country])[productConfig.officialName] = product.quantity;
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
+
+export function createValues(orders: any[]) {
+    const statistic = getSattisticsByName(orders, []);
+    const curDate = new Date();
+    let contryPositions: any = {};
+    let productPositions: any = {};
+    let values: any[] = [[]];
+    values.push([`${curDate.getDate()}/${curDate.getMonth()+1}/${curDate.getFullYear()}`]);
+    values.push([""]);
+    let countryCol = 1;
+    for(let contry of Object.keys(statistic)) {
+        (values[2] as Array<any>).push(contry);
+        contryPositions[contry] = [2,countryCol];
+        countryCol += 1; 
+    }
+    let productRow = 3;
+    for(let contry of Object.keys(statistic)) {
+        for(let product of Object.keys(statistic[contry])) {
+            if(productPositions[product]) {
+                values[productPositions[product][0]][contryPositions[contry][1]] += statistic[contry][product];
+            } else {
+                values.push([product]);
+                for(let i = 0; i < Object.keys(statistic).length; i++) {
+                    (values[productRow] as Array<any>).push(0);
+                }
+                productPositions[product] = [productRow, 0];
+                values[productPositions[product][0]][contryPositions[contry][1]] += statistic[contry][product];
+                productRow += 1;
+            }
+        }
+    }
+
+    return values;
+}
+
+export function getLastGoogleSheetRowNumber() {
+    console.log(__dirname);
+    const fileData = readFileSync(path.resolve("src", "config", "lastRowInfo.json"), {encoding: "utf8"});
+    const jsonData = JSON.parse(fileData);
+    return jsonData;
+}
+
+export function setLastGoogleSheetRowNumber(latestTableRowLength: number, curDate: string) {
+    const fileData = readFileSync(path.resolve("src", "config", "lastRowInfo.json"), {encoding: "utf8"});
+    const jsonData = JSON.parse(fileData);
+    jsonData.lastRow += latestTableRowLength;
+    jsonData.lastDate = curDate;
+    writeFileSync(path.resolve("src", "config", "lastRowInfo.json"), JSON.stringify(jsonData));
+}
+
 

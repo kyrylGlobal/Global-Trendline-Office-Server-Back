@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "ts-node server.ts",
-    "dev": "nodemon server.ts"
+    "dev": "nodemon server.ts",
+    "postinstall": "tsc"
   },
   "keywords": [],
   "author": "",
@@ -25,6 +26,7 @@
     "express": "^4.17.2",
     "express-fileupload": "^1.2.1",
     "fast-xml-parser": "^4.0.6",
+    "googleapis": "^105.0.0",
     "jsvat": "^2.5.3",
     "nodemailer": "^6.7.3",
     "typescript": "^4.5.4"

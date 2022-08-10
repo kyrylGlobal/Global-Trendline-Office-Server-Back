@@ -1,6 +1,12 @@
 import axios from 'axios';
 import url, {URLSearchParams} from 'url';
+import DateTime from '../utils/DateTime';
 import { getEnvData } from '../utils/Process';
+
+export interface GetOrdersParams {
+    statusId?: string,
+    dateFrom?: string
+}
 
 class BaselinkerApiController {
     private readonly apiToken: string;
@@ -24,12 +30,13 @@ class BaselinkerApiController {
         return await this.makeBaselinkerPost(params);
     }
 
-    public async getOrders(status_id?: any): Promise<any[]> {
+    public async getOrders(getOrdersParams?: GetOrdersParams): Promise<any[]> {
         let params = this.createBaselinkerApiParams(
             "getOrders", 
             {
-                status_id,
-                "get_unconfirmed_orders": true
+                status_id: getOrdersParams?.statusId,
+                "get_unconfirmed_orders": true,
+                "date_from": DateTime.getCurDayUnix()
             }
         )
         let lastOrdersSet = false;
@@ -43,7 +50,7 @@ class BaselinkerApiController {
                 params = this.createBaselinkerApiParams(
                     "getOrders",
                     {
-                        status_id,
+                        status_id: getOrdersParams?.statusId,
                         "get_unconfirmed_orders": true,
                         "date_from": setOfOrders[setOfOrders.length - 1].date_add
                     }
@@ -88,13 +95,14 @@ class BaselinkerApiController {
         })
     }
 
-    public async getOrderStatusIdByName(orderName: string) {
+    public async getOrderStatusIdByName(statusName: string): Promise<string> {
         let orderStatuses = (await this.getStatuses()).statuses;
         for( let orderStatusData of orderStatuses) {
-            if(orderStatusData.name === orderName) {
+            if(orderStatusData.name === statusName) {
                 return orderStatusData.id;
             }
         }
+        throw new Error("Error! ")
     }
 
     private async makeBaselinkerPost(params: string): Promise<any> {

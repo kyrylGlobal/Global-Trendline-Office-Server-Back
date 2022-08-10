@@ -22,7 +22,7 @@ baselinkerRouter.post('/statuses/change/ready/sent', async (req, res, next) => {
             const countryStatuses = combinedStatuses[countryCode];
             console.log("Before orders")
             // console.log(`countryCode - ${countryCode}\ncountryStatuses - ${JSON.stringify(countryStatuses)}`)
-            const readyOrders = await baselinkerApiController.getOrders(countryStatuses.ready.id);
+            const readyOrders = await baselinkerApiController.getOrders({statusId: countryStatuses.ready.id});
             // console.log(readyOrders);
             console.log("After orders")
             readyOrders.forEach( (order: any) => {

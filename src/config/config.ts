@@ -1,4 +1,4 @@
-import {Country, czechRepublic, hungary, romania, slovakiaRepublic, bulgaria, lithuania, austria, germany, croatia, greece, poland, latvia, estonia} from 'jsvat'
+import {Country, czechRepublic, hungary, romania, slovakiaRepublic, bulgaria, lithuania, austria, germany, croatia, greece, poland, latvia, estonia, netherlands} from 'jsvat'
 
 
 interface BaselinkerCountry {
@@ -304,6 +304,20 @@ Für Großeinkäufe kontaktieren Sie uns bitte unter unserer E-Mail-Adresse: log
         names: ["Estonia"],
         shortName: "EE",
         viesConfig: estonia,
+        currency: "EUR",
+        supportEmail: {
+            log: "",
+            pas: "",
+            allowMailSending: false
+        },
+        productName: "",
+        mailText: ``,
+        convCurGetRequestWay: "http://api.nbp.pl/api/exchangerates/rates/a/eur"
+    },
+    {
+        names: ["Holandia"],
+        shortName: "NL",
+        viesConfig: netherlands,
         currency: "EUR",
         supportEmail: {
             log: "",

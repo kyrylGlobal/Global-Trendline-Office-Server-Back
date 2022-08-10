@@ -52,6 +52,19 @@ class DateTime{
         }
         return `${year}-${mounth}-${day}`
     }
+
+
+    convertDateToUnix(date: DateTime): number {
+        return Math.floor(Number.parseInt(date.getCurTime()) / 1000)
+    }
+
+    getCurDayUnix() {
+        const curDate = new Date();
+        const curSecondsUnix = curDate.getSeconds() * 1000;
+        const curMinutesUnix = curDate.getMinutes() * 60 * 1000;
+        const curHoursUnix = curDate.getHours() * 60 * 60 * 1000;
+        return Math.floor((curDate.getTime() - curSecondsUnix - curMinutesUnix - curHoursUnix) / 1000);
+    }
 }
 
 export default new DateTime();

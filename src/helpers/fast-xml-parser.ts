@@ -137,16 +137,16 @@ async function updateInvoice(invoiceObject: any) {
     updatePaymentType(invoiceObject);
     updateVatNumber(invoiceObject);
     updateVatCountry(invoiceObject);
-    updateInvoiceDates(invoiceObject);
+    await updateInvoiceDates(invoiceObject);
     updatePrices(invoiceObject);
-    updatePaymentData(invoiceObject);
+    updatePaymentCurrency(invoiceObject);
 
     checkInvoice(invoiceObject);
 
     updateFinishedJObject(invoiceObject);
 }
 
-async function updatePaymentData(invoiceObject: any) {
+async function updatePaymentCurrency(invoiceObject: any) {
     if(invoiceObject.PLATNOSCI.PLATNOSC) {
         if(invoiceObject.PLATNOSCI.PLATNOSC.WALUTA_PLAT === "") {
             const countryObject = getCountryObjectIfName(invoiceObject.KRAJ);
@@ -157,16 +157,18 @@ async function updatePaymentData(invoiceObject: any) {
     }
 }
 
-async function updateConversion(invoiceObject: any) {
-    if(invoiceObject.NOTOWANIE_WALUTY_ILE_2 === 0) {
+async function updateConversion(invoiceObject: any, shouldChangeAnyway: boolean = false) {
+    if(invoiceObject.NOTOWANIE_WALUTY_ILE_2 === 0  || shouldChangeAnyway) {
         const lookingCountryObj = getCountryObjectIfName(invoiceObject.KRAJ);
         if(lookingCountryObj && !lookingCountryObj.names.includes("Polska")) {
             if(lookingCountryObj) {
                 const midRate = await getMidRate(lookingCountryObj.convCurGetRequestWay, invoiceObject.DATA_KURSU); //(await axios.get(`${lookingCountryObj.convCurGetRequestWay}/${invoiceObject.DATA_KURSU}`, {params: {format: "json"}})).data.rates[0].mid; 
+                console.log(`The midrate of ${invoiceObject.DATA_KURSU} is ${midRate}`);
                 if(midRate) {
                     invoiceObject.NOTOWANIE_WALUTY_ILE_2 = midRate;
-                    invoiceObject.NOTOWANIE_WALUTY_ILE_PLAT = midRate;
+                    invoiceObject.NOTOWANIE_WALUTY_ILE = midRate;
                     if(invoiceObject.PLATNOSCI.PLATNOSC) {
+                        invoiceObject.PLATNOSCI.PLATNOSC.NOTOWANIE_WALUTY_ILE_PLAT = midRate;
                         invoiceObject.PLATNOSCI.PLATNOSC.KWOTA_PLN_PLAT = parseFloat((midRate * invoiceObject.PLATNOSCI.PLATNOSC.KWOTA_PLAT).toFixed(2));
                     }
                 } else {
@@ -220,24 +222,26 @@ function updatePrices(invoiceObject: any) {
     } else if(invoiceObject.KOREKTA === "Tak" && Array.isArray(invoicePositions)) {
         let difference = 0;
         (invoicePositions as Array<any>).forEach( position => difference += position.NETTO + position.VAT);
-        if(invoiceObject.ID_ZRODLA === "49/11/2021/K/RO") {
-            console.log();
-        }
         if(difference > -1 && difference < 1) {
             invoicePositions[0].NETTO = +((invoicePositions[0].NETTO - difference)).toFixed(2);
         }
     }
 }
 
-function updateInvoiceDates(invoiceObject: any) {
+async function updateInvoiceDates(invoiceObject: any) {
     if(invoiceObject.KOREKTA === "Nie") {
         if(invoiceObject.DATA_WYSTAWIENIA != invoiceObject.DATA_SPRZEDAZY) {
+            const dateOfCreationArray: string[] = invoiceObject.DATA_WYSTAWIENIA.split("-");
             invoiceObject.DATA_SPRZEDAZY = invoiceObject.DATA_WYSTAWIENIA;
             invoiceObject.TERMIN = invoiceObject.DATA_WYSTAWIENIA;
+            invoiceObject.DATA_KURSU = invoiceObject.DATA_WYSTAWIENIA;
+            invoiceObject.DATA_KURSU_2 = invoiceObject.DATA_WYSTAWIENIA;
+            invoiceObject.DEKLARACJA_VAT7 = `${dateOfCreationArray[0]}-${dateOfCreationArray[1]}`;
             invoiceObject.DATA_DATAOBOWIAZKUPODATKOWEGO = invoiceObject.DATA_WYSTAWIENIA;
             invoiceObject.DATA_DATAPRAWAODLICZENIA = invoiceObject.DATA_WYSTAWIENIA;
             invoiceObject.PLATNOSCI.PLATNOSC.TERMIN_PLAT = invoiceObject.DATA_WYSTAWIENIA;
             invoiceObject.PLATNOSCI.PLATNOSC.DATA_KURSU_PLAT = invoiceObject.DATA_KURSU;
+            await updateConversion(invoiceObject, true);
         }   
     }
 }
