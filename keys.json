@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "sturdy-actor-358816",
+  "private_key_id": "f66693b27c42baa7c68dfabd6015252467345826",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQC//Gaxlcut0CYp\nGIVCo/n+WXtZ8S+r7U6eyLqrIWyFDflGbw6hyfTDjJCRj2u8EnXyebVf4a/SHGPc\nEaPmydU9D78+wbrTm/I6TNNbCyMtSQpmDq+Mt+mt7hKU8MENbH3p9KAk5S7dRFnq\nVioSpgW+ivdm0eEAp30VG4b++w3pfLCuZaCdYn5EEMC8iallZsLaGP1LGtrBuy4K\nPakY0tsPQoWq8rxfmLWOmaswuVbcAFHAObg1fI+BzTUzphLIoQNx19BUvzySPgJb\nIjaZ22EkMATSl8PIRoq0awEHfw9Qri6aAedAOAltyZf1bagB9V9tGyVaa57hCVFN\nrY8a5nINAgMBAAECggEAAIN9BYNFv49LqtclSXUFhDKvwSEuDs2xuicF/iiMERxl\nIFUdED2+vo8vtn6lu85o1l87pv1ZlRGntWeurT1jqVLTdigv3G+8XtTkc908bjCV\n1d662tYwdTCqiA96KhOyOoqsVazvSn7rpqmDBKMWZ4NuVK4XEK4MsvPB5rNmlCCq\nFcv3D2dy4ok6S/sohM+Yr3yEoihKow9Z1/nJ9MnQIem+AP+jztkh2fovFrvj9hwC\nRVCk3LBesRn26QSr8he3ejLuxSCTIWb+lE/eTdv12KJzc7EC86GQpwOwiKWMHnDR\nsrM1/YacTbC/c1c37nWbRudYBCQNat8wSkCUi6IAQQKBgQDl/3qhw++B/VSFhNsV\nNicRLNLMxX9V9Hiw1wc4/8kgvfLjdCb4B5IEwedHFSZW7mPST6cVa/5I5OmWf7xz\ngi1lYBboN4ckETWxshghbZnrXCEOkJ2cTMwNHh8k5ewQisz6+uj7s4rngBcRfywd\nzDqEwlbvxSI1N7l0e15iLH9/qQKBgQDVsMqYl31FTWJv9kmXJlHzQmQwgk9ojA+G\n8Y8dfaItk68lgz1y1yPYD88CZwqvIzDe2FzXWbO+Izs1HaYGT7R9GPEibf5KLhzI\nbQJekwxaoamajTl1Y1zgBrWlIXStBrNAAQ4toykAZNypX91e4L8h89ZVe+Duo49i\nBKC/meStxQKBgQC0OFlGUnrlN7U4Hl9xIorAOYhAbm0V1EeSAhwlvMBECLM/KW+z\noHL5iVsJZvgw3AGZ9VIuRf3t7nletV7cf9/EdOPeOEyLpXSWdb/UycX3F6zLdeQa\nak7l5Hlw9zzfxXNTIrLXL9ujBMqOqkDOZI5iIsnufWENpEmMjXLqqIWLaQKBgQCN\nqr8lmoj6QOtZvrXa9xStaP5zCnEKppBErjBrJLc38AjVncRHNkoVG6XpudZjdbkY\ng+hI/Lck/sZp2FYRKRZHORnj8Xf8RcXfOiWv/VzbWQHP7ICDSnRwMQKLjzqC20ZK\n0GhN6TVthXCk+WERXX5ZTAZ0dcQRcW3FVbwcSjJI4QKBgGHa6SDEQfV6APiFgjnU\n8bTj3qPYIapDY6p8mE8WnqA67MRInZRrBnXd1kftXxZGsyxgZ0N+qLaygIM/dMYA\njSoZbXMzxCS/NhqTGVf12lhjla+ufSSnXZYoNlFIm+/pvcF14cUj+LoFA3JWisLR\nuujbqJsIjlrK6B+nHGpgleQX\n-----END PRIVATE KEY-----\n",
+  "client_email": "dayoneglobal@sturdy-actor-358816.iam.gserviceaccount.com",
+  "client_id": "103668428715405238676",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/dayoneglobal%40sturdy-actor-358816.iam.gserviceaccount.com"
+}
