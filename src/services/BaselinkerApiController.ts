@@ -4,121 +4,118 @@ import DateTime from '../utils/DateTime';
 import { getEnvData } from '../utils/Process';
 
 export interface GetOrdersParams {
-    statusId?: string,
-    dateFrom?: string
+    dateFrom: number,
+    dateTo: number,
+    statuses: number[]
 }
 
 class BaselinkerApiController {
-    private readonly apiToken: string;
+    private token = process.env.BASELINKERTOKEN ? process.env.BASELINKERTOKEN : "undefined";
 
-    constructor(apiToken?: string) {
-        if(apiToken) {
-            this.apiToken = apiToken;
-        } else {
-            const envData = getEnvData("BASELINKERTOKEN");
-            if(envData) {
-                this.apiToken = envData;
-            } else {
-                throw new Error("Baselinker apiToken was not provided. Please add baselinker api token variable to .env");
-            }
+    public async getListOfOrdersByParams(params: GetOrdersParams) {
+        let orders: any[] = await this.getListOfOrders(params.dateFrom?.toString());
+
+        if(params.dateTo) {
+            orders = orders.filter( order => order.date_add <= params.dateTo);
         }
-    }
 
-    public async getStatuses(): Promise<any> {
-        let params = this.createBaselinkerApiParams("getOrderStatusList", {});
-
-        return await this.makeBaselinkerPost(params);
-    }
-
-    public async getOrders(getOrdersParams?: GetOrdersParams): Promise<any[]> {
-        let params = this.createBaselinkerApiParams(
-            "getOrders", 
-            {
-                status_id: getOrdersParams?.statusId,
-                "get_unconfirmed_orders": true,
-                "date_from": DateTime.getCurDayUnix()
-            }
-        )
-        let lastOrdersSet = false;
-        let orders: any[] = [];
-
-        while (!lastOrdersSet) {
-            const setOfOrders = (await this.makeBaselinkerPost(params)).orders;
-            orders = orders.concat(setOfOrders);
-
-            if(setOfOrders.length === 100) {
-                params = this.createBaselinkerApiParams(
-                    "getOrders",
-                    {
-                        status_id: getOrdersParams?.statusId,
-                        "get_unconfirmed_orders": true,
-                        "date_from": setOfOrders[setOfOrders.length - 1].date_add
-                    }
-                )
-            } else if(setOfOrders.length > 0 && setOfOrders.length < 100) {
-                lastOrdersSet = true;
-            } else if(setOfOrders.length < 0) {
-                throw new Error(`Order length is ${setOfOrders.length}. Something wrong with Baselinker API :(`)
-            } else {
-                lastOrdersSet = true;
-            }
+        if(params.statuses.length > 0) {
+            const statusIds = params.statuses;
+            orders = orders.filter( order => {
+                if(statusIds.includes(order.order_status_id)) {
+                    return true;
+                }
+                return false;
+            })
         }
 
         return orders;
     }
 
-    public async setOrderStatus(orderId: string | number, statusId: string | number) {
-        let params = this.createBaselinkerApiParams(
-            "setOrderStatus",
-            {
-                "order_id": orderId,
-                "status_id": statusId
-            }
-        )
+    private async getListOfOrders(date: string | undefined): Promise<any[]> { // date cointaine date in timestamp
+        return new Promise((res, rej) => {
+            let orders: any[] = [];
 
-        return this.makeBaselinkerPost(params);
-    }
+            let params = new url.URLSearchParams({
+                "token": this.token,
+                "method": "getOrders",
+                "parameters": JSON.stringify({
+                    "get_unconfirmed_orders": "true",
+                    "date_confirmed_from": date ? date : ""
+                })
+            })
 
-    public async addOrders(orders: any[]) {
-        orders.forEach( async order => {
-            let params = this.createBaselinkerApiParams(
-                "addOrder",
-                order
-            )
-            
-            let result = await this.makeBaselinkerPost(params);
-            if(result) {
-                console.log()
-            } else {
-                console.log()
-            }
+            axios.post('https://api.baselinker.com/connector.php', params.toString())
+            .then( res => res.data)
+            .then( async data => {
+                orders = orders.concat(data.orders);
+                console.log(`Just got orders ${orders.length}`)
+                if(data.orders.length === 100) {
+                    console.log(`Orders count equel 100`)
+                    date = data.orders[data.orders.length - 1].date_confirmed + 1;
+                    orders = orders.concat(await this.getListOfOrders(date));
+                }
+                res(orders);
+            })
+            .catch(error => rej(error))
         })
     }
 
-    public async getOrderStatusIdByName(statusName: string): Promise<string> {
-        let orderStatuses = (await this.getStatuses()).statuses;
-        for( let orderStatusData of orderStatuses) {
-            if(orderStatusData.name === statusName) {
-                return orderStatusData.id;
-            }
+    public async getListOfStatuses(): Promise<any[]> {
+        return new Promise((res, rej) => {
+            let statuses: any[] = [];
+
+            let params = new url.URLSearchParams({
+                "token": this.token,
+                "method": "getOrderStatusList",
+                "parameters": ""
+            })
+
+            axios.post('https://api.baselinker.com/connector.php', params.toString())
+            .then( res => res.data)
+            .then( async data => {
+                res(data.statuses);
+            })
+            .catch(error => rej(error))
+        })
+    }
+    
+    private sortOrdersBySku(sku: string, orders: any[]) : any[] {
+        let sortedOrders: any[] = [];
+
+        orders.forEach( order => {
+            (order.products as Array<any>).every( product => {
+                if((product.sku as string).includes(sku)) {
+                    sortedOrders.push(order);
+                    return false;
+                }
+                return true;
+            })
+        })
+
+        return sortedOrders;
+    }
+
+    private sortOrdersByCountry(orders: any[], countryCode?: string): Object {
+        let sortedOrders: any = {};
+        if(countryCode) {
+
+        } else {
+            orders.forEach( order => {
+                if(sortedOrders[order.delivery_country_code]) {
+                    console.log("Coubtry is here");
+                    sortedOrders[order.delivery_country_code].orders.push(order);
+                } else {
+                    sortedOrders[order.delivery_country_code] = {};
+                    sortedOrders[order.delivery_country_code].orders = [order];
+                    sortedOrders[order.delivery_country_code].sum = 0;
+                    sortedOrders[order.delivery_country_code].currency = order.currency;
+                }
+                sortedOrders[order.delivery_country_code].sum += (order.products as Array<any>).reduce( (previous, current) => { return previous + (current.price_brutto * current.quantity)}, 0)
+            })
         }
-        throw new Error("Error! ")
-    }
 
-    private async makeBaselinkerPost(params: string): Promise<any> {
-        return await axios.post('https://api.baselinker.com/connector.php', params)
-        .then( res => res.data)
-        .catch(error => console.log(error))
-    }
-
-    private createBaselinkerApiParams(method: string, params: Object): string {
-        const urlSearchParams: URLSearchParams = new URLSearchParams({
-            "token": this.apiToken,
-            "method": method,
-            "parameters": JSON.stringify(params)
-        })
-
-        return urlSearchParams.toString();
+        return sortedOrders;
     }
 }
 

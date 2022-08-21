@@ -1,9 +1,11 @@
 import internal from "stream";
 import country from "../config/config";
-import BaselinkerApiController from "../services/BaselinkerApiController";
+import BaselinkerApiController, { GetOrdersParams } from "../services/BaselinkerApiController";
 import Files from "../utils/Files";
 import {readFileSync, writeFileSync} from 'fs';
 import path from "path";
+import Google from "../services/GoogleSheetApiController";
+import DateTime from "../utils/DateTime";
 
 interface ProductBySku {
     options: string[],
@@ -159,28 +161,28 @@ export function parseWoocomersJsonOrdersToBaselinker(woocomerceOrders: any[], or
     return baselinkerOrders;
 }
 
-export async function addOrdersToBaselinker() { // Add arders which does not exist in folder, getting orders from file
-    const baselinkerApiController = new BaselinkerApiController();
-    const baselinkerStatusForAdding = "Not Confirmed";
-    const baselinkerStatusForChecking = "Return by code";
-    const fileWithWoocomerceJsonData = './src/db/orders/orders.json';
-    const woocomerceOrders = JSON.parse(Files.readFileSync(fileWithWoocomerceJsonData));
-    let parsedBaselinkerOrders = parseWoocomersJsonOrdersToBaselinker(woocomerceOrders, await (baselinkerApiController.getOrderStatusIdByName(baselinkerStatusForAdding)));
-    const baselinkerOrdersFromFolder = await baselinkerApiController.getOrders({
-        statusId: await (baselinkerApiController.getOrderStatusIdByName(baselinkerStatusForChecking))
-    });
-    parsedBaselinkerOrders = parsedBaselinkerOrders.filter( order => {
-        for(let folderOrders of baselinkerOrdersFromFolder) {
-            if(folderOrders.shop_order_id.toString() === order.custom_source_id?.toString()) {
-                return false;
-            }
-        }
-        return true;
-    })
-    baselinkerApiController.addOrders(parsedBaselinkerOrders);
-}
+// export async function addOrdersToBaselinker() { // Add arders which does not exist in folder, getting orders from file
+//     const baselinkerApiController = new BaselinkerApiController();
+//     const baselinkerStatusForAdding = "Not Confirmed";
+//     const baselinkerStatusForChecking = "Return by code";
+//     const fileWithWoocomerceJsonData = './src/db/orders/orders.json';
+//     const woocomerceOrders = JSON.parse(Files.readFileSync(fileWithWoocomerceJsonData));
+//     let parsedBaselinkerOrders = parseWoocomersJsonOrdersToBaselinker(woocomerceOrders, await (baselinkerApiController.getOrderStatusIdByName(baselinkerStatusForAdding)));
+//     const baselinkerOrdersFromFolder = await baselinkerApiController.getOrders({
+//         statusId: await (baselinkerApiController.getOrderStatusIdByName(baselinkerStatusForChecking))
+//     });
+//     parsedBaselinkerOrders = parsedBaselinkerOrders.filter( order => {
+//         for(let folderOrders of baselinkerOrdersFromFolder) {
+//             if(folderOrders.shop_order_id.toString() === order.custom_source_id?.toString()) {
+//                 return false;
+//             }
+//         }
+//         return true;
+//     })
+//     baselinkerApiController.addOrders(parsedBaselinkerOrders);
+// }
 
-export function getSattisticsByName(orders: any[], productSkus: string[]): any {
+export function getSattisticsByName(orders: any[]): any {
     let statistic: any = {}
     let config: ProductBySku[] = [
         {
@@ -215,8 +217,9 @@ export function getSattisticsByName(orders: any[], productSkus: string[]): any {
         }
     ]
     for(let order of orders) {
+        let includeProduct = false;
         if(true) {
-            if(order.order_id === 439316536){
+            if(order.order_id === 439316536) {
                 console.log()
             }
             for(let product of order.products) {
@@ -225,8 +228,12 @@ export function getSattisticsByName(orders: any[], productSkus: string[]): any {
                     if(statistic[order.delivery_country]) {
                         wasFound = addProduct(order, product, statistic, productConfig)
                     } else {
-                        statistic[order.delivery_country] = {};
+                        statistic[order.delivery_country] = {products: {}, ordersWithConfigProducts: 0, orders: 0};
                         wasFound = addProduct(order, product, statistic, productConfig);
+                    }
+
+                    if(wasFound) { // if order contain product than true and we can count orders with this product
+                        includeProduct = true;
                     }
                     if(wasFound) {
                         break;
@@ -234,21 +241,26 @@ export function getSattisticsByName(orders: any[], productSkus: string[]): any {
                 }
             }
         }
+
+        if(includeProduct) {
+            statistic[order.delivery_country].ordersWithConfigProducts++;
+        }
+        statistic[order.delivery_country].orders++
     }
     return statistic;
 }
 
 function addProduct(order: any, product: any, statistic: any, productConfig: ProductBySku): boolean {
-    if((statistic[order.delivery_country])[productConfig.officialName]) {
+    if((statistic[order.delivery_country]).products[productConfig.officialName]) {
         if(productConfig.exact) {
             if(productConfig.options.includes(product.sku)) {
-                (statistic[order.delivery_country])[productConfig.officialName] += product.quantity;
+                (statistic[order.delivery_country]).products[productConfig.officialName] += product.quantity;
                 return true;
             }
         } else {
             for(let option of productConfig.options) {
                 if((product.sku as Array<string>).includes(option)) {
-                    (statistic[order.delivery_country])[productConfig.officialName] += product.quantity;
+                    (statistic[order.delivery_country]).products[productConfig.officialName] += product.quantity;
                     return true;
                 }
             }
@@ -256,14 +268,14 @@ function addProduct(order: any, product: any, statistic: any, productConfig: Pro
     } else {
         if(productConfig.exact) {
             if(productConfig.options.includes(product.sku)) {
-                (statistic[order.delivery_country])[productConfig.officialName] = product.quantity;
+                (statistic[order.delivery_country]).products[productConfig.officialName] = product.quantity;
                 return true;
             }
         }
         else {
             for(let option of productConfig.options) {
                 if((product.sku as Array<string>).includes(option)) {
-                    (statistic[order.delivery_country])[productConfig.officialName] = product.quantity;
+                    (statistic[order.delivery_country]).products[productConfig.officialName] = product.quantity;
                     return true;
                 }
             }
@@ -272,14 +284,30 @@ function addProduct(order: any, product: any, statistic: any, productConfig: Pro
     return false;
 }
 
+function addProductWithNameChecking(order: any, product: any, statistic: any, productConfig: ProductBySku, containName: boolean) {
+    if(productConfig.exact) {
+        if(productConfig.options.includes(product.sku)) {
+            (statistic[order.delivery_country]).products[productConfig.officialName] = product.quantity;
+            return true;
+        }
+    }
+    else {
+        for(let option of productConfig.options) {
+            if((product.sku as Array<string>).includes(option)) {
+                (statistic[order.delivery_country]).products[productConfig.officialName] = product.quantity;
+                return true;
+            }
+        }
+    }
+}
 
-export function createValues(orders: any[]) {
-    const statistic = getSattisticsByName(orders, []);
+
+export function createValues(statistic: any, date: string) {
     const curDate = new Date();
     let contryPositions: any = {};
     let productPositions: any = {};
     let values: any[] = [[]];
-    values.push([`${curDate.getDate()}/${curDate.getMonth()+1}/${curDate.getFullYear()}`]);
+    values.push([date]);
     values.push([""]);
     let countryCol = 1;
     for(let contry of Object.keys(statistic)) {
@@ -289,16 +317,16 @@ export function createValues(orders: any[]) {
     }
     let productRow = 3;
     for(let contry of Object.keys(statistic)) {
-        for(let product of Object.keys(statistic[contry])) {
+        for(let product of Object.keys(statistic[contry].products)) {
             if(productPositions[product]) {
-                values[productPositions[product][0]][contryPositions[contry][1]] += statistic[contry][product];
+                values[productPositions[product][0]][contryPositions[contry][1]] += statistic[contry].products[product];
             } else {
                 values.push([product]);
                 for(let i = 0; i < Object.keys(statistic).length; i++) {
                     (values[productRow] as Array<any>).push(0);
                 }
                 productPositions[product] = [productRow, 0];
-                values[productPositions[product][0]][contryPositions[contry][1]] += statistic[contry][product];
+                values[productPositions[product][0]][contryPositions[contry][1]] += statistic[contry].products[product];
                 productRow += 1;
             }
         }
@@ -322,4 +350,25 @@ export function setLastGoogleSheetRowNumber(latestTableRowLength: number, curDat
     writeFileSync(path.resolve("src", "config", "lastRowInfo.json"), JSON.stringify(jsonData));
 }
 
+export function sliceOrders(orders: any[],dateToo: number): any[] {
+    return orders.filter( order => order.date_add < dateToo);
+}
 
+export async function generateHeatersStatistic(params: GetOrdersParams) {
+    const baselinkerController = new BaselinkerApiController();
+    let orders = await baselinkerController.getListOfOrdersByParams(params);
+
+    let statistic = getSattisticsByName(orders);
+    return statistic;
+}
+
+export async function sendStatisticToSheet(statistic: any, date: string) {
+    const values = createValues(statistic, date);
+
+    const googleApi = new Google("1lMRIjyb0Qlz4BtOaf2OQWczpDN-NxEhXNHRkLMYYJDY");
+    const lastRow: string = await googleApi.getDataFromCell("Enter", `A1`);
+
+    await googleApi.addData("Enter", `A${Number.parseInt(lastRow)+1}`, values); // add new statistic
+
+    await googleApi.addData("Enter", `A1`, [[Number.parseInt(lastRow) + values.length]]); // update last row info
+}

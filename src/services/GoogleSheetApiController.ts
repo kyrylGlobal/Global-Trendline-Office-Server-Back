@@ -18,7 +18,7 @@ class Google {
         const authClientObject = await auth.getClient();
 
         const instance =  google.sheets({version: "v4", auth: authClientObject});
-        await instance.spreadsheets.values.append({
+        await instance.spreadsheets.values.update({
             auth: auth,
             spreadsheetId: this.spreadsheetId,
             range: `${sheetName}!${range}`,
@@ -27,6 +27,26 @@ class Google {
                 values: values
             }
         })
+    }
+
+    async getDataFromCell(sheetName: string, range: string) {
+        const auth = new google.auth.GoogleAuth({
+            keyFile: "keys.json",
+            scopes: "https://www.googleapis.com/auth/spreadsheets"
+        });
+
+        const authClientObject = await auth.getClient();
+
+        const instance =  google.sheets({version: "v4", auth: authClientObject});
+        const response =  await instance.spreadsheets.values.get({
+            auth,
+            spreadsheetId: this.spreadsheetId,
+            range: `${sheetName}!${range}`
+        })
+
+        if(response && response.data.values) {
+            return response.data.values[0][0];
+        }
     }
 }
 

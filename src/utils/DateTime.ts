@@ -54,8 +54,8 @@ class DateTime{
     }
 
 
-    convertDateToUnix(date: DateTime): number {
-        return Math.floor(Number.parseInt(date.getCurTime()) / 1000)
+    convertDateToUnix(date: Date): number {
+        return Math.floor(date.getTime() / 1000)
     }
 
     getCurDayUnix() {
@@ -64,6 +64,10 @@ class DateTime{
         const curMinutesUnix = curDate.getMinutes() * 60 * 1000;
         const curHoursUnix = curDate.getHours() * 60 * 60 * 1000;
         return Math.floor((curDate.getTime() - curSecondsUnix - curMinutesUnix - curHoursUnix) / 1000);
+    }
+
+    addDaysToUnix(unix: number, countOfDays: number) {
+        return unix + ((24 * 60 * 60) * countOfDays);
     }
 }
 
