@@ -6,10 +6,6 @@ import cors from 'cors';
 import Cors from "./utils/Cors";
 import Errors from "./utils/Errors";
 import baselinkerRouter from "./routers/baselinkerRouter";
-import BaselinkerApiController from "./services/BaselinkerApiController";
-import { createValues, generateHeatersStatistic, getLastGoogleSheetRowNumber, setLastGoogleSheetRowNumber } from "./helpers/baselinker";
-import DateTime from "./utils/DateTime";
-import Google from "./services/GoogleSheetApiController";
 import bp from "body-parser";
 
 dotenv.config();
