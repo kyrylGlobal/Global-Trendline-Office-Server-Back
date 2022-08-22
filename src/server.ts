@@ -1,15 +1,15 @@
 import express, {Request, Response, Express} from "express";
 import dotenv from "dotenv";
-import raportRouter from "./src/routers/raportRouter";
+import raportRouter from "./routers/raportRouter";
 import fileUpload from "express-fileupload";
 import cors from 'cors';
-import Cors from "./src/utils/Cors";
-import Errors from "./src/utils/Errors";
-import baselinkerRouter from "./src/routers/baselinkerRouter";
-import BaselinkerApiController from "./src/services/BaselinkerApiController";
-import { createValues, generateHeatersStatistic, getLastGoogleSheetRowNumber, setLastGoogleSheetRowNumber } from "./src/helpers/baselinker";
-import DateTime from "./src/utils/DateTime";
-import Google from "./src/services/GoogleSheetApiController";
+import Cors from "./utils/Cors";
+import Errors from "./utils/Errors";
+import baselinkerRouter from "./routers/baselinkerRouter";
+import BaselinkerApiController from "./services/BaselinkerApiController";
+import { createValues, generateHeatersStatistic, getLastGoogleSheetRowNumber, setLastGoogleSheetRowNumber } from "./helpers/baselinker";
+import DateTime from "./utils/DateTime";
+import Google from "./services/GoogleSheetApiController";
 import bp from "body-parser";
 
 dotenv.config();

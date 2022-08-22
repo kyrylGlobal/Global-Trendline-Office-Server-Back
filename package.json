@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "ts-node server.ts",
-    "dev": "nodemon server.ts",
-    "build": "tsc -p .",
+    "start": "node build/server.js",
+    "dev": "nodemon src/server.ts",
+    "build": "tsc",
     "postinstall": "tsc",
     "build-rm": "tsc --build --clean"
   },
