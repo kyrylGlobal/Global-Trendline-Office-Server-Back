@@ -2,12 +2,15 @@ import axios from 'axios';
 import url, {URLSearchParams} from 'url';
 import DateTime from '../utils/DateTime';
 import { getEnvData } from '../utils/Process';
+import dotenv from "dotenv";
 
 export interface GetOrdersParams {
     dateFrom: number,
     dateTo: number,
     statuses: number[]
 }
+
+dotenv.config();
 
 class BaselinkerApiController {
     private token = process.env.BASELINKERTOKEN ? process.env.BASELINKERTOKEN : "undefined";

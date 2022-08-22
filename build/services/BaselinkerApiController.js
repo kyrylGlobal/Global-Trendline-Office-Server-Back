@@ -14,6 +14,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const axios_1 = __importDefault(require("axios"));
 const url_1 = __importDefault(require("url"));
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
 class BaselinkerApiController {
     constructor() {
         this.token = process.env.BASELINKERTOKEN ? process.env.BASELINKERTOKEN : "undefined";

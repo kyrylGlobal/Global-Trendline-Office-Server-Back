@@ -1,4 +1,0 @@
-1. Open terminal
-2. tipe to terminal -> npm install
-3. create file .env
-4. write inside .env file -> PORT=[number value]
