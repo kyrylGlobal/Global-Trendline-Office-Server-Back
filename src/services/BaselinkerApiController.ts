@@ -43,7 +43,7 @@ class BaselinkerApiController {
                 "token": this.token,
                 "method": "getOrders",
                 "parameters": JSON.stringify({
-                    "get_unconfirmed_orders": "true",
+                    "get_unconfirmed_orders": true,
                     "date_confirmed_from": date ? date : ""
                 })
             })
