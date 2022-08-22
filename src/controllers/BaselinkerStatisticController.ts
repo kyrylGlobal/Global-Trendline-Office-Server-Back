@@ -19,6 +19,7 @@ class BaselinkerStatisticController {
         const statistic: any = req.body.statistic;
         const date = req.body.period;
         sendStatisticToSheet(statistic, date);
+        res.status(200).send("Ok");
     }
 }
 
