@@ -14,7 +14,7 @@ const PORT: string | undefined = process.env.PORT || "5000";
 
 const app: Express = express();
 
-app.use(cors(Cors.allowDevCors));
+app.use(cors());
 
 app.use(bp.json());
 
