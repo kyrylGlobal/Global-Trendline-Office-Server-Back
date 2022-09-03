@@ -219,9 +219,6 @@ export function getSattisticsByName(orders: any[]): any {
     for(let order of orders) {
         let includeProduct = false;
         if(true) {
-            if(order.order_id === 439316536) {
-                console.log()
-            }
             for(let product of order.products) {
                 for(let productConfig of config) {
                     let wasFound = false;
@@ -234,14 +231,11 @@ export function getSattisticsByName(orders: any[]): any {
 
                     if(wasFound) { // if order contain product than true and we can count orders with this product
                         includeProduct = true;
-                    }
-                    if(wasFound) {
                         break;
                     }
                 }
             }
         }
-
         if(includeProduct) {
             statistic[order.delivery_country].ordersWithConfigProducts++;
         }
@@ -259,7 +253,7 @@ function addProduct(order: any, product: any, statistic: any, productConfig: Pro
             }
         } else {
             for(let option of productConfig.options) {
-                if((product.sku as Array<string>).includes(option)) {
+                if((product.sku as string).toLowerCase().includes(option)) {
                     (statistic[order.delivery_country]).products[productConfig.officialName] += product.quantity;
                     return true;
                 }
@@ -274,7 +268,7 @@ function addProduct(order: any, product: any, statistic: any, productConfig: Pro
         }
         else {
             for(let option of productConfig.options) {
-                if((product.sku as Array<string>).includes(option)) {
+                if((product.sku as string).toLowerCase().includes(option)) {
                     (statistic[order.delivery_country]).products[productConfig.officialName] = product.quantity;
                     return true;
                 }

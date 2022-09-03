@@ -44,7 +44,7 @@ class BaselinkerApiController {
                 "method": "getOrders",
                 "parameters": JSON.stringify({
                     "get_unconfirmed_orders": true,
-                    "date_confirmed_from": date ? date : ""
+                    "date_from": date ? date : ""
                 })
             })
 
@@ -55,7 +55,7 @@ class BaselinkerApiController {
                 console.log(`Just got orders ${orders.length}`)
                 if(data.orders.length === 100) {
                     console.log(`Orders count equel 100`)
-                    date = data.orders[data.orders.length - 1].date_confirmed + 1;
+                    date = data.orders[data.orders.length - 1].date_add + 1;
                     orders = orders.concat(await this.getListOfOrders(date));
                 }
                 res(orders);
