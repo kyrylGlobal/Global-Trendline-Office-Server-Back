@@ -7,8 +7,11 @@ import Cors from "./utils/Cors";
 import Errors from "./utils/Errors";
 import baselinkerRouter from "./routers/baselinkerRouter";
 import bp from "body-parser";
+import path, { dirname } from "path";
+import scannerRouter from "./routers/scannerRouter";
 
 dotenv.config();
+(global as any).mainFolderPath = path.resolve(__dirname, "..")
 
 const PORT: string | undefined = process.env.PORT || "5000";
 
@@ -25,6 +28,8 @@ app.use(fileUpload());
 app.use("/api/raport/", raportRouter);
 
 app.use("/api/baselinker", baselinkerRouter);
+
+app.use("/api/scanner", scannerRouter);
 
 app.get('/', (req: Request, res: Response) => {
     res.end("Works!");
@@ -50,4 +55,3 @@ app.listen(PORT, async () => {
 
     // generateHeatersStatistic(DateTime.convertDateToUnix(dateFrom), DateTime.convertDateToUnix(dateTo));
 });
-

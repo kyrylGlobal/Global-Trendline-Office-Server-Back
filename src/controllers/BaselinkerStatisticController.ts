@@ -1,6 +1,6 @@
 import { NextFunction, Request, response, Response } from "express";
 import { generateHeatersStatistic, sendStatisticToSheet } from "../helpers/baselinker";
-import BaselinkerApiController, { GetOrdersParams } from "../services/BaselinkerApiController";
+import BaselinkerApiController, { GetOrdersParams } from "../services/BaselinkerApi";
 
 class BaselinkerStatisticController {
     async getStauses(req: Request, res: Response, next: NextFunction) {

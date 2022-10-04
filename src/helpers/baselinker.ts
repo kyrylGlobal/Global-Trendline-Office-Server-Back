@@ -1,6 +1,6 @@
 import internal from "stream";
 import country from "../config/config";
-import BaselinkerApiController, { GetOrdersParams } from "../services/BaselinkerApiController";
+import BaselinkerApiController, { GetOrdersParams } from "../services/BaselinkerApi";
 import Files from "../utils/Files";
 import {readFileSync, writeFileSync} from 'fs';
 import path from "path";
@@ -218,7 +218,7 @@ export function getSattisticsByName(orders: any[]): any {
     ]
     for(let order of orders) {
         let includeProduct = false;
-        if(true) {
+        if(order.products) {
             for(let product of order.products) {
                 for(let productConfig of config) {
                     let wasFound = false;
@@ -239,7 +239,7 @@ export function getSattisticsByName(orders: any[]): any {
         if(includeProduct) {
             statistic[order.delivery_country].ordersWithConfigProducts++;
         }
-        statistic[order.delivery_country].orders++
+        statistic[order.delivery_country] && statistic[order.delivery_country].orders++;
     }
     return statistic;
 }
@@ -350,6 +350,7 @@ export function sliceOrders(orders: any[],dateToo: number): any[] {
 
 export async function generateHeatersStatistic(params: GetOrdersParams) {
     const baselinkerController = new BaselinkerApiController();
+    params.severalFolder = false; // update parameters, generally we should send it from client but for now it is okay
     let orders = await baselinkerController.getListOfOrdersByParams(params);
 
     let statistic = getSattisticsByName(orders);

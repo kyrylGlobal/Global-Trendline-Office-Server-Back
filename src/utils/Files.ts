@@ -5,7 +5,7 @@ interface OnWriteFileUpdateDataFunction {
 }
 
 class Files{
-    async appendFile(path: string, data: string){
+    async appendFile(path: string, data: string) {
         return new Promise((resolve, reject) => {
             fs.appendFile(path, data, (error) => {
                 if(error){
