@@ -32,7 +32,7 @@ class BaselinkerSortController {
         }
     }
 
-    public async updatePresentsSkus(req: Request, res: Response, next: NextFunction) {
+    public async updateOrdersData(req: Request, res: Response, next: NextFunction) {
         let resultMessages: string[] = [];
             const lookingStatusNames = ["Priority", "Check", "Delayed Del. 2", "Delayed Delivery", "Express", "Preparation"];
             let bApi = new BaselinkerApiController();

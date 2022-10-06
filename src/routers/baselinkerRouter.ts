@@ -20,8 +20,8 @@ baselinkerRouter.post('/sorting', (req, res, next) => {
     BaselinkerSortController.sortDuplicateOrders(req, res, next)
 })
 
-baselinkerRouter.get('/update/presents', (req, res, next) => {
-    BaselinkerSortController.updatePresentsSkus(req, res, next);
+baselinkerRouter.get('/update/orders', (req, res, next) => {
+    BaselinkerSortController.updateOrdersData(req, res, next);
 })
 
 
