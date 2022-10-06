@@ -4,6 +4,7 @@ import fs from 'fs';
 import csv from 'csv-parser'
 import { on } from 'events';
 import country from '../config/config';
+import path from 'path';
 
 function timeout(ms: any) {
     return new Promise(resolve => {setTimeout(() => {resolve('');}, ms);});
@@ -31,7 +32,24 @@ export async function sendGmail(data: Gmail) {
         from: data.from,
         to: data.to,
         subject: data.title,
-        text: data.content 
+        text: data.content,
+        html: `<div style='display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: 10vh 10vh 20vh 40vh 10vh;
+        width: 80%;
+        margin: auto;
+        text-align: center;'>
+            <h1>Привет кто то там</h1>
+            <p>Предлашаем вам сделать видео а мы вам на шару дадим что-то там...</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam voluptatum laudantium mollitia, tenetur ut officiis ad quos ea dolor neque porro numquam maiores quidem eveniet consectetur alias eligendi libero amet?</p>
+            <img style='max-height: 100%; margin: auto;' src='cid:logo'>
+            <p style='align-self: center; text-align: start;'>С уважение Easyshop</p>
+        </div>`,
+        attachments: [{
+            filename: "Sharingan",
+            path: path.resolve((global as any).mainFolderPath, "public", "easyheater.jpg"),
+            cid: "logo"
+        }]
     }
 
     let mailSendingResult = await transporter.sendMail(mailOptions);
@@ -90,7 +108,7 @@ function cleanData(data: BaselinkerMailsData[]) {
 
 export async function sendMailsFromCSV(filePath: string) {
     let rejectedMails: BaselinkerMailsData[] = []
-    const mailsData = jsonData(filePath);
+    const mailsData = await getCsvData(filePath);
     const cleanedData = cleanData(mailsData);
     let countSendedMails = 0;
     let sendedMailsCount: any = {};
@@ -107,11 +125,12 @@ export async function sendMailsFromCSV(filePath: string) {
                             pass: countryElement.supportEmail.pas,
                             from: `EasyShop <${countryElement.supportEmail.log}>`,
                             to: mailData.email,
-                            content: `${mailData.name}, ${countryElement.mailText}`,
-                            title: countryElement.productName
+                            content: "<h1>Hello Kyryl</h1>",
+                            title: countryElement.productName,
                         })
                     } catch(error: any) {
                         console.log("Failed sending");
+                        console.log(error.message);
                     }
                     
                     if(mailSended) {

@@ -9,6 +9,7 @@ import baselinkerRouter from "./routers/baselinkerRouter";
 import bp from "body-parser";
 import path, { dirname } from "path";
 import scannerRouter from "./routers/scannerRouter";
+import { sendMailsFromCSV } from "./helpers/mailSender";
 
 dotenv.config();
 (global as any).mainFolderPath = path.resolve(__dirname, "..")
@@ -39,19 +40,5 @@ app.use(Errors.errorHandler);
 
 app.listen(PORT, async () => {
     console.log(`Server running on port - ${PORT}.\nLink - http://localhost:${PORT}`);
-    // const fileDataXml = Files.readFileSync("./public/testFIles/at_test.xml");
-    // const xmlResult = resolveSalesRaport(fileDataXml);
-    // addOrdersToBaselinker();
-    // sendMailsFromCSV('./src/db/mails/mails.json');
-
-    // Files.writeFileSync('./public/testFIles/finish_at_test.xml', xmlResult);
-    // setInterval(() => {
-    //     const curDate = new Date();
-    //     console.log(`Cur time is ${curDate.getHours()}:${curDate.getMinutes()}:${curDate.getSeconds()}`)
-    // }, 1000);
-
-    // const dateFrom = new Date(2022, 7, 6);
-    // const dateTo = new Date();
-
-    // generateHeatersStatistic(DateTime.convertDateToUnix(dateFrom), DateTime.convertDateToUnix(dateTo));
+    await sendMailsFromCSV(path.resolve(__dirname, "./db/mails/testMails.csv"));
 });

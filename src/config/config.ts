@@ -25,8 +25,8 @@ const country: BaselinkerCountry[] = [
         viesConfig: poland, 
         currency: "PLN",
         supportEmail: {
-            log: "easyshopzakaz@gmail.com",
-            pas: "Trendline2019",
+            log: "kyryl.global@gmail.com",
+            pas: "ssjyjkulvkvwjczr",
             allowMailSending: true
         },
         productName: "Tunel agrofibrowy – szklarnia „Mega Garden”",
