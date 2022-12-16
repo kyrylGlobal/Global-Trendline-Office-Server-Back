@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node build/server.js",
     "dev": "nodemon src/server.ts",
+    "devStart": "ts-node src/server.ts",
     "build": "tsc",
     "postinstall": "tsc",
     "build-rm": "tsc --build --clean"

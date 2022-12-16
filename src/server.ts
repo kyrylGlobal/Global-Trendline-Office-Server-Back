@@ -40,5 +40,15 @@ app.use(Errors.errorHandler);
 
 app.listen(PORT, async () => {
     console.log(`Server running on port - ${PORT}.\nLink - http://localhost:${PORT}`);
-    await sendMailsFromCSV(path.resolve(__dirname, "./db/mails/testMails.csv"));
+    // await sendMailsFromCSV(path.resolve(__dirname, "./db/mails/mails.csv"), {
+    //     "Poland": 0,
+    //     "Czech Republic": 0,
+    //     "Hungary": 0,
+    //     "Slovakia": 0,
+    //     "Bulgaria": 0,
+    //     "Lithuania": 0,
+    //     "Austria": 0,
+    //     "Latvia": 0,
+    //     "Romania": 0
+    // }, 100);
 });

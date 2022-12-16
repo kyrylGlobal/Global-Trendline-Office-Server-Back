@@ -91,6 +91,7 @@ function checkCurrencyAndCountry(invoiceObject: any) {
     try {
         if(invoiceObject.PLATNOSCI.PLATNOSC) {
             let invoiceCurrency = invoiceObject.PLATNOSCI.PLATNOSC.WALUTA_PLAT;
+            let orderCurrency = invoiceObject.WALUTA;
             let invoiceCountry = invoiceObject.KRAJ;
 
             let countryWasFounded = false;
@@ -98,11 +99,17 @@ function checkCurrencyAndCountry(invoiceObject: any) {
             country.every( countryElement => {
                 countryElement.names.forEach( countryName => {
                     if (countryName === invoiceCountry) {
-                        if( countryElement.currency === invoiceCurrency) {
+                        if(countryElement.currency === invoiceCurrency && countryElement.currency === orderCurrency) {
                             countryWasFounded = true;
                             return false;
                         } else {
-                            throw new Error(`Error! Facture ${invoiceObject.ID_ZRODLA} contain country ${invoiceCountry} with ${invoiceCurrency}`)
+                            for(let countryName of countryElement.names) {
+                                if(countryName === "Czechy") {
+                                    countryWasFounded = true;
+                                    return false;
+                                }
+                            }
+                            throw new Error(`For invoice ${invoiceObject.ID_ZRODLA} true coutry curensy is ${countryElement.currency}. Real order curency is ${orderCurrency} nad real invoice curensy is ${invoiceCurrency}`)
                         }
                     }
                 })
@@ -115,7 +122,8 @@ function checkCurrencyAndCountry(invoiceObject: any) {
         }
     }
     catch(error: any) {
-        console.log(error)
+        console.log(error.message);
+        throw new Error(error.message);
     }
 }
 
@@ -248,6 +256,7 @@ async function updateInvoiceDates(invoiceObject: any) {
 
 function updatePaymentType(invoiceObject: any) {
     invoiceObject.FORMA_PLATNOSCI = "Przelew";
+    invoiceObject.PLATNOSCI.PLATNOSC.FORMA_PLATNOSCI_PLAT = "Przelew";
 }
 
 function updateVatCountry(invoiceObject: any) {
