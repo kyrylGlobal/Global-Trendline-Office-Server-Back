@@ -60,7 +60,7 @@ const country: BaselinkerCountry[] = [
         imgName: "easyheaterPl.jpeg",
         errorToIgnore: [],
         factureToIgnoreError: [],
-        paymentMethods: [{keyWord: "Stripe", changeTo: "Stripe"}, {keyWord: "Paypal", changeTo: "Paypal"}, {keyWord: "Dotpay", changeTo: "Przelewy24"}, {keyWord: "PayU", changeTo: "PayU"}]
+        paymentMethods: [{keyWord: "STRIPE", changeTo: "STRIPE"}, {keyWord: "PAYPAL", changeTo: "PAYPAL"}, {keyWord: "Dotpay", changeTo: "PRZELEWY24"}, {keyWord: "PayU", changeTo: "PayU"}]
     },
     {
         names: ["Czechy", "Czech Republic"],
@@ -90,7 +90,7 @@ const country: BaselinkerCountry[] = [
         imgName: "easyheaterSK.jpeg",
         errorToIgnore: [],
         factureToIgnoreError: [],
-        paymentMethods: [{keyWord: "Stripe", changeTo: "Stripe"}, {keyWord: "Paypal", changeTo: "Paypal"}]
+        paymentMethods: [{keyWord: "STRIPE", changeTo: "STRIPE"}, {keyWord: "PAYPAL", changeTo: "PAYPAL"}]
     },
     {
         names: ["Węgry", "Hungary"],
@@ -120,7 +120,7 @@ const country: BaselinkerCountry[] = [
         imgName: "easyheaterHU.jpeg",
         errorToIgnore: [],
         factureToIgnoreError: [],
-        paymentMethods: [{keyWord: "Stripe", changeTo: "Stripe"}, {keyWord: "Paypal", changeTo: "Paypal"}]
+        paymentMethods: [{keyWord: "STRIPE", changeTo: "STRIPE"}, {keyWord: "PAYPAL", changeTo: "PAYPAL"}]
     },
     {
         names: ["Rumunia", "Romania"],
@@ -150,7 +150,7 @@ const country: BaselinkerCountry[] = [
         imgName: "easyheaterRO.jpeg",
         errorToIgnore: [],
         factureToIgnoreError: [],
-        paymentMethods: [{keyWord: "Stripe", changeTo: "Stripe"}, {keyWord: "Paypal", changeTo: "Paypal"}]
+        paymentMethods: [{keyWord: "STRIPE", changeTo: "STRIPE"}, {keyWord: "PAYPAL", changeTo: "PAYPAL"}]
     },
     {
         names: ["Słowacja", "Slovakia"],
@@ -180,7 +180,7 @@ const country: BaselinkerCountry[] = [
         imgName: "easyheaterSK.jpeg",
         errorToIgnore: [],
         factureToIgnoreError: [],
-        paymentMethods: [{keyWord: "Stripe", changeTo: "Stripe"}, {keyWord: "Paypal", changeTo: "Paypal"}]
+        paymentMethods: [{keyWord: "STRIPE", changeTo: "STRIPE"}, {keyWord: "PAYPAL", changeTo: "PAYPAL"}]
     },
     {
         names: ["Bułgaria", "Bulgaria"],
@@ -210,7 +210,7 @@ const country: BaselinkerCountry[] = [
         imgName: "easyheaterBG.jpeg",
         errorToIgnore: [],
         factureToIgnoreError: [],
-        paymentMethods: [{keyWord: "Stripe", changeTo: "Stripe"}, {keyWord: "Paypal", changeTo: "Paypal"}]
+        paymentMethods: [{keyWord: "STRIPE", changeTo: "STRIPE"}, {keyWord: "PAYPAL", changeTo: "PAYPAL"}]
     },
     {
         names: ["Litwa", "Lithuania"],
@@ -240,7 +240,7 @@ const country: BaselinkerCountry[] = [
         imgName: "easyheaterLT.jpeg",
         errorToIgnore: [],
         factureToIgnoreError: [],
-        paymentMethods: [{keyWord: "Stripe", changeTo: "Stripe"}, {keyWord: "Paypal", changeTo: "Paypal"}]
+        paymentMethods: [{keyWord: "STRIPE", changeTo: "STRIPE"}, {keyWord: "PAYPAL", changeTo: "PAYPAL"}]
     },
     {
         names: ["Austria"],
@@ -270,7 +270,7 @@ const country: BaselinkerCountry[] = [
         imgName: "easyheaterDE.jpeg",
         errorToIgnore: [],
         factureToIgnoreError: [],
-        paymentMethods: [{keyWord: "Stripe", changeTo: "Stripe"}, {keyWord: "Paypal", changeTo: "Paypal"}, {keyWord: "EPS", changeTo: "Stripe"}]
+        paymentMethods: [{keyWord: "STRIPE", changeTo: "STRIPE"}, {keyWord: "PAYPAL", changeTo: "PAYPAL"}, {keyWord: "EPS", changeTo: "STRIPE"}]
     },
     {
         names: ["Niemcy", "Germany"],
@@ -300,7 +300,7 @@ const country: BaselinkerCountry[] = [
         imgName: "easyheaterDE.jpeg",
         errorToIgnore: [],
         factureToIgnoreError: [],
-        paymentMethods: [{keyWord: "Stripe", changeTo: "Stripe"}, {keyWord: "Paypal", changeTo: "Paypal"}]
+        paymentMethods: [{keyWord: "STRIPE", changeTo: "STRIPE"}, {keyWord: "PAYPAL", changeTo: "PAYPAL"}]
     },
     {
         names: ["Chorwacja", "Croatia"],
@@ -330,7 +330,7 @@ const country: BaselinkerCountry[] = [
         imgName: "easyheaterCH.jpeg",
         errorToIgnore: [],
         factureToIgnoreError: [],
-        paymentMethods: [{keyWord: "Stripe", changeTo: "Stripe"}, {keyWord: "Paypal", changeTo: "Paypal"}]
+        paymentMethods: [{keyWord: "STRIPE", changeTo: "STRIPE"}, {keyWord: "PAYPAL", changeTo: "PAYPAL"}]
     },
     {
         names: ["Grecja", "Greece"],
@@ -360,7 +360,7 @@ const country: BaselinkerCountry[] = [
         imgName: "easyheaterGR.jpeg",
         errorToIgnore: [],
         factureToIgnoreError: [],
-        paymentMethods: [{keyWord: "Stripe", changeTo: "Stripe"}, {keyWord: "Paypal", changeTo: "Paypal"}]
+        paymentMethods: [{keyWord: "STRIPE", changeTo: "STRIPE"}, {keyWord: "PAYPAL", changeTo: "PAYPAL"}]
     },
     {
         names: ["Łotwa", "Latvia"],
@@ -390,7 +390,7 @@ const country: BaselinkerCountry[] = [
         imgName: "easyheaterLV.jpeg",
         errorToIgnore: [],
         factureToIgnoreError: [],
-        paymentMethods: [{keyWord: "Stripe", changeTo: "Stripe"}, {keyWord: "Paypal", changeTo: "Paypal"}]
+        paymentMethods: [{keyWord: "STRIPE", changeTo: "STRIPE"}, {keyWord: "PAYPAL", changeTo: "PAYPAL"}]
     },
     {
         names: ["Estonia"],
@@ -420,7 +420,7 @@ const country: BaselinkerCountry[] = [
         imgName: "easyheaterEE.jpeg",
         errorToIgnore: [],
         factureToIgnoreError: [],
-        paymentMethods: [{keyWord: "Stripe", changeTo: "Stripe"}, {keyWord: "Paypal", changeTo: "Paypal"}, {keyWord: "iDeal", changeTo: "Stripe"}]
+        paymentMethods: [{keyWord: "STRIPE", changeTo: "STRIPE"}, {keyWord: "PAYPAL", changeTo: "PAYPAL"}, {keyWord: "iDeal", changeTo: "STRIPE"}]
     },
     {
         names: ["Holandia", "Netherlands"],
@@ -450,7 +450,7 @@ const country: BaselinkerCountry[] = [
         imgName: "easyheaterNE.jpeg",
         errorToIgnore: [],
         factureToIgnoreError: [],
-        paymentMethods: [{keyWord: "Stripe", changeTo: "Stripe"}, {keyWord: "Paypal", changeTo: "Paypal"}]
+        paymentMethods: [{keyWord: "STRIPE", changeTo: "STRIPE"}, {keyWord: "PAYPAL", changeTo: "PAYPAL"}]
     },
     {
         names: ["Belgia", "Belgium"],
@@ -480,7 +480,7 @@ const country: BaselinkerCountry[] = [
         imgName: "easyheaterBE.jpeg",
         errorToIgnore: [],
         factureToIgnoreError: [],
-        paymentMethods: [{keyWord: "Stripe", changeTo: "Stripe"}, {keyWord: "Paypal", changeTo: "Paypal"}, {keyWord: "Bancontact", changeTo: "Stripe"}]
+        paymentMethods: [{keyWord: "STRIPE", changeTo: "STRIPE"}, {keyWord: "PAYPAL", changeTo: "PAYPAL"}, {keyWord: "Bancontact", changeTo: "STRIPE"}]
     }
 ];
 
