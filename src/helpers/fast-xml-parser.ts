@@ -1,9 +1,10 @@
 import { X2jOptions, XMLBuilder, XmlBuilderOptions, XMLParser } from "fast-xml-parser";
 import cDataRows from "../config/c-data-rows";
-import country, {ifContainCountryName, getCountryObjectIfName} from "../config/config";
+import country, {ifContainCountryName, getCountryObjectIfName, ErrorTypes} from "../config/config";
 import {checkVAT} from 'jsvat'
 import axios from "axios";
 import DateTime from "../utils/DateTime";
+import { checkIfContainText } from "./stringHelper";
 
 interface KeyAndValue {
     key: string,
@@ -103,13 +104,18 @@ function checkCurrencyAndCountry(invoiceObject: any) {
                             countryWasFounded = true;
                             return false;
                         } else {
-                            for(let countryName of countryElement.names) {
-                                if(countryName === "Czechy") {
-                                    countryWasFounded = true;
-                                    return false;
+                            if(!countryElement.errorToIgnore.includes(ErrorTypes.CURENCYERROR)) { // if not ignore
+                                for(let countryName of countryElement.names) {
+                                    if(countryName === "Czechy") {
+                                        countryWasFounded = true;
+                                        return false;
+                                    }
                                 }
-                            }
-                            throw new Error(`For invoice ${invoiceObject.ID_ZRODLA} true coutry curensy is ${countryElement.currency}. Real order curency is ${orderCurrency} nad real invoice curensy is ${invoiceCurrency}`)
+
+                                if(!countryElement.factureToIgnoreError.includes(invoiceObject.ID_ZRODLA)) {
+                                    throw new Error(`For invoice ${invoiceObject.ID_ZRODLA} true coutry curensy is ${countryElement.currency}. Real order curency is ${orderCurrency} nad real invoice curensy is ${invoiceCurrency}`)
+                                } else countryWasFounded = true;
+                            } else countryWasFounded = true;
                         }
                     }
                 })
@@ -255,8 +261,24 @@ async function updateInvoiceDates(invoiceObject: any) {
 }
 
 function updatePaymentType(invoiceObject: any) {
-    invoiceObject.FORMA_PLATNOSCI = "Przelew";
-    invoiceObject.PLATNOSCI.PLATNOSC.FORMA_PLATNOSCI_PLAT = "Przelew";
+    for(let countryConfig of country) {
+        if(countryConfig.names.includes(invoiceObject.KRAJ)) {
+            let paymentMethod: string = "przelew";
+            for(let countryPaymentMethod of countryConfig.paymentMethods) {
+                if(checkIfContainText(countryPaymentMethod.keyWord, invoiceObject.FORMA_PLATNOSCI)) {
+                    paymentMethod = countryPaymentMethod.changeTo;
+                    break;
+                }
+            }
+
+            invoiceObject.FORMA_PLATNOSCI = paymentMethod;
+            if(invoiceObject.PLATNOSCI.PLATNOSC) {
+                invoiceObject.PLATNOSCI.PLATNOSC.FORMA_PLATNOSCI_PLAT = paymentMethod;
+            }
+            break;
+        }
+    }
+
 }
 
 function updateVatCountry(invoiceObject: any) {

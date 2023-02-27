@@ -1,8 +1,7 @@
-enum DateTypes {
-    dashyymmdd = "yy-mm-dd",
-    dashyymm = "yy-mm"
-}
+export function checkIfContainText(lookingText: string, sourceText: string): boolean {
+    sourceText = sourceText.toLowerCase();
+    lookingText = lookingText.toLocaleLowerCase();
 
-export function convertDateTypeTo(from: string, to: string) {
-
+    if(sourceText.includes(lookingText)) return true;
+    return false;
 }

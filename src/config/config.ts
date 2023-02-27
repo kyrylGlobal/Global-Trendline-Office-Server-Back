@@ -1,6 +1,5 @@
 import {Country, czechRepublic, hungary, romania, slovakiaRepublic, bulgaria, lithuania, austria, germany, croatia, greece, poland, latvia, estonia, netherlands, belgium} from 'jsvat'
 
-
 interface BaselinkerCountry {
     names: string[],
     shortName: string,
@@ -11,7 +10,19 @@ interface BaselinkerCountry {
     mailText: string,
     convCurGetRequestWay: string,
     secretCode?: string,
-    imgName: string
+    imgName: string,
+    errorToIgnore: ErrorTypes[],
+    factureToIgnoreError: string[],
+    paymentMethods: PaymentMethod[]
+}
+
+interface PaymentMethod {
+    keyWord: string,
+    changeTo: string
+}
+
+export enum ErrorTypes {
+    CURENCYERROR = "CURENCYERROR"
 }
 
 interface Email {
@@ -46,7 +57,10 @@ const country: BaselinkerCountry[] = [
         </div>`,
         convCurGetRequestWay: "",
         secretCode: "lgrfaghkmwbmzjzw",
-        imgName: "easyheaterPl.jpeg"
+        imgName: "easyheaterPl.jpeg",
+        errorToIgnore: [],
+        factureToIgnoreError: [],
+        paymentMethods: [{keyWord: "Stripe", changeTo: "Stripe"}, {keyWord: "Paypal", changeTo: "Paypal"}, {keyWord: "Dotpay", changeTo: "Przelewy24"}, {keyWord: "PayU", changeTo: "PayU"}]
     },
     {
         names: ["Czechy", "Czech Republic"],
@@ -73,7 +87,10 @@ const country: BaselinkerCountry[] = [
         </div>`,
         convCurGetRequestWay: "http://api.nbp.pl/api/exchangerates/rates/a/czk",
         secretCode: "mrbwhoqphobebyhi",
-        imgName: "easyheaterSK.jpeg"
+        imgName: "easyheaterSK.jpeg",
+        errorToIgnore: [],
+        factureToIgnoreError: [],
+        paymentMethods: [{keyWord: "Stripe", changeTo: "Stripe"}, {keyWord: "Paypal", changeTo: "Paypal"}]
     },
     {
         names: ["Węgry", "Hungary"],
@@ -100,7 +117,10 @@ const country: BaselinkerCountry[] = [
         </div>`,
         convCurGetRequestWay: "http://api.nbp.pl/api/exchangerates/rates/a/huf",
         secretCode: "rqvsawadsxtiragt",
-        imgName: "easyheaterHU.jpeg"
+        imgName: "easyheaterHU.jpeg",
+        errorToIgnore: [],
+        factureToIgnoreError: [],
+        paymentMethods: [{keyWord: "Stripe", changeTo: "Stripe"}, {keyWord: "Paypal", changeTo: "Paypal"}]
     },
     {
         names: ["Rumunia", "Romania"],
@@ -127,7 +147,10 @@ const country: BaselinkerCountry[] = [
         </div>`,
         convCurGetRequestWay: "http://api.nbp.pl/api/exchangerates/rates/a/ron",
         secretCode: "gnttqpvzprzrlvjg",
-        imgName: "easyheaterRO.jpeg"
+        imgName: "easyheaterRO.jpeg",
+        errorToIgnore: [],
+        factureToIgnoreError: [],
+        paymentMethods: [{keyWord: "Stripe", changeTo: "Stripe"}, {keyWord: "Paypal", changeTo: "Paypal"}]
     },
     {
         names: ["Słowacja", "Slovakia"],
@@ -142,7 +165,7 @@ const country: BaselinkerCountry[] = [
         productName: `Infrazářič "EasyHeater" zdarma!`,
         mailText: `<div style='display: grid;
         grid-template-columns: 1fr;
-        grid-template-rows: 10vh 10vh 20vh 40vh 10vh;
+        grid-template-rows: 10vh 10vh 20vh 40vh 10vh; 
         width: 90%;
         margin: auto;
         text-align: center; border-radius: 5px; box-shadow: 0 0 10px black;'>
@@ -154,7 +177,10 @@ const country: BaselinkerCountry[] = [
         </div>`,
         convCurGetRequestWay: "http://api.nbp.pl/api/exchangerates/rates/a/eur",
         secretCode: "mrbwhoqphobebyhi",
-        imgName: "easyheaterSK.jpeg"
+        imgName: "easyheaterSK.jpeg",
+        errorToIgnore: [],
+        factureToIgnoreError: [],
+        paymentMethods: [{keyWord: "Stripe", changeTo: "Stripe"}, {keyWord: "Paypal", changeTo: "Paypal"}]
     },
     {
         names: ["Bułgaria", "Bulgaria"],
@@ -181,7 +207,10 @@ const country: BaselinkerCountry[] = [
         </div>`,
         convCurGetRequestWay: "http://api.nbp.pl/api/exchangerates/rates/a/bgn",
         secretCode: "aavhgagilndtyapb",
-        imgName: "easyheaterBG.jpeg"
+        imgName: "easyheaterBG.jpeg",
+        errorToIgnore: [],
+        factureToIgnoreError: [],
+        paymentMethods: [{keyWord: "Stripe", changeTo: "Stripe"}, {keyWord: "Paypal", changeTo: "Paypal"}]
     },
     {
         names: ["Litwa", "Lithuania"],
@@ -208,7 +237,10 @@ const country: BaselinkerCountry[] = [
         </div>`,
         convCurGetRequestWay: "http://api.nbp.pl/api/exchangerates/rates/a/eur",
         secretCode: "bgauhlcgtchidhfq",
-        imgName: "easyheaterLT.jpeg"
+        imgName: "easyheaterLT.jpeg",
+        errorToIgnore: [],
+        factureToIgnoreError: [],
+        paymentMethods: [{keyWord: "Stripe", changeTo: "Stripe"}, {keyWord: "Paypal", changeTo: "Paypal"}]
     },
     {
         names: ["Austria"],
@@ -235,7 +267,10 @@ const country: BaselinkerCountry[] = [
         </div>`,
         convCurGetRequestWay: "http://api.nbp.pl/api/exchangerates/rates/a/eur",
         secretCode: "uytsufkutdltsxgb",
-        imgName: "easyheaterDE.jpeg"
+        imgName: "easyheaterDE.jpeg",
+        errorToIgnore: [],
+        factureToIgnoreError: [],
+        paymentMethods: [{keyWord: "Stripe", changeTo: "Stripe"}, {keyWord: "Paypal", changeTo: "Paypal"}, {keyWord: "EPS", changeTo: "Stripe"}]
     },
     {
         names: ["Niemcy", "Germany"],
@@ -262,13 +297,16 @@ const country: BaselinkerCountry[] = [
         </div>`,
         convCurGetRequestWay: "http://api.nbp.pl/api/exchangerates/rates/a/eur",
         secretCode: "qhzmulqubsetqavi",
-        imgName: "easyheaterDE.jpeg"
+        imgName: "easyheaterDE.jpeg",
+        errorToIgnore: [],
+        factureToIgnoreError: [],
+        paymentMethods: [{keyWord: "Stripe", changeTo: "Stripe"}, {keyWord: "Paypal", changeTo: "Paypal"}]
     },
     {
         names: ["Chorwacja", "Croatia"],
         shortName: "HR",
         viesConfig: croatia, 
-        currency: "HRK",
+        currency: "EUR",
         supportEmail: {
             log: "hr.easyshop.info@gmail.com",
             pas: "",
@@ -289,7 +327,10 @@ const country: BaselinkerCountry[] = [
         </div>`,
         convCurGetRequestWay: "http://api.nbp.pl/api/exchangerates/rates/a/hrk",
         secretCode: "elzvwkeezblkfgwf",
-        imgName: "easyheaterCH.jpeg"
+        imgName: "easyheaterCH.jpeg",
+        errorToIgnore: [],
+        factureToIgnoreError: [],
+        paymentMethods: [{keyWord: "Stripe", changeTo: "Stripe"}, {keyWord: "Paypal", changeTo: "Paypal"}]
     },
     {
         names: ["Grecja", "Greece"],
@@ -316,7 +357,10 @@ const country: BaselinkerCountry[] = [
         </div>`,
         convCurGetRequestWay: "http://api.nbp.pl/api/exchangerates/rates/a/eur",
         secretCode: "ndozckgpmrnglnrr",
-        imgName: "easyheaterGR.jpeg"
+        imgName: "easyheaterGR.jpeg",
+        errorToIgnore: [],
+        factureToIgnoreError: [],
+        paymentMethods: [{keyWord: "Stripe", changeTo: "Stripe"}, {keyWord: "Paypal", changeTo: "Paypal"}]
     },
     {
         names: ["Łotwa", "Latvia"],
@@ -343,7 +387,10 @@ const country: BaselinkerCountry[] = [
         </div>`,
         convCurGetRequestWay: "http://api.nbp.pl/api/exchangerates/rates/a/eur",
         secretCode: "rksucufmjgqugebh",
-        imgName: "easyheaterLV.jpeg"
+        imgName: "easyheaterLV.jpeg",
+        errorToIgnore: [],
+        factureToIgnoreError: [],
+        paymentMethods: [{keyWord: "Stripe", changeTo: "Stripe"}, {keyWord: "Paypal", changeTo: "Paypal"}]
     },
     {
         names: ["Estonia"],
@@ -370,7 +417,10 @@ const country: BaselinkerCountry[] = [
         </div>`,
         convCurGetRequestWay: "http://api.nbp.pl/api/exchangerates/rates/a/eur",
         secretCode: "tdxzyslewqfkujrj",
-        imgName: "easyheaterEE.jpeg"
+        imgName: "easyheaterEE.jpeg",
+        errorToIgnore: [],
+        factureToIgnoreError: [],
+        paymentMethods: [{keyWord: "Stripe", changeTo: "Stripe"}, {keyWord: "Paypal", changeTo: "Paypal"}, {keyWord: "iDeal", changeTo: "Stripe"}]
     },
     {
         names: ["Holandia", "Netherlands"],
@@ -397,7 +447,10 @@ const country: BaselinkerCountry[] = [
         </div>`,
         convCurGetRequestWay: "http://api.nbp.pl/api/exchangerates/rates/a/eur",
         secretCode: "oriltnvoujnxjuqv",
-        imgName: "easyheaterNE.jpeg"
+        imgName: "easyheaterNE.jpeg",
+        errorToIgnore: [],
+        factureToIgnoreError: [],
+        paymentMethods: [{keyWord: "Stripe", changeTo: "Stripe"}, {keyWord: "Paypal", changeTo: "Paypal"}]
     },
     {
         names: ["Belgia", "Belgium"],
@@ -424,7 +477,10 @@ const country: BaselinkerCountry[] = [
         </div>`,
         convCurGetRequestWay: "http://api.nbp.pl/api/exchangerates/rates/a/eur",
         secretCode: "dsrhigouwgonbgvx",
-        imgName: "easyheaterBE.jpeg"
+        imgName: "easyheaterBE.jpeg",
+        errorToIgnore: [],
+        factureToIgnoreError: [],
+        paymentMethods: [{keyWord: "Stripe", changeTo: "Stripe"}, {keyWord: "Paypal", changeTo: "Paypal"}, {keyWord: "Bancontact", changeTo: "Stripe"}]
     }
 ];
 
