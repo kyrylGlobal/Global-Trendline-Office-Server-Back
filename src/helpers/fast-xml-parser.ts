@@ -105,16 +105,10 @@ function checkCurrencyAndCountry(invoiceObject: any) {
                             return false;
                         } else {
                             if(!countryElement.errorToIgnore.includes(ErrorTypes.CURENCYERROR)) { // if not ignore
-                                for(let countryName of countryElement.names) {
-                                    if(countryName === "Czechy") {
-                                        countryWasFounded = true;
-                                        return false;
-                                    }
-                                }
-
-                                if(!countryElement.factureToIgnoreError.includes(invoiceObject.ID_ZRODLA)) {
-                                    throw new Error(`For invoice ${invoiceObject.ID_ZRODLA} true coutry curensy is ${countryElement.currency}. Real order curency is ${orderCurrency} nad real invoice curensy is ${invoiceCurrency}`)
-                                } else countryWasFounded = true;
+                                countryWasFounded = true;
+                                return false;
+                            } else if(!countryElement.factureToIgnoreError.includes(invoiceObject.ID_ZRODLA)) {
+                                throw new Error(`For invoice ${invoiceObject.ID_ZRODLA} true coutry curensy is ${countryElement.currency}. Real order curency is ${orderCurrency} nad real invoice curensy is ${invoiceCurrency}`)
                             } else countryWasFounded = true;
                         }
                     }
@@ -149,6 +143,7 @@ async function updateInvoices(xmlObject: any) {
 async function updateInvoice(invoiceObject: any) {
     await updateConversion(invoiceObject);
     updatePaymentType(invoiceObject);
+    updatePaymentSection(invoiceObject);
     updateVatNumber(invoiceObject);
     updateVatCountry(invoiceObject);
     await updateInvoiceDates(invoiceObject);
@@ -158,6 +153,15 @@ async function updateInvoice(invoiceObject: any) {
     checkInvoice(invoiceObject);
 
     updateFinishedJObject(invoiceObject);
+}
+
+function updatePaymentSection(invoiceObject: any) {
+    if(invoiceObject.PLATNOSCI.PLATNOSC) {
+        let paymentSection: any = invoiceObject.PLATNOSCI.PLATNOSC;
+        if(invoiceObject.KRAJ === "Polska") {
+            paymentSection.WALUTA_PLAT = "";
+        }
+    }
 }
 
 async function updatePaymentCurrency(invoiceObject: any) {

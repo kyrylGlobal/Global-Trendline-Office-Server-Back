@@ -1,4 +1,4 @@
-import {Country, czechRepublic, hungary, romania, slovakiaRepublic, bulgaria, lithuania, austria, germany, croatia, greece, poland, latvia, estonia, netherlands, belgium} from 'jsvat'
+import {Country, czechRepublic, hungary, romania, slovakiaRepublic, bulgaria, lithuania, austria, germany, croatia, greece, poland, latvia, estonia, netherlands, belgium, spain, portugal} from 'jsvat'
 
 interface BaselinkerCountry {
     names: string[],
@@ -481,6 +481,44 @@ const country: BaselinkerCountry[] = [
         errorToIgnore: [],
         factureToIgnoreError: [],
         paymentMethods: [{keyWord: "STRIPE", changeTo: "STRIPE"}, {keyWord: "PAYPAL", changeTo: "PAYPAL"}, {keyWord: "Bancontact", changeTo: "STRIPE"}]
+    },
+    {
+        names: ["Portugalia", "Portugal"],
+        shortName: "PT",
+        viesConfig: portugal,
+        currency: "EUR",
+        supportEmail: {
+            log: "",
+            pas: "",
+            allowMailSending: true
+        },
+        productName: '',
+        mailText: ``,
+        convCurGetRequestWay: "http://api.nbp.pl/api/exchangerates/rates/a/eur",
+        secretCode: "",
+        imgName: "",
+        errorToIgnore: [],
+        factureToIgnoreError: [],
+        paymentMethods: [{keyWord: "STRIPE", changeTo: "STRIPE"}, {keyWord: "PAYPAL", changeTo: "PAYPAL"}]
+    },
+    {
+        names: ["Hiszpania", "Spain"],
+        shortName: "ES",
+        viesConfig: spain,
+        currency: "EUR",
+        supportEmail: {
+            log: "",
+            pas: "",
+            allowMailSending: false
+        },
+        productName: '',
+        mailText: ``,
+        convCurGetRequestWay: "http://api.nbp.pl/api/exchangerates/rates/a/eur",
+        secretCode: "",
+        imgName: "",
+        errorToIgnore: [],
+        factureToIgnoreError: [],
+        paymentMethods: [{keyWord: "STRIPE", changeTo: "STRIPE"}, {keyWord: "PAYPAL", changeTo: "PAYPAL"}]
     }
 ];
 
