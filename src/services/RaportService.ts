@@ -1,18 +1,15 @@
 import { UploadedFile } from "express-fileupload";
-import { SalesRaportFileDateInfo } from "../interfaces/Files";
-import { XMLParser, XMLBuilder, XMLValidator} from 'fast-xml-parser';
-import Files from "../utils/Files";
 import { resolveSalesRaport } from "../helpers/fast-xml-parser";
 
 class RaportService{
 
-    async generateXmlResultFileData(raportFile: UploadedFile): Promise<string> {
+    async generateXmlResultFileData(raportFile: UploadedFile, useNewVersion: boolean): Promise<string> {
         
         this.checkFileExtention(raportFile.mimetype);
 
         const fileDataXml = this.getDataString(raportFile);
 
-        const xmlResult = await resolveSalesRaport(fileDataXml);
+        const xmlResult = await resolveSalesRaport(fileDataXml, useNewVersion);
 
         return xmlResult;
     }

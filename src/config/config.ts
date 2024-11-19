@@ -1,4 +1,4 @@
-import {Country, czechRepublic, hungary, romania, slovakiaRepublic, bulgaria, lithuania, austria, germany, croatia, greece, poland, latvia, estonia, netherlands, belgium, spain, portugal} from 'jsvat'
+import {Country, switzerland, czechRepublic, hungary, romania, slovakiaRepublic, bulgaria, lithuania, austria, germany, croatia, cyprus, greece, poland, latvia, estonia, netherlands, belgium, spain, portugal, france, italy, finland, ireland, slovenia, norway} from 'jsvat'
 
 interface BaselinkerCountry {
     names: string[],
@@ -60,7 +60,22 @@ const country: BaselinkerCountry[] = [
         imgName: "easyheaterPl.jpeg",
         errorToIgnore: [],
         factureToIgnoreError: [],
-        paymentMethods: [{keyWord: "STRIPE", changeTo: "STRIPE"}, {keyWord: "PAYPAL", changeTo: "PAYPAL"}, {keyWord: "Dotpay", changeTo: "PRZELEWY24"}, {keyWord: "PayU", changeTo: "PayU"}]
+        paymentMethods: [
+            {keyWord: "Za pobraniem INPOST", changeTo: "Za pobraniem INPOST"},
+            {keyWord: "STRIPE", changeTo: "Stripe"}, 
+            {keyWord: "Przesyłka za pobrani", changeTo: "GLS za pobraniem"}, 
+            {keyWord: "PAYPAL", changeTo: "PayPal"}, 
+            {keyWord: "Dotpay", changeTo: "PayPro"}, 
+            {keyWord: "PayU", changeTo: "PayU"}, 
+            {keyWord: "Przelewy24", changeTo: "PayPro"}, 
+            {keyWord: 'pobranie', changeTo: 'GLS za pobraniem'}, 
+            {keyWord: 'GLS za pobraniem', changeTo: 'GLS za pobraniem'}, 
+            {keyWord: 'PayPro', changeTo: 'PayPro'}, 
+            {keyWord: 'Przelew', changeTo: 'Przelew'}, 
+            {keyWord: 'cash', changeTo: 'GLS za pobraniem'}, 
+            {keyWord: 'Płatność przy odbior', changeTo: 'PRAGMAGO'},
+            {keyWord: 'Klarna', changeTo: 'Klarna'}
+        ]
     },
     {
         names: ["Czechy", "Czech Republic"],
@@ -90,7 +105,17 @@ const country: BaselinkerCountry[] = [
         imgName: "easyheaterSK.jpeg",
         errorToIgnore: [],
         factureToIgnoreError: [],
-        paymentMethods: [{keyWord: "STRIPE", changeTo: "STRIPE"}, {keyWord: "PAYPAL", changeTo: "PAYPAL"}]
+        paymentMethods: [
+            {keyWord: 'pobranie', changeTo: 'Paxy za pobraniem'}, 
+            {keyWord: "STRIPE", changeTo: "Stripe"}, 
+            {keyWord: "PAYPAL", changeTo: "PayPal"}, 
+            {keyWord: 'Dobírkou', changeTo: 'Paxy za pobraniem'}, 
+            {keyWord: 'Paxy za pobraniem', changeTo: 'Paxy za pobraniem'}, 
+            {keyWord: "PayU", changeTo: "PayU"}, 
+            {keyWord: "Płatność przy odbior", changeTo: "PRAGMAGO"},
+            {keyWord: "Przelew", changeTo: "Przelew"},
+            {keyWord: "PayPro", changeTo: "PayPro"}, 
+        ]
     },
     {
         names: ["Węgry", "Hungary"],
@@ -120,7 +145,17 @@ const country: BaselinkerCountry[] = [
         imgName: "easyheaterHU.jpeg",
         errorToIgnore: [],
         factureToIgnoreError: [],
-        paymentMethods: [{keyWord: "STRIPE", changeTo: "STRIPE"}, {keyWord: "PAYPAL", changeTo: "PAYPAL"}]
+        paymentMethods: [
+            {keyWord: 'pobranie', changeTo: 'Paxy za pobraniem'}, 
+            {keyWord: "STRIPE", changeTo: "Stripe"}, 
+            {keyWord: "PAYPAL", changeTo: "PayPal"}, 
+            {keyWord: 'Utánvétes fizetés', changeTo: 'Paxy za pobraniem'}, 
+            {keyWord: 'Paxy za pobraniem', changeTo: 'Paxy za pobraniem'}, 
+            {keyWord: 'cash', changeTo: 'Paxy za pobraniem'},
+            {keyWord: 'Przelew', changeTo: 'Przelew'},
+            {keyWord: 'MasterCard ending in', changeTo: 'Stripe'},
+            {keyWord: "PayU", changeTo: "PayU"},
+        ]
     },
     {
         names: ["Rumunia", "Romania"],
@@ -150,7 +185,14 @@ const country: BaselinkerCountry[] = [
         imgName: "easyheaterRO.jpeg",
         errorToIgnore: [],
         factureToIgnoreError: [],
-        paymentMethods: [{keyWord: "STRIPE", changeTo: "STRIPE"}, {keyWord: "PAYPAL", changeTo: "PAYPAL"}]
+        paymentMethods: [
+            {keyWord: "STRIPE", changeTo: "Stripe"},
+            {keyWord: "PAYPAL", changeTo: "PayPal"},
+            {keyWord: 'Plata ramburs', changeTo: 'Paxy za pobraniem'}, 
+            {keyWord: 'Paxy za pobraniem', changeTo: 'Paxy za pobraniem'},
+            {keyWord: 'Przelew', changeTo: 'Przelew'},
+            {keyWord: 'Joom Online', changeTo: 'Joom Online'}
+        ]
     },
     {
         names: ["Słowacja", "Slovakia"],
@@ -180,7 +222,13 @@ const country: BaselinkerCountry[] = [
         imgName: "easyheaterSK.jpeg",
         errorToIgnore: [],
         factureToIgnoreError: [],
-        paymentMethods: [{keyWord: "STRIPE", changeTo: "STRIPE"}, {keyWord: "PAYPAL", changeTo: "PAYPAL"}]
+        paymentMethods: [
+            {keyWord: "STRIPE", changeTo: "Stripe"}, 
+            {keyWord: "PAYPAL", changeTo: "PayPal"}, 
+            {keyWord: 'Dobírkou', changeTo: 'Paxy za pobraniem'}, 
+            {keyWord: 'Paxy za pobraniem', changeTo: 'Paxy za pobraniem'},
+            {keyWord: "PayU", changeTo: "PayU"}, 
+        ]
     },
     {
         names: ["Bułgaria", "Bulgaria"],
@@ -210,7 +258,14 @@ const country: BaselinkerCountry[] = [
         imgName: "easyheaterBG.jpeg",
         errorToIgnore: [],
         factureToIgnoreError: [],
-        paymentMethods: [{keyWord: "STRIPE", changeTo: "STRIPE"}, {keyWord: "PAYPAL", changeTo: "PAYPAL"}]
+        paymentMethods: [
+            {keyWord: "STRIPE", changeTo: "Stripe"}, 
+            {keyWord: "PAYPAL", changeTo: "PayPal"}, 
+            {keyWord: 'наложен', changeTo: 'Paxy za pobraniem'}, 
+            {keyWord: 'Paxy za pobraniem', changeTo: 'Paxy za pobraniem'},
+            {keyWord: 'Za pobraniem', changeTo: 'Paxy za pobraniem'},
+            {keyWord: 'Przelew', changeTo: 'Przelew'}
+        ]
     },
     {
         names: ["Litwa", "Lithuania"],
@@ -240,7 +295,15 @@ const country: BaselinkerCountry[] = [
         imgName: "easyheaterLT.jpeg",
         errorToIgnore: [],
         factureToIgnoreError: [],
-        paymentMethods: [{keyWord: "STRIPE", changeTo: "STRIPE"}, {keyWord: "PAYPAL", changeTo: "PAYPAL"}]
+        paymentMethods: [
+            {keyWord: "STRIPE", changeTo: "Stripe"}, 
+            {keyWord: "PAYPAL", changeTo: "PayPal"}, 
+            {keyWord: 'Grynaisiais pinigais', changeTo: 'Paxy za pobraniem'}, 
+            {keyWord: 'Paxy za pobraniem', changeTo: 'Paxy za pobraniem'}, 
+            {keyWord: 'Za pobraniem', changeTo: 'Paxy za pobraniem'}, 
+            {keyWord: "PayU", changeTo: "PayU"},
+            {keyWord: "Przelew własny", changeTo: "Przelew własny"}
+        ]
     },
     {
         names: ["Austria"],
@@ -270,7 +333,19 @@ const country: BaselinkerCountry[] = [
         imgName: "easyheaterDE.jpeg",
         errorToIgnore: [],
         factureToIgnoreError: [],
-        paymentMethods: [{keyWord: "STRIPE", changeTo: "STRIPE"}, {keyWord: "PAYPAL", changeTo: "PAYPAL"}, {keyWord: "EPS", changeTo: "STRIPE"}]
+        paymentMethods: [{keyWord: "STRIPE", changeTo: "Stripe"}, 
+        {keyWord: "PAYPAL", changeTo: "PayPal"}, 
+        {keyWord: "EPS", changeTo: "Stripe"}, 
+        {keyWord: 'Nachnahme', changeTo: 'Paxy za pobraniem'}, 
+        {keyWord: 'Paxy za pobraniem', changeTo: 'Paxy za pobraniem'}, 
+        {keyWord: 'Przelew', changeTo: 'Przelew'}, 
+        {keyWord: "WISE", changeTo: "WISE"},
+        {keyWord: "Za pobraniem", changeTo: "Paxy za pobraniem"},
+        {keyWord: "Klarna", changeTo: "Klarna"},
+        {keyWord: "Visa endet mit", changeTo: "Stripe"},
+        {keyWord: "PayPro", changeTo: "PayPro"},
+
+    ]
     },
     {
         names: ["Niemcy", "Germany"],
@@ -300,7 +375,16 @@ const country: BaselinkerCountry[] = [
         imgName: "easyheaterDE.jpeg",
         errorToIgnore: [],
         factureToIgnoreError: [],
-        paymentMethods: [{keyWord: "STRIPE", changeTo: "STRIPE"}, {keyWord: "PAYPAL", changeTo: "PAYPAL"}]
+        paymentMethods: [
+            {keyWord: "STRIPE", changeTo: "Stripe"},
+            {keyWord: "klarna", changeTo: "Klarna"}, 
+            {keyWord: "PAYPAL", changeTo: "PayPal"}, 
+            {keyWord: 'Nachnahme', changeTo: 'Paxy za pobraniem'},
+            {keyWord: 'Paxy za pobraniem', changeTo: 'Paxy za pobraniem'},
+            {keyWord: 'Joom Online', changeTo: 'Joom Online'},
+            {keyWord: 'Giropay', changeTo: 'Stripe'},
+            {keyWord: 'Visa endet mit', changeTo: 'Stripe'}
+        ]
     },
     {
         names: ["Chorwacja", "Croatia"],
@@ -330,7 +414,13 @@ const country: BaselinkerCountry[] = [
         imgName: "easyheaterCH.jpeg",
         errorToIgnore: [],
         factureToIgnoreError: [],
-        paymentMethods: [{keyWord: "STRIPE", changeTo: "STRIPE"}, {keyWord: "PAYPAL", changeTo: "PAYPAL"}]
+        paymentMethods: [
+            {keyWord: "STRIPE", changeTo: "Stripe"}, 
+            {keyWord: "PAYPAL", changeTo: "PayPal"}, 
+            {keyWord: 'Plaćanje pouzećem', changeTo: 'Paxy za pobraniem'}, 
+            {keyWord: 'Paxy za pobraniem', changeTo: 'Paxy za pobraniem'},
+            {keyWord: 'PayU', changeTo: 'PayU'}
+        ]
     },
     {
         names: ["Grecja", "Greece"],
@@ -360,7 +450,13 @@ const country: BaselinkerCountry[] = [
         imgName: "easyheaterGR.jpeg",
         errorToIgnore: [],
         factureToIgnoreError: [],
-        paymentMethods: [{keyWord: "STRIPE", changeTo: "STRIPE"}, {keyWord: "PAYPAL", changeTo: "PAYPAL"}]
+        paymentMethods: [
+            {keyWord: "STRIPE", changeTo: "Stripe"}, 
+            {keyWord: "PAYPAL", changeTo: "PayPal"}, 
+            {keyWord: 'Με αντικαταβολή', changeTo: 'Paxy za pobraniem'}, 
+            {keyWord: 'Paxy za pobraniem', changeTo: 'Paxy za pobraniem'},
+            {keyWord: 'Za pobraniem', changeTo: 'Paxy za pobraniem'}
+        ]
     },
     {
         names: ["Łotwa", "Latvia"],
@@ -390,7 +486,14 @@ const country: BaselinkerCountry[] = [
         imgName: "easyheaterLV.jpeg",
         errorToIgnore: [],
         factureToIgnoreError: [],
-        paymentMethods: [{keyWord: "STRIPE", changeTo: "STRIPE"}, {keyWord: "PAYPAL", changeTo: "PAYPAL"}]
+        paymentMethods: [
+            {keyWord: "STRIPE", changeTo: "Stripe"}, 
+            {keyWord: "PAYPAL", changeTo: "PayPal"}, 
+            {keyWord: 'Samaksa pēc piegādes', changeTo: 'Paxy za pobraniem'}, 
+            {keyWord: 'Paxy za pobraniem', changeTo: 'Paxy za pobraniem'}, 
+            {keyWord: 'Za pobraniem', changeTo: 'Paxy za pobraniem'},
+            {keyWord: 'PayU', changeTo: 'PayU'}
+        ]
     },
     {
         names: ["Estonia"],
@@ -420,7 +523,15 @@ const country: BaselinkerCountry[] = [
         imgName: "easyheaterEE.jpeg",
         errorToIgnore: [],
         factureToIgnoreError: [],
-        paymentMethods: [{keyWord: "STRIPE", changeTo: "STRIPE"}, {keyWord: "PAYPAL", changeTo: "PAYPAL"}, {keyWord: "iDeal", changeTo: "STRIPE"}]
+        paymentMethods: [
+            {keyWord: "STRIPE", changeTo: "Stripe"}, 
+            {keyWord: "PAYPAL", changeTo: "PayPal"}, 
+            {keyWord: "iDeal", changeTo: "Stripe"},
+            {keyWord: 'Joom Online', changeTo: 'Joom Online'},
+            {keyWord: 'Paxy za pobraniem', changeTo: 'Paxy za pobraniem'},
+            {keyWord: 'Sularaha kättetoimet', changeTo: 'Paxy za pobraniem'},
+            {keyWord: 'MasterCard ending', changeTo: 'Stripe'},
+        ]
     },
     {
         names: ["Holandia", "Netherlands"],
@@ -450,7 +561,12 @@ const country: BaselinkerCountry[] = [
         imgName: "easyheaterNE.jpeg",
         errorToIgnore: [],
         factureToIgnoreError: [],
-        paymentMethods: [{keyWord: "STRIPE", changeTo: "STRIPE"}, {keyWord: "PAYPAL", changeTo: "PAYPAL"}]
+        paymentMethods: [
+            {keyWord: "STRIPE", changeTo: "Stripe"}, 
+            {keyWord: "PAYPAL", changeTo: "PayPal"},
+            {keyWord: "PayU", changeTo: "PayU"},
+            {keyWord: "Joom Online", changeTo: "Joom Online"}
+        ]
     },
     {
         names: ["Belgia", "Belgium"],
@@ -480,7 +596,24 @@ const country: BaselinkerCountry[] = [
         imgName: "easyheaterBE.jpeg",
         errorToIgnore: [],
         factureToIgnoreError: [],
-        paymentMethods: [{keyWord: "STRIPE", changeTo: "STRIPE"}, {keyWord: "PAYPAL", changeTo: "PAYPAL"}, {keyWord: "Bancontact", changeTo: "STRIPE"}]
+        paymentMethods: [
+            {
+                keyWord: "STRIPE", 
+                changeTo: "Stripe"
+            },
+            {
+                keyWord: "PAYPAL", 
+                changeTo: "PayPal"
+            }, 
+            {
+                keyWord: "Bancontact", 
+                changeTo: "Stripe"
+            }, 
+            {
+                keyWord: "PayU", 
+                changeTo: "PayU"
+            }
+        ]
     },
     {
         names: ["Portugalia", "Portugal"],
@@ -499,7 +632,7 @@ const country: BaselinkerCountry[] = [
         imgName: "",
         errorToIgnore: [],
         factureToIgnoreError: [],
-        paymentMethods: [{keyWord: "STRIPE", changeTo: "STRIPE"}, {keyWord: "PAYPAL", changeTo: "PAYPAL"}]
+        paymentMethods: [{keyWord: "STRIPE", changeTo: "Stripe"}, {keyWord: "PAYPAL", changeTo: "PayPal"}, {keyWord: "Przelew", changeTo: "Przelew"}]
     },
     {
         names: ["Hiszpania", "Spain"],
@@ -518,7 +651,186 @@ const country: BaselinkerCountry[] = [
         imgName: "",
         errorToIgnore: [],
         factureToIgnoreError: [],
-        paymentMethods: [{keyWord: "STRIPE", changeTo: "STRIPE"}, {keyWord: "PAYPAL", changeTo: "PAYPAL"}]
+        paymentMethods: [
+            {keyWord: "STRIPE", changeTo: "Stripe"}, 
+            {keyWord: "PAYPAL", changeTo: "PayPal"},
+            {keyWord: "Joom Online", changeTo: "Joom Online"},
+            {keyWord: "Za pobraniem FREE Co", changeTo: "Za pobraniem FREE Company"},
+        ]
+    },
+    {
+        names: ["Francja", "France"],
+        shortName: "FR",
+        viesConfig: france,
+        currency: "EUR",
+        supportEmail: {
+            log: "",
+            pas: "",
+            allowMailSending: false
+        },
+        productName: '',
+        mailText: ``,
+        convCurGetRequestWay: "http://api.nbp.pl/api/exchangerates/rates/a/eur",
+        secretCode: "",
+        imgName: "",
+        errorToIgnore: [],
+        factureToIgnoreError: [],
+        paymentMethods: [{keyWord: "STRIPE", changeTo: "Stripe"}, {keyWord: "PAYPAL", changeTo: "PayPal"}]
+    },
+    {
+        names: ["Włochy", "Italy"],
+        shortName: "IT",
+        viesConfig: italy,
+        currency: "EUR",
+        supportEmail: {
+            log: "",
+            pas: "",
+            allowMailSending: false
+        },
+        productName: '',
+        mailText: ``,
+        convCurGetRequestWay: "http://api.nbp.pl/api/exchangerates/rates/a/eur",
+        secretCode: "",
+        imgName: "",
+        errorToIgnore: [],
+        factureToIgnoreError: [],
+        paymentMethods: [
+            {keyWord: "STRIPE", changeTo: "Stripe"}, 
+            {keyWord: "PAYPAL", changeTo: "PayPal"},
+            {keyWord: "Za pobraniem FREE Company", changeTo: "Za pobraniem FREE Company"},
+            {keyWord: "Za pobraniem FREE Co", changeTo: "Za pobraniem FREE Company"}
+        ]
+    },
+    {
+        names: ["Finland", "Finlandia"],
+        shortName: "FI",
+        viesConfig: finland,
+        currency: "PLN",
+        supportEmail: {
+            log: "",
+            pas: "",
+            allowMailSending: false
+        },
+        productName: '',
+        mailText: ``,
+        convCurGetRequestWay: "http://api.nbp.pl/api/exchangerates/rates/a/eur",
+        secretCode: "",
+        imgName: "",
+        errorToIgnore: [],
+        factureToIgnoreError: [],
+        paymentMethods: [
+            {keyWord: "PayU", changeTo: "PayU"}
+        ]
+    },
+    {
+        names: ["Irlandia", "Ireland"],
+        shortName: "IE",
+        viesConfig: ireland,
+        currency: "EUR",
+        supportEmail: {
+            log: "",
+            pas: "",
+            allowMailSending: false
+        },
+        productName: '',
+        mailText: ``,
+        convCurGetRequestWay: "",
+        secretCode: "",
+        imgName: "",
+        errorToIgnore: [],
+        factureToIgnoreError: [],
+        paymentMethods: [
+            {keyWord: "Joom Online", changeTo: "Joom Online"},
+            {keyWord: "PayU", changeTo: "PayU"},
+            {keyWord: "Przelew własny", changeTo: "Przelew"}
+        ]
+    },
+    {
+        names: ["Cypr"],
+        shortName: "CY",
+        viesConfig: cyprus,
+        currency: "EUR",
+        supportEmail: {
+            log: "",
+            pas: "",
+            allowMailSending: false
+        },
+        productName: '',
+        mailText: ``,
+        convCurGetRequestWay: "",
+        secretCode: "",
+        imgName: "",
+        errorToIgnore: [],
+        factureToIgnoreError: [],
+        paymentMethods: [
+            {keyWord: "Przelew własny", changeTo: "Przelew"}
+        ]
+    },
+    {
+        names: ["Switzerland", "Szwajcaria"],
+        shortName: "CH",
+        viesConfig: switzerland,
+        currency: "EUR",
+        supportEmail: {
+            log: "",
+            pas: "",
+            allowMailSending: false
+        },
+        productName: '',
+        mailText: ``,
+        convCurGetRequestWay: "",
+        secretCode: "",
+        imgName: "",
+        errorToIgnore: [],
+        factureToIgnoreError: [],
+        paymentMethods: [
+            {keyWord: "Przelew własny", changeTo: "Przelew"},
+            {keyWord: "Joom Online", changeTo: "Joom Online"}
+        ]
+    },
+    {
+        names: ["Slovenia", "Słowenia"],
+        shortName: "SI",
+        viesConfig: slovenia,
+        currency: "EUR",
+        supportEmail: {
+            log: "",
+            pas: "",
+            allowMailSending: false
+        },
+        productName: '',
+        mailText: ``,
+        convCurGetRequestWay: "",
+        secretCode: "",
+        imgName: "",
+        errorToIgnore: [],
+        factureToIgnoreError: [],
+        paymentMethods: [
+            {keyWord: "Przelew własny", changeTo: "Przelew"},
+            {keyWord: "Joom Online", changeTo: "Joom Online"},
+            {keyWord: "Stripe", changeTo: "Stripe"}
+        ]
+    },
+    {
+        names: ["Norwegia"],
+        shortName: "NO",
+        viesConfig: norway,
+        currency: "EUR",
+        supportEmail: {
+            log: "",
+            pas: "",
+            allowMailSending: false
+        },
+        productName: '',
+        mailText: ``,
+        convCurGetRequestWay: "",
+        secretCode: "",
+        imgName: "",
+        errorToIgnore: [],
+        factureToIgnoreError: [],
+        paymentMethods: [
+            {keyWord: "Joom Online", changeTo: "Joom Online"},
+        ]
     }
 ];
 

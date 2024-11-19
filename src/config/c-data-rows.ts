@@ -48,6 +48,16 @@ const cDataRows: string[] = [
     "WALUTA_DOK",
     "PLATNOSC_PODMIOT",
     "ID_ZRODLA",
+    "WARTOSC",
+    "ID_ZRODLA_ATR",
+    "KOD_ATR"
+
+]
+
+export const attributeDescriptionCDataRows: string[] = [
+    'KOD',
+    'NAZWA',
+    'ID_ZRODLA',
 ]
 
 export default cDataRows;

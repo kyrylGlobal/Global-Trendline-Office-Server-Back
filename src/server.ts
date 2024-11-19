@@ -14,7 +14,7 @@ import { sendMailsFromCSV } from "./helpers/mailSender";
 dotenv.config();
 (global as any).mainFolderPath = path.resolve(__dirname, "..")
 
-const PORT: string | undefined = process.env.PORT || "5000";
+const PORT: string | undefined = process.env.PORT || "5001";
 
 const app: Express = express();
 
