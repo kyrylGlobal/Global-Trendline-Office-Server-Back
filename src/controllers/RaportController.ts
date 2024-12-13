@@ -23,7 +23,7 @@ class RaportController {
           res.status(200).send(xmlResultData);
         }
       } catch (error: any | unknown) {
-        next(new Error(error.message));
+        next(new Error(error?.message));
       }
     }
   }

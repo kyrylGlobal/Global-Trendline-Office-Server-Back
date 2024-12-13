@@ -29,14 +29,14 @@ export async function resolveSalesRaport(xmlStringata: string, useNewVersion: bo
         parseAttributeValue: false,
         allowBooleanAttributes: true, // atributes without value,
         unpairedTags: ["ATRYBUTY"],
-        cdataPropName: 'cdata'
+        cdataPropName: 'cdata',
     }
     const xmlBuilderOption: Partial<XmlBuilderOptions> = {
-        format: true,
         ignoreAttributes: false,
         unpairedTags: ["ATRYBUTY", "KWOTY_DODATKOWE"],
         suppressUnpairedNode: false,
-        cdataPropName: 'cdata'
+        cdataPropName: 'cdata',
+        format: true
     }
 
     const xmlObject: any = new XMLParser(xmlParseOption).parse(xmlStringata);
@@ -53,14 +53,14 @@ export async function resolveSalesRaport(xmlStringata: string, useNewVersion: bo
     xmlResult = replaceData(
         xmlResult,
         [
-            // {
-            //     key: "&lt;",
-            //     value: "<"
-            // }, 
-            // {
-            //     key: "&gt;",
-            //     value: ">"
-            // }
+            {
+                key: "\\n\\s*<!\\[CDATA",
+                value: "\<\![CDATA"
+            }, 
+            {
+                key: "]]>\\n\\s*",
+                value: "]]>"
+            }
         ]
     )
 
@@ -171,7 +171,12 @@ async function updateInvoices(xmlObject: any, useNewVersion: boolean) {
     }
 
     for(let invoiceObject of invoices) {
-        await updateInvoice(invoiceObject, responseData, useNewVersion);
+        try {
+            await updateInvoice(invoiceObject, responseData, useNewVersion);
+        } catch (e) {
+            console.log(e);
+            
+        }
     }
 
 }
@@ -199,23 +204,43 @@ async function updateInvoice(invoiceObject: any, attributesData: GetInvoiceAccou
 async function addAttributes(invoiceObject: any, attributesData: GetInvoiceAccountantDataResponseBody) {
     const invoiceData = attributesData[invoiceObject.ID_ZRODLA.cdata];
 
+    let sklOrdId = invoiceData && (isPrivateStore(invoiceData.orderSource, invoiceData.orderSourceId) ? invoiceData.extraFieldOne : invoiceData.storeOrderId);
+
     if(invoiceData) {
         invoiceObject.ATRYBUTY = {
             ATRYBUT: [
               {
-                KOD_ATR: 'NUMER ZAMOWIENIA SKL',
-                ID_ZRODLA_ATR: 'CED4DFCD-5CBC-4E9B-947E-4E2AFEE5D08E',
-                WARTOSC: isPrivateStore(invoiceData.orderSource, invoiceData.orderSourceId) ? invoiceData.extraFieldOne : invoiceData.storeOrderId
+                KOD_ATR: {
+                    cdata: 'NUMER ZAMOWIENIA SKL'
+                },
+                ID_ZRODLA_ATR: {
+                    cdata: 'CED4DFCD-5CBC-4E9B-947E-4E2AFEE5D08E'
+                },
+                WARTOSC: {
+                    cdata: sklOrdId ? sklOrdId : ''
+                }
               },
               {
-                KOD_ATR: 'NUMER ZAMOWIENIA BAS',
-                ID_ZRODLA_ATR: '9A998639-A814-452C-962E-9A28DD935417',
-                WARTOSC: invoiceData.baselinkerOrderId
+                KOD_ATR: {
+                    cdata: 'NUMER ZAMOWIENIA BAS'
+                },
+                ID_ZRODLA_ATR: {
+                    cdata: '9A998639-A814-452C-962E-9A28DD935417'
+                },
+                WARTOSC: {
+                    cdata: invoiceData.baselinkerOrderId
+                }
               },
               {
-                KOD_ATR: 'LOGIN KLIENTA',
-                ID_ZRODLA_ATR: '59D8B122-AB51-4440-91F4-ED7A15C3FD57',
-                WARTOSC: invoiceData.userLogin
+                KOD_ATR: {
+                    cdata: 'LOGIN KLIENTA'
+                },
+                ID_ZRODLA_ATR: {
+                    cdata: '59D8B122-AB51-4440-91F4-ED7A15C3FD57'
+                },
+                WARTOSC: {
+                    cdata: invoiceData.userLogin
+                }
               }
             ]
         }
@@ -476,7 +501,9 @@ function updateVatNumber(invoiceObject: any) {
 }
 
 function updateFinishedJObject(invoiceObject: any) {
-    // addCdata(invoiceObject, cDataRows);
+    // remove baselinker update
+    if(invoiceObject.NR_KSEF?.cdata !== undefined)  invoiceObject.NR_KSEF = invoiceObject.NR_KSEF.cdata;
+    if(invoiceObject.DODATKOWY_OPIS?.cdata  !== undefined) invoiceObject.DODATKOWY_OPIS = invoiceObject.DODATKOWY_OPIS.cdata;
 }
 
 function replaceData(data: string, dataToReplace: KeyAndValue[]) {

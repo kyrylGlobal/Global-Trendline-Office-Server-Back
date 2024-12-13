@@ -531,6 +531,7 @@ const country: BaselinkerCountry[] = [
             {keyWord: 'Paxy za pobraniem', changeTo: 'Paxy za pobraniem'},
             {keyWord: 'Sularaha kättetoimet', changeTo: 'Paxy za pobraniem'},
             {keyWord: 'MasterCard ending', changeTo: 'Stripe'},
+            {keyWord: 'PayU', changeTo: 'PayU'}
         ]
     },
     {
@@ -698,7 +699,10 @@ const country: BaselinkerCountry[] = [
             {keyWord: "STRIPE", changeTo: "Stripe"}, 
             {keyWord: "PAYPAL", changeTo: "PayPal"},
             {keyWord: "Za pobraniem FREE Company", changeTo: "Za pobraniem FREE Company"},
-            {keyWord: "Za pobraniem FREE Co", changeTo: "Za pobraniem FREE Company"}
+            {keyWord: "Za pobraniem FREE Co", changeTo: "Za pobraniem FREE Company"},
+            {keyWord: 'Paxy za pobraniem', changeTo: 'Paxy za pobraniem'},
+            {keyWord: 'Pagamento alla consegna', changeTo: 'Paxy za pobraniem'},
+            {keyWord: 'Pagamento alla conse', changeTo: 'Paxy za pobraniem'}
         ]
     },
     {
