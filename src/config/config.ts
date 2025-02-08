@@ -533,11 +533,7 @@ const country: BaselinkerCountry[] = [
             {keyWord: 'Paxy za pobraniem', changeTo: 'Paxy za pobraniem'},
             {keyWord: 'Sularaha kättetoimet', changeTo: 'Paxy za pobraniem'},
             {keyWord: 'MasterCard ending', changeTo: 'Stripe'},
-<<<<<<< HEAD
-            {keyWord: 'PayU', changeTo: 'PayU'}
-=======
             {keyWord: "PayU", changeTo: "PayU"},
->>>>>>> bed730d (Some fixes)
         ]
     },
     {
