@@ -4,7 +4,8 @@ export type InvoiceAccountantData = {
     userLogin: string,
     orderSourceId: string,
     orderSource: string,
-    extraFieldOne: string
+    extraFieldOne: string,
+    deliveryPackage: string
 }
 
 export interface GetInvoiceAccountantDataResponseBody {

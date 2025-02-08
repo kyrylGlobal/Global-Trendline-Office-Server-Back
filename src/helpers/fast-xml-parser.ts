@@ -243,6 +243,17 @@ async function addAttributes(invoiceObject: any, attributesData: GetInvoiceAccou
                 WARTOSC: {
                     cdata: invoiceData.userLogin
                 }
+              },
+              {
+                KOD_ATR: {
+                    cdata: 'NUMER PRZESYLKI'
+                },
+                ID_ZRODLA_ATR: {
+                    cdata: '3E7A89F5-1234-4CDE-9876-A1B2C3D4E5F6'
+                },
+                WARTOSC: {
+                    cdata: invoiceData.deliveryPackage
+                }
               }
             ]
         }
