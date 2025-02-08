@@ -30,13 +30,14 @@ export async function resolveSalesRaport(xmlStringata: string, useNewVersion: bo
         allowBooleanAttributes: true, // atributes without value,
         unpairedTags: ["ATRYBUTY"],
         cdataPropName: 'cdata',
-    }
+        // preserveOrder: true
+    }//asd
     const xmlBuilderOption: Partial<XmlBuilderOptions> = {
         ignoreAttributes: false,
         unpairedTags: ["ATRYBUTY", "KWOTY_DODATKOWE"],
         suppressUnpairedNode: false,
         cdataPropName: 'cdata',
-        format: true
+        // preserveOrder: true
     }
 
     const xmlObject: any = new XMLParser(xmlParseOption).parse(xmlStringata);
@@ -207,6 +208,7 @@ async function addAttributes(invoiceObject: any, attributesData: GetInvoiceAccou
     let sklOrdId = invoiceData && (isPrivateStore(invoiceData.orderSource, invoiceData.orderSourceId) ? invoiceData.extraFieldOne : invoiceData.storeOrderId);
 
     if(invoiceData) {
+        const numZampSkl = isPrivateStore(invoiceData.orderSource, invoiceData.orderSourceId) ? invoiceData.extraFieldOne : invoiceData.storeOrderId;
         invoiceObject.ATRYBUTY = {
             ATRYBUT: [
               {
@@ -217,7 +219,7 @@ async function addAttributes(invoiceObject: any, attributesData: GetInvoiceAccou
                     cdata: 'CED4DFCD-5CBC-4E9B-947E-4E2AFEE5D08E'
                 },
                 WARTOSC: {
-                    cdata: sklOrdId ? sklOrdId : ''
+                    cdata: numZampSkl == '0' ? '' : numZampSkl
                 }
               },
               {
