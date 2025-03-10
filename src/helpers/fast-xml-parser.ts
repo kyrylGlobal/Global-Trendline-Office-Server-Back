@@ -41,14 +41,12 @@ export async function resolveSalesRaport(xmlStringata: string, useNewVersion: bo
     }
 
     const xmlObject: any = new XMLParser(xmlParseOption).parse(xmlStringata);
-    console.log(xmlObject);
     if(useNewVersion) {
         addAttributesDescription(xmlObject.ROOT);
     }
 
     await updateInvoices(xmlObject, useNewVersion); // here is the problem need to resolve async
     
-    console.log(xmlObject);
     let xmlResult = new XMLBuilder(xmlBuilderOption).build(xmlObject);
     
     xmlResult = replaceData(

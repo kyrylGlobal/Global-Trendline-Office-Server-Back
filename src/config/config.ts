@@ -227,9 +227,9 @@ const country: BaselinkerCountry[] = [
             {keyWord: "PAYPAL", changeTo: "PayPal"}, 
             {keyWord: 'Dobírkou', changeTo: 'Paxy za pobraniem'}, 
             {keyWord: 'Paxy za pobraniem', changeTo: 'Paxy za pobraniem'},
-            {keyWord: "PayU", changeTo: "PayU"}, 
-            {keyWord: "PayPro", changeTo: "PayPro"},
-            {keyWord: "Przelewy24", changeTo: "Przelewy24"}, 
+            {keyWord: "PayU", changeTo: "PayU"},
+            {keyWord: "Przelewy24", changeTo: "PayPro"},
+            {keyWord: 'PayPro', changeTo: 'PayPro'},
         ]
     },
     {
@@ -659,6 +659,7 @@ const country: BaselinkerCountry[] = [
             {keyWord: "PAYPAL", changeTo: "PayPal"},
             {keyWord: "Joom Online", changeTo: "Joom Online"},
             {keyWord: "Za pobraniem FREE Co", changeTo: "Za pobraniem FREE Company"},
+            {keyWord: "PayU", changeTo: "PayU"}, 
         ]
     },
     {
@@ -704,7 +705,8 @@ const country: BaselinkerCountry[] = [
             {keyWord: "Za pobraniem FREE Co", changeTo: "Za pobraniem FREE Company"},
             {keyWord: 'Paxy za pobraniem', changeTo: 'Paxy za pobraniem'},
             {keyWord: 'Pagamento alla consegna', changeTo: 'Paxy za pobraniem'},
-            {keyWord: 'Pagamento alla conse', changeTo: 'Paxy za pobraniem'}
+            {keyWord: 'Pagamento alla conse', changeTo: 'Paxy za pobraniem'},
+            {keyWord: 'PayPro', changeTo: 'PayPro'}, 
         ]
     },
     {
