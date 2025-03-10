@@ -37,6 +37,7 @@ export async function resolveSalesRaport(xmlStringata: string, useNewVersion: bo
         unpairedTags: ["ATRYBUTY", "KWOTY_DODATKOWE"],
         suppressUnpairedNode: false,
         cdataPropName: 'cdata',
+        format: true
         // preserveOrder: true
     }
 
