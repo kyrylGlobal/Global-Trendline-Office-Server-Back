@@ -3,7 +3,7 @@ import {Country, switzerland, czechRepublic, hungary, romania, slovakiaRepublic,
 interface BaselinkerCountry {
     names: string[],
     shortName: string,
-    viesConfig: Country,
+    viesConfig?: Country,
     currency: string,
     supportEmail: Email,
     productName: string,
@@ -659,7 +659,8 @@ const country: BaselinkerCountry[] = [
             {keyWord: "PAYPAL", changeTo: "PayPal"},
             {keyWord: "Joom Online", changeTo: "Joom Online"},
             {keyWord: "Za pobraniem FREE Co", changeTo: "Za pobraniem FREE Company"},
-            {keyWord: "PayU", changeTo: "PayU"}, 
+            {keyWord: "PayU", changeTo: "PayU"},
+            {keyWord: "Amazon", changeTo: "Amazon"}, 
         ]
     },
     {
@@ -679,7 +680,11 @@ const country: BaselinkerCountry[] = [
         imgName: "",
         errorToIgnore: [],
         factureToIgnoreError: [],
-        paymentMethods: [{keyWord: "STRIPE", changeTo: "Stripe"}, {keyWord: "PAYPAL", changeTo: "PayPal"}]
+        paymentMethods: [
+            {keyWord: "STRIPE", changeTo: "Stripe"}, 
+            {keyWord: "PAYPAL", changeTo: "PayPal"},
+            {keyWord: "Amazon", changeTo: "Amazon"}
+        ]
     },
     {
         names: ["Włochy", "Italy"],
@@ -706,7 +711,8 @@ const country: BaselinkerCountry[] = [
             {keyWord: 'Paxy za pobraniem', changeTo: 'Paxy za pobraniem'},
             {keyWord: 'Pagamento alla consegna', changeTo: 'Paxy za pobraniem'},
             {keyWord: 'Pagamento alla conse', changeTo: 'Paxy za pobraniem'},
-            {keyWord: 'PayPro', changeTo: 'PayPro'}, 
+            {keyWord: 'PayPro', changeTo: 'PayPro'},
+            {keyWord: 'Amazon', changeTo: 'Amazon'}, 
         ]
     },
     {
@@ -838,6 +844,26 @@ const country: BaselinkerCountry[] = [
         factureToIgnoreError: [],
         paymentMethods: [
             {keyWord: "Joom Online", changeTo: "Joom Online"},
+        ]
+    },
+    {
+        names: ["Stany Zjednoczone"],
+        shortName: "USA",
+        currency: "EUR",
+        supportEmail: {
+            log: "",
+            pas: "",
+            allowMailSending: false
+        },
+        productName: '',
+        mailText: ``,
+        convCurGetRequestWay: "",
+        secretCode: "",
+        imgName: "",
+        errorToIgnore: [],
+        factureToIgnoreError: [],
+        paymentMethods: [
+            {keyWord: "Stripe", changeTo: "Stripe"},
         ]
     }
 ];

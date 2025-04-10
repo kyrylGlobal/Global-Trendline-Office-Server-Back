@@ -83,11 +83,11 @@ function checkVatNumber(invoiceObject: any) {
             countryElement.names.forEach( countryName => {
                 if(countryName === invoiceObject.KRAJ.cdata) {
                     if(pozycje.POZYCJA) { // optimise
-                        let vatCheckResult = checkVAT(`${countryElement.shortName}${invoiceObject.NIP.cdata}`, [countryElement.viesConfig])
+                        let vatCheckResult = countryElement.viesConfig ? checkVAT(`${countryElement.shortName}${invoiceObject.NIP.cdata}`, [countryElement.viesConfig]) : null;
                         if(invoiceObject.KOREKTA === "Tak") {
                             if(pozycje.POZYCJA.length > 1 && ((pozycje.POZYCJA.length % 2) === 0)) {
                                 const pozSum = (pozycje.POZYCJA as Array<any>).reduce((previous, current) => { return previous + current}, 0)
-                                if((pozSum > -1 && pozSum < 1)) {
+                                if((pozSum > -1 && pozSum < 1 && vatCheckResult)) {
                                     if(!vatCheckResult.isValid && pozycje.POZYCJA[pozycje.POZYCJA.length / 2].STAWKA_VAT !== 0) {
                                         throw new Error(`Error! Please check vat rate for invoice ${invoiceObject.ID_ZRODŁA}. Vat rate should be 0%`);
                                     } 
