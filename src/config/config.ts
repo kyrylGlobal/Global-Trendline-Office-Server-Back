@@ -1,4 +1,4 @@
-import {Country, switzerland, czechRepublic, hungary, romania, slovakiaRepublic, bulgaria, lithuania, austria, germany, croatia, cyprus, greece, poland, latvia, estonia, netherlands, belgium, spain, portugal, france, italy, finland, ireland, slovenia, norway} from 'jsvat'
+import { Country, switzerland, czechRepublic, hungary, romania, slovakiaRepublic, bulgaria, lithuania, austria, germany, croatia, cyprus, greece, poland, latvia, estonia, netherlands, belgium, spain, portugal, france, italy, finland, ireland, slovenia, norway } from 'jsvat'
 
 interface BaselinkerCountry {
     names: string[],
@@ -35,7 +35,7 @@ const country: BaselinkerCountry[] = [
     {
         names: ["Polska", "Poland"],
         shortName: "PL",
-        viesConfig: poland, 
+        viesConfig: poland,
         currency: "PLN",
         supportEmail: {
             log: "easyshopzakaz@gmail.com",
@@ -61,26 +61,27 @@ const country: BaselinkerCountry[] = [
         errorToIgnore: [],
         factureToIgnoreError: [],
         paymentMethods: [
-            {keyWord: "Za pobraniem INPOST", changeTo: "Za pobraniem INPOST"},
-            {keyWord: "STRIPE", changeTo: "Stripe"}, 
-            {keyWord: "Przesyłka za pobrani", changeTo: "GLS za pobraniem"}, 
-            {keyWord: "PAYPAL", changeTo: "PayPal"}, 
-            {keyWord: "Dotpay", changeTo: "PayPro"}, 
-            {keyWord: "PayU", changeTo: "PayU"}, 
-            {keyWord: "Przelewy24", changeTo: "PayPro"}, 
-            {keyWord: 'pobranie', changeTo: 'GLS za pobraniem'}, 
-            {keyWord: 'GLS za pobraniem', changeTo: 'GLS za pobraniem'}, 
-            {keyWord: 'PayPro', changeTo: 'PayPro'}, 
-            {keyWord: 'Przelew', changeTo: 'Przelew'}, 
-            {keyWord: 'cash', changeTo: 'GLS za pobraniem'}, 
-            {keyWord: 'Płatność przy odbior', changeTo: 'PRAGMAGO'},
-            {keyWord: 'Klarna', changeTo: 'Klarna'}
+            { keyWord: "Za pobraniem INPOST", changeTo: "Za pobraniem INPOST" },
+            { keyWord: "STRIPE", changeTo: "Stripe" },
+            { keyWord: "Przesyłka za pobrani", changeTo: "GLS za pobraniem" },
+            { keyWord: "PAYPAL", changeTo: "PayPal" },
+            { keyWord: "Dotpay", changeTo: "PayPro" },
+            { keyWord: "PayU", changeTo: "PayU" },
+            { keyWord: "Przelewy24", changeTo: "PayPro" },
+            { keyWord: 'pobranie', changeTo: 'GLS za pobraniem' },
+            { keyWord: 'GLS za pobraniem', changeTo: 'GLS za pobraniem' },
+            { keyWord: 'PayPro', changeTo: 'PayPro' },
+            { keyWord: 'Przelew', changeTo: 'Przelew' },
+            { keyWord: 'cash', changeTo: 'GLS za pobraniem' },
+            { keyWord: 'Płatność przy odbior', changeTo: 'PRAGMAGO' },
+            { keyWord: 'Klarna', changeTo: 'Klarna' },
+            { keyWord: 'Allegro Finance', changeTo: 'Allegro Finance' }
         ]
     },
     {
         names: ["Czechy", "Czech Republic"],
         shortName: "CZ",
-        viesConfig: czechRepublic, 
+        viesConfig: czechRepublic,
         currency: "CZK",
         supportEmail: {
             log: "sk.easyshop.info@gmail.com",
@@ -106,15 +107,16 @@ const country: BaselinkerCountry[] = [
         errorToIgnore: [],
         factureToIgnoreError: [],
         paymentMethods: [
-            {keyWord: 'pobranie', changeTo: 'Paxy za pobraniem'}, 
-            {keyWord: "STRIPE", changeTo: "Stripe"}, 
-            {keyWord: "PAYPAL", changeTo: "PayPal"}, 
-            {keyWord: 'Dobírkou', changeTo: 'Paxy za pobraniem'}, 
-            {keyWord: 'Paxy za pobraniem', changeTo: 'Paxy za pobraniem'}, 
-            {keyWord: "PayU", changeTo: "PayU"}, 
-            {keyWord: "Płatność przy odbior", changeTo: "PRAGMAGO"},
-            {keyWord: "Przelew", changeTo: "Przelew"},
-            {keyWord: "PayPro", changeTo: "PayPro"}, 
+            { keyWord: 'pobranie', changeTo: 'Paxy za pobraniem' },
+            { keyWord: "STRIPE", changeTo: "Stripe" },
+            { keyWord: "PAYPAL", changeTo: "PayPal" },
+            { keyWord: 'Dobírkou', changeTo: 'Paxy za pobraniem' },
+            { keyWord: 'Paxy za pobraniem', changeTo: 'Paxy za pobraniem' },
+            { keyWord: "PayU", changeTo: "PayU" },
+            { keyWord: "Płatność przy odbior", changeTo: "PRAGMAGO" },
+            { keyWord: "Przelew", changeTo: "Przelew" },
+            { keyWord: "PayPro", changeTo: "PayPro" },
+            { keyWord: "Allegro Finance", changeTo: "Allegro Finance" },
         ]
     },
     {
@@ -146,21 +148,23 @@ const country: BaselinkerCountry[] = [
         errorToIgnore: [],
         factureToIgnoreError: [],
         paymentMethods: [
-            {keyWord: 'pobranie', changeTo: 'Paxy za pobraniem'}, 
-            {keyWord: "STRIPE", changeTo: "Stripe"}, 
-            {keyWord: "PAYPAL", changeTo: "PayPal"}, 
-            {keyWord: 'Utánvétes fizetés', changeTo: 'Paxy za pobraniem'}, 
-            {keyWord: 'Paxy za pobraniem', changeTo: 'Paxy za pobraniem'}, 
-            {keyWord: 'cash', changeTo: 'Paxy za pobraniem'},
-            {keyWord: 'Przelew', changeTo: 'Przelew'},
-            {keyWord: 'MasterCard ending in', changeTo: 'Stripe'},
-            {keyWord: "PayU", changeTo: "PayU"},
+            { keyWord: 'pobranie', changeTo: 'Paxy za pobraniem' },
+            { keyWord: "STRIPE", changeTo: "Stripe" },
+            { keyWord: "PAYPAL", changeTo: "PayPal" },
+            { keyWord: 'Utánvétes fizetés', changeTo: 'Paxy za pobraniem' },
+            { keyWord: 'Paxy za pobraniem', changeTo: 'Paxy za pobraniem' },
+            { keyWord: 'cash', changeTo: 'Paxy za pobraniem' },
+            { keyWord: 'Przelew', changeTo: 'Przelew' },
+            { keyWord: 'MasterCard ending in', changeTo: 'Stripe' },
+            { keyWord: "PayU", changeTo: "PayU" },
+            { keyWord: "PayPro", changeTo: "PayPro" },
+            { keyWord: "Allegro Finance", changeTo: "Allegro Finance" },
         ]
     },
     {
         names: ["Rumunia", "Romania"],
         shortName: "RO",
-        viesConfig: romania, 
+        viesConfig: romania,
         currency: "RON",
         supportEmail: {
             log: "ro.easyshop@gmail.com",
@@ -186,18 +190,18 @@ const country: BaselinkerCountry[] = [
         errorToIgnore: [],
         factureToIgnoreError: [],
         paymentMethods: [
-            {keyWord: "STRIPE", changeTo: "Stripe"},
-            {keyWord: "PAYPAL", changeTo: "PayPal"},
-            {keyWord: 'Plata ramburs', changeTo: 'Paxy za pobraniem'}, 
-            {keyWord: 'Paxy za pobraniem', changeTo: 'Paxy za pobraniem'},
-            {keyWord: 'Przelew', changeTo: 'Przelew'},
-            {keyWord: 'Joom Online', changeTo: 'Joom Online'}
+            { keyWord: "STRIPE", changeTo: "Stripe" },
+            { keyWord: "PAYPAL", changeTo: "PayPal" },
+            { keyWord: 'Plata ramburs', changeTo: 'Paxy za pobraniem' },
+            { keyWord: 'Paxy za pobraniem', changeTo: 'Paxy za pobraniem' },
+            { keyWord: 'Przelew', changeTo: 'Przelew' },
+            { keyWord: 'Joom Online', changeTo: 'Joom Online' }
         ]
     },
     {
         names: ["Słowacja", "Slovakia"],
         shortName: "SK",
-        viesConfig: slovakiaRepublic, 
+        viesConfig: slovakiaRepublic,
         currency: "EUR",
         supportEmail: {
             log: "sk.easyshop.info@gmail.com",
@@ -223,19 +227,21 @@ const country: BaselinkerCountry[] = [
         errorToIgnore: [],
         factureToIgnoreError: [],
         paymentMethods: [
-            {keyWord: "STRIPE", changeTo: "Stripe"}, 
-            {keyWord: "PAYPAL", changeTo: "PayPal"}, 
-            {keyWord: 'Dobírkou', changeTo: 'Paxy za pobraniem'}, 
-            {keyWord: 'Paxy za pobraniem', changeTo: 'Paxy za pobraniem'},
-            {keyWord: "PayU", changeTo: "PayU"},
-            {keyWord: "Przelewy24", changeTo: "PayPro"},
-            {keyWord: 'PayPro', changeTo: 'PayPro'},
+            { keyWord: "STRIPE", changeTo: "Stripe" },
+            { keyWord: "PAYPAL", changeTo: "PayPal" },
+            { keyWord: 'Dobírkou', changeTo: 'Paxy za pobraniem' },
+            { keyWord: 'Paxy za pobraniem', changeTo: 'Paxy za pobraniem' },
+            { keyWord: "PayU", changeTo: "PayU" },
+            { keyWord: "Przelewy24", changeTo: "PayPro" },
+            { keyWord: 'PayPro', changeTo: 'PayPro' },
+            { keyWord: 'Allegro Finance', changeTo: 'Allegro Finance' },
+            { keyWord: 'Za pobraniem ALLEGRO', changeTo: 'Za pobraniem ALLEGRO' },
         ]
     },
     {
         names: ["Bułgaria", "Bulgaria"],
         shortName: "BG",
-        viesConfig: bulgaria, 
+        viesConfig: bulgaria,
         currency: "BGN",
         supportEmail: {
             log: "bg.easyshop.info@gmail.com",
@@ -261,18 +267,18 @@ const country: BaselinkerCountry[] = [
         errorToIgnore: [],
         factureToIgnoreError: [],
         paymentMethods: [
-            {keyWord: "STRIPE", changeTo: "Stripe"}, 
-            {keyWord: "PAYPAL", changeTo: "PayPal"}, 
-            {keyWord: 'наложен', changeTo: 'Paxy za pobraniem'}, 
-            {keyWord: 'Paxy za pobraniem', changeTo: 'Paxy za pobraniem'},
-            {keyWord: 'Za pobraniem', changeTo: 'Paxy za pobraniem'},
-            {keyWord: 'Przelew', changeTo: 'Przelew'}
+            { keyWord: "STRIPE", changeTo: "Stripe" },
+            { keyWord: "PAYPAL", changeTo: "PayPal" },
+            { keyWord: 'наложен', changeTo: 'Paxy za pobraniem' },
+            { keyWord: 'Paxy za pobraniem', changeTo: 'Paxy za pobraniem' },
+            { keyWord: 'Za pobraniem', changeTo: 'Paxy za pobraniem' },
+            { keyWord: 'Przelew', changeTo: 'Przelew' }
         ]
     },
     {
         names: ["Litwa", "Lithuania"],
         shortName: "LT",
-        viesConfig: lithuania, 
+        viesConfig: lithuania,
         currency: "EUR",
         supportEmail: {
             log: "lt.easyshop.info@gmail.com",
@@ -298,19 +304,19 @@ const country: BaselinkerCountry[] = [
         errorToIgnore: [],
         factureToIgnoreError: [],
         paymentMethods: [
-            {keyWord: "STRIPE", changeTo: "Stripe"}, 
-            {keyWord: "PAYPAL", changeTo: "PayPal"}, 
-            {keyWord: 'Grynaisiais pinigais', changeTo: 'Paxy za pobraniem'}, 
-            {keyWord: 'Paxy za pobraniem', changeTo: 'Paxy za pobraniem'}, 
-            {keyWord: 'Za pobraniem', changeTo: 'Paxy za pobraniem'}, 
-            {keyWord: "PayU", changeTo: "PayU"},
-            {keyWord: "Przelew własny", changeTo: "Przelew własny"}
+            { keyWord: "STRIPE", changeTo: "Stripe" },
+            { keyWord: "PAYPAL", changeTo: "PayPal" },
+            { keyWord: 'Grynaisiais pinigais', changeTo: 'Paxy za pobraniem' },
+            { keyWord: 'Paxy za pobraniem', changeTo: 'Paxy za pobraniem' },
+            { keyWord: 'Za pobraniem', changeTo: 'Paxy za pobraniem' },
+            { keyWord: "PayU", changeTo: "PayU" },
+            { keyWord: "Przelew własny", changeTo: "Przelew własny" }
         ]
     },
     {
         names: ["Austria"],
         shortName: "AT",
-        viesConfig: austria, 
+        viesConfig: austria,
         currency: "EUR",
         supportEmail: {
             log: "at.easyshop.info@gmail.com",
@@ -335,24 +341,24 @@ const country: BaselinkerCountry[] = [
         imgName: "easyheaterDE.jpeg",
         errorToIgnore: [],
         factureToIgnoreError: [],
-        paymentMethods: [{keyWord: "STRIPE", changeTo: "Stripe"}, 
-        {keyWord: "PAYPAL", changeTo: "PayPal"}, 
-        {keyWord: "EPS", changeTo: "Stripe"}, 
-        {keyWord: 'Nachnahme', changeTo: 'Paxy za pobraniem'}, 
-        {keyWord: 'Paxy za pobraniem', changeTo: 'Paxy za pobraniem'}, 
-        {keyWord: 'Przelew', changeTo: 'Przelew'}, 
-        {keyWord: "WISE", changeTo: "WISE"},
-        {keyWord: "Za pobraniem", changeTo: "Paxy za pobraniem"},
-        {keyWord: "Klarna", changeTo: "Klarna"},
-        {keyWord: "Visa endet mit", changeTo: "Stripe"},
-        {keyWord: "PayPro", changeTo: "PayPro"},
+        paymentMethods: [{ keyWord: "STRIPE", changeTo: "Stripe" },
+        { keyWord: "PAYPAL", changeTo: "PayPal" },
+        { keyWord: "EPS", changeTo: "Stripe" },
+        { keyWord: 'Nachnahme', changeTo: 'Paxy za pobraniem' },
+        { keyWord: 'Paxy za pobraniem', changeTo: 'Paxy za pobraniem' },
+        { keyWord: 'Przelew', changeTo: 'Przelew' },
+        { keyWord: "WISE", changeTo: "WISE" },
+        { keyWord: "Za pobraniem", changeTo: "Paxy za pobraniem" },
+        { keyWord: "Klarna", changeTo: "Klarna" },
+        { keyWord: "Visa endet mit", changeTo: "Stripe" },
+        { keyWord: "PayPro", changeTo: "PayPro" },
 
-    ]
+        ]
     },
     {
         names: ["Niemcy", "Germany"],
         shortName: "DE",
-        viesConfig: germany, 
+        viesConfig: germany,
         currency: "EUR",
         supportEmail: {
             log: "de.easyshop.info@gmail.com",
@@ -378,20 +384,21 @@ const country: BaselinkerCountry[] = [
         errorToIgnore: [],
         factureToIgnoreError: [],
         paymentMethods: [
-            {keyWord: "STRIPE", changeTo: "Stripe"},
-            {keyWord: "klarna", changeTo: "Klarna"}, 
-            {keyWord: "PAYPAL", changeTo: "PayPal"}, 
-            {keyWord: 'Nachnahme', changeTo: 'Paxy za pobraniem'},
-            {keyWord: 'Paxy za pobraniem', changeTo: 'Paxy za pobraniem'},
-            {keyWord: 'Joom Online', changeTo: 'Joom Online'},
-            {keyWord: 'Giropay', changeTo: 'Stripe'},
-            {keyWord: 'Visa endet mit', changeTo: 'Stripe'}
+            { keyWord: "STRIPE", changeTo: "Stripe" },
+            { keyWord: "klarna", changeTo: "Klarna" },
+            { keyWord: "PAYPAL", changeTo: "PayPal" },
+            { keyWord: 'Nachnahme', changeTo: 'Paxy za pobraniem' },
+            { keyWord: 'Paxy za pobraniem', changeTo: 'Paxy za pobraniem' },
+            { keyWord: 'Joom Online', changeTo: 'Joom Online' },
+            { keyWord: 'Giropay', changeTo: 'Stripe' },
+            { keyWord: 'Visa endet mit', changeTo: 'Stripe' },
+            { keyWord: 'Amazon', changeTo: 'Amazon' }
         ]
     },
     {
         names: ["Chorwacja", "Croatia"],
         shortName: "HR",
-        viesConfig: croatia, 
+        viesConfig: croatia,
         currency: "EUR",
         supportEmail: {
             log: "hr.easyshop.info@gmail.com",
@@ -417,17 +424,17 @@ const country: BaselinkerCountry[] = [
         errorToIgnore: [],
         factureToIgnoreError: [],
         paymentMethods: [
-            {keyWord: "STRIPE", changeTo: "Stripe"}, 
-            {keyWord: "PAYPAL", changeTo: "PayPal"}, 
-            {keyWord: 'Plaćanje pouzećem', changeTo: 'Paxy za pobraniem'}, 
-            {keyWord: 'Paxy za pobraniem', changeTo: 'Paxy za pobraniem'},
-            {keyWord: 'PayU', changeTo: 'PayU'}
+            { keyWord: "STRIPE", changeTo: "Stripe" },
+            { keyWord: "PAYPAL", changeTo: "PayPal" },
+            { keyWord: 'Plaćanje pouzećem', changeTo: 'Paxy za pobraniem' },
+            { keyWord: 'Paxy za pobraniem', changeTo: 'Paxy za pobraniem' },
+            { keyWord: 'PayU', changeTo: 'PayU' }
         ]
     },
     {
         names: ["Grecja", "Greece"],
         shortName: "GR",
-        viesConfig: greece, 
+        viesConfig: greece,
         currency: "EUR",
         supportEmail: {
             log: "gr.easyshop.info@gmail.com",
@@ -453,11 +460,11 @@ const country: BaselinkerCountry[] = [
         errorToIgnore: [],
         factureToIgnoreError: [],
         paymentMethods: [
-            {keyWord: "STRIPE", changeTo: "Stripe"}, 
-            {keyWord: "PAYPAL", changeTo: "PayPal"}, 
-            {keyWord: 'Με αντικαταβολή', changeTo: 'Paxy za pobraniem'}, 
-            {keyWord: 'Paxy za pobraniem', changeTo: 'Paxy za pobraniem'},
-            {keyWord: 'Za pobraniem', changeTo: 'Paxy za pobraniem'}
+            { keyWord: "STRIPE", changeTo: "Stripe" },
+            { keyWord: "PAYPAL", changeTo: "PayPal" },
+            { keyWord: 'Με αντικαταβολή', changeTo: 'Paxy za pobraniem' },
+            { keyWord: 'Paxy za pobraniem', changeTo: 'Paxy za pobraniem' },
+            { keyWord: 'Za pobraniem', changeTo: 'Paxy za pobraniem' }
         ]
     },
     {
@@ -489,12 +496,12 @@ const country: BaselinkerCountry[] = [
         errorToIgnore: [],
         factureToIgnoreError: [],
         paymentMethods: [
-            {keyWord: "STRIPE", changeTo: "Stripe"}, 
-            {keyWord: "PAYPAL", changeTo: "PayPal"}, 
-            {keyWord: 'Samaksa pēc piegādes', changeTo: 'Paxy za pobraniem'}, 
-            {keyWord: 'Paxy za pobraniem', changeTo: 'Paxy za pobraniem'}, 
-            {keyWord: 'Za pobraniem', changeTo: 'Paxy za pobraniem'},
-            {keyWord: 'PayU', changeTo: 'PayU'}
+            { keyWord: "STRIPE", changeTo: "Stripe" },
+            { keyWord: "PAYPAL", changeTo: "PayPal" },
+            { keyWord: 'Samaksa pēc piegādes', changeTo: 'Paxy za pobraniem' },
+            { keyWord: 'Paxy za pobraniem', changeTo: 'Paxy za pobraniem' },
+            { keyWord: 'Za pobraniem', changeTo: 'Paxy za pobraniem' },
+            { keyWord: 'PayU', changeTo: 'PayU' }
         ]
     },
     {
@@ -526,14 +533,14 @@ const country: BaselinkerCountry[] = [
         errorToIgnore: [],
         factureToIgnoreError: [],
         paymentMethods: [
-            {keyWord: "STRIPE", changeTo: "Stripe"}, 
-            {keyWord: "PAYPAL", changeTo: "PayPal"}, 
-            {keyWord: "iDeal", changeTo: "Stripe"},
-            {keyWord: 'Joom Online', changeTo: 'Joom Online'},
-            {keyWord: 'Paxy za pobraniem', changeTo: 'Paxy za pobraniem'},
-            {keyWord: 'Sularaha kättetoimet', changeTo: 'Paxy za pobraniem'},
-            {keyWord: 'MasterCard ending', changeTo: 'Stripe'},
-            {keyWord: "PayU", changeTo: "PayU"},
+            { keyWord: "STRIPE", changeTo: "Stripe" },
+            { keyWord: "PAYPAL", changeTo: "PayPal" },
+            { keyWord: "iDeal", changeTo: "Stripe" },
+            { keyWord: 'Joom Online', changeTo: 'Joom Online' },
+            { keyWord: 'Paxy za pobraniem', changeTo: 'Paxy za pobraniem' },
+            { keyWord: 'Sularaha kättetoimet', changeTo: 'Paxy za pobraniem' },
+            { keyWord: 'MasterCard ending', changeTo: 'Stripe' },
+            { keyWord: "PayU", changeTo: "PayU" },
         ]
     },
     {
@@ -565,10 +572,10 @@ const country: BaselinkerCountry[] = [
         errorToIgnore: [],
         factureToIgnoreError: [],
         paymentMethods: [
-            {keyWord: "STRIPE", changeTo: "Stripe"}, 
-            {keyWord: "PAYPAL", changeTo: "PayPal"},
-            {keyWord: "PayU", changeTo: "PayU"},
-            {keyWord: "Joom Online", changeTo: "Joom Online"}
+            { keyWord: "STRIPE", changeTo: "Stripe" },
+            { keyWord: "PAYPAL", changeTo: "PayPal" },
+            { keyWord: "PayU", changeTo: "PayU" },
+            { keyWord: "Joom Online", changeTo: "Joom Online" }
         ]
     },
     {
@@ -601,19 +608,19 @@ const country: BaselinkerCountry[] = [
         factureToIgnoreError: [],
         paymentMethods: [
             {
-                keyWord: "STRIPE", 
+                keyWord: "STRIPE",
                 changeTo: "Stripe"
             },
             {
-                keyWord: "PAYPAL", 
+                keyWord: "PAYPAL",
                 changeTo: "PayPal"
-            }, 
+            },
             {
-                keyWord: "Bancontact", 
+                keyWord: "Bancontact",
                 changeTo: "Stripe"
-            }, 
+            },
             {
-                keyWord: "PayU", 
+                keyWord: "PayU",
                 changeTo: "PayU"
             }
         ]
@@ -635,7 +642,12 @@ const country: BaselinkerCountry[] = [
         imgName: "",
         errorToIgnore: [],
         factureToIgnoreError: [],
-        paymentMethods: [{keyWord: "STRIPE", changeTo: "Stripe"}, {keyWord: "PAYPAL", changeTo: "PayPal"}, {keyWord: "Przelew", changeTo: "Przelew"}]
+        paymentMethods: [
+            { keyWord: "STRIPE", changeTo: "Stripe" },
+            { keyWord: "PAYPAL", changeTo: "PayPal" },
+            { keyWord: "Przelew", changeTo: "Przelew" },
+            { keyWord: "Za pobraniem OCEGES", changeTo: "Za pobraniem OCEGES" }
+        ]
     },
     {
         names: ["Hiszpania", "Spain"],
@@ -655,12 +667,12 @@ const country: BaselinkerCountry[] = [
         errorToIgnore: [],
         factureToIgnoreError: [],
         paymentMethods: [
-            {keyWord: "STRIPE", changeTo: "Stripe"}, 
-            {keyWord: "PAYPAL", changeTo: "PayPal"},
-            {keyWord: "Joom Online", changeTo: "Joom Online"},
-            {keyWord: "Za pobraniem FREE Co", changeTo: "Za pobraniem FREE Company"},
-            {keyWord: "PayU", changeTo: "PayU"},
-            {keyWord: "Amazon", changeTo: "Amazon"}, 
+            { keyWord: "STRIPE", changeTo: "Stripe" },
+            { keyWord: "PAYPAL", changeTo: "PayPal" },
+            { keyWord: "Joom Online", changeTo: "Joom Online" },
+            { keyWord: "Za pobraniem FREE Co", changeTo: "Za pobraniem FREE Company" },
+            { keyWord: "PayU", changeTo: "PayU" },
+            { keyWord: "Amazon", changeTo: "Amazon" },
         ]
     },
     {
@@ -681,9 +693,9 @@ const country: BaselinkerCountry[] = [
         errorToIgnore: [],
         factureToIgnoreError: [],
         paymentMethods: [
-            {keyWord: "STRIPE", changeTo: "Stripe"}, 
-            {keyWord: "PAYPAL", changeTo: "PayPal"},
-            {keyWord: "Amazon", changeTo: "Amazon"}
+            { keyWord: "STRIPE", changeTo: "Stripe" },
+            { keyWord: "PAYPAL", changeTo: "PayPal" },
+            { keyWord: "Amazon", changeTo: "Amazon" }
         ]
     },
     {
@@ -704,15 +716,15 @@ const country: BaselinkerCountry[] = [
         errorToIgnore: [],
         factureToIgnoreError: [],
         paymentMethods: [
-            {keyWord: "STRIPE", changeTo: "Stripe"}, 
-            {keyWord: "PAYPAL", changeTo: "PayPal"},
-            {keyWord: "Za pobraniem FREE Company", changeTo: "Za pobraniem FREE Company"},
-            {keyWord: "Za pobraniem FREE Co", changeTo: "Za pobraniem FREE Company"},
-            {keyWord: 'Paxy za pobraniem', changeTo: 'Paxy za pobraniem'},
-            {keyWord: 'Pagamento alla consegna', changeTo: 'Paxy za pobraniem'},
-            {keyWord: 'Pagamento alla conse', changeTo: 'Paxy za pobraniem'},
-            {keyWord: 'PayPro', changeTo: 'PayPro'},
-            {keyWord: 'Amazon', changeTo: 'Amazon'}, 
+            { keyWord: "STRIPE", changeTo: "Stripe" },
+            { keyWord: "PAYPAL", changeTo: "PayPal" },
+            { keyWord: "Za pobraniem FREE Company", changeTo: "Za pobraniem FREE Company" },
+            { keyWord: "Za pobraniem FREE Co", changeTo: "Za pobraniem FREE Company" },
+            { keyWord: 'Paxy za pobraniem', changeTo: 'Paxy za pobraniem' },
+            { keyWord: 'Pagamento alla consegna', changeTo: 'Paxy za pobraniem' },
+            { keyWord: 'Pagamento alla conse', changeTo: 'Paxy za pobraniem' },
+            { keyWord: 'PayPro', changeTo: 'PayPro' },
+            { keyWord: 'Amazon', changeTo: 'Amazon' },
         ]
     },
     {
@@ -733,7 +745,7 @@ const country: BaselinkerCountry[] = [
         errorToIgnore: [],
         factureToIgnoreError: [],
         paymentMethods: [
-            {keyWord: "PayU", changeTo: "PayU"}
+            { keyWord: "PayU", changeTo: "PayU" }
         ]
     },
     {
@@ -754,9 +766,9 @@ const country: BaselinkerCountry[] = [
         errorToIgnore: [],
         factureToIgnoreError: [],
         paymentMethods: [
-            {keyWord: "Joom Online", changeTo: "Joom Online"},
-            {keyWord: "PayU", changeTo: "PayU"},
-            {keyWord: "Przelew własny", changeTo: "Przelew"}
+            { keyWord: "Joom Online", changeTo: "Joom Online" },
+            { keyWord: "PayU", changeTo: "PayU" },
+            { keyWord: "Przelew własny", changeTo: "Przelew" }
         ]
     },
     {
@@ -777,7 +789,7 @@ const country: BaselinkerCountry[] = [
         errorToIgnore: [],
         factureToIgnoreError: [],
         paymentMethods: [
-            {keyWord: "Przelew własny", changeTo: "Przelew"}
+            { keyWord: "Przelew własny", changeTo: "Przelew" }
         ]
     },
     {
@@ -798,8 +810,8 @@ const country: BaselinkerCountry[] = [
         errorToIgnore: [],
         factureToIgnoreError: [],
         paymentMethods: [
-            {keyWord: "Przelew własny", changeTo: "Przelew"},
-            {keyWord: "Joom Online", changeTo: "Joom Online"}
+            { keyWord: "Przelew własny", changeTo: "Przelew" },
+            { keyWord: "Joom Online", changeTo: "Joom Online" }
         ]
     },
     {
@@ -820,9 +832,9 @@ const country: BaselinkerCountry[] = [
         errorToIgnore: [],
         factureToIgnoreError: [],
         paymentMethods: [
-            {keyWord: "Przelew własny", changeTo: "Przelew"},
-            {keyWord: "Joom Online", changeTo: "Joom Online"},
-            {keyWord: "Stripe", changeTo: "Stripe"}
+            { keyWord: "Przelew własny", changeTo: "Przelew" },
+            { keyWord: "Joom Online", changeTo: "Joom Online" },
+            { keyWord: "Stripe", changeTo: "Stripe" }
         ]
     },
     {
@@ -843,7 +855,7 @@ const country: BaselinkerCountry[] = [
         errorToIgnore: [],
         factureToIgnoreError: [],
         paymentMethods: [
-            {keyWord: "Joom Online", changeTo: "Joom Online"},
+            { keyWord: "Joom Online", changeTo: "Joom Online" },
         ]
     },
     {
@@ -863,15 +875,15 @@ const country: BaselinkerCountry[] = [
         errorToIgnore: [],
         factureToIgnoreError: [],
         paymentMethods: [
-            {keyWord: "Stripe", changeTo: "Stripe"},
+            { keyWord: "Stripe", changeTo: "Stripe" },
         ]
     }
 ];
 
 export function ifContainCountryName(lookingName: string): boolean {
-    for(let countryElement of country) {
-        for(let countryName of countryElement.names) {
-            if(countryName === lookingName) {
+    for (let countryElement of country) {
+        for (let countryName of countryElement.names) {
+            if (countryName === lookingName) {
                 return true;
             }
         }
@@ -881,9 +893,9 @@ export function ifContainCountryName(lookingName: string): boolean {
 }
 
 export function getCountryObjectIfName(lookingName: string): BaselinkerCountry | null {
-    for(let countryElement of country) {
-        for(let countryName of countryElement.names) {
-            if(countryName === lookingName) {
+    for (let countryElement of country) {
+        for (let countryName of countryElement.names) {
+            if (countryName === lookingName) {
                 return countryElement;
             }
         }
