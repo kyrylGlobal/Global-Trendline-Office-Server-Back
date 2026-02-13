@@ -673,6 +673,7 @@ const country: BaselinkerCountry[] = [
             { keyWord: "Za pobraniem FREE Co", changeTo: "Za pobraniem FREE Company" },
             { keyWord: "PayU", changeTo: "PayU" },
             { keyWord: "Amazon", changeTo: "Amazon" },
+            { keyWord: "Za pobraniem OCEGES", changeTo: "Za pobraniem OCEGES" },
         ]
     },
     {
@@ -725,6 +726,7 @@ const country: BaselinkerCountry[] = [
             { keyWord: 'Pagamento alla conse', changeTo: 'Paxy za pobraniem' },
             { keyWord: 'PayPro', changeTo: 'PayPro' },
             { keyWord: 'Amazon', changeTo: 'Amazon' },
+            { keyWord: 'Przelew własny', changeTo: 'Przelew własny' },
         ]
     },
     {
