@@ -184,7 +184,7 @@ async function updateInvoices(xmlObject: any, useNewVersion: boolean) {
 
 async function updateInvoice(invoiceObject: any, attributesData: GetInvoiceAccountantDataResponseBody, useNewVersion: boolean) {
     await updateConversion(invoiceObject);
-    // addKontagent(invoiceObject, attributesData); // baselinker has issue with adding other charecters than latin in kontragent section
+    addKontagent(invoiceObject, attributesData); // baselinker has issue with adding other charecters than latin in kontragent section
     updatePaymentType(invoiceObject);
     updatePaymentSection(invoiceObject);
     updateVatNumber(invoiceObject);
@@ -206,9 +206,31 @@ async function addKontagent(invoiceObject: any, attributesData: GetInvoiceAccoun
     try {
         const invoiceData = attributesData[invoiceObject.ID_ZRODLA.cdata];
 
+        if (!invoiceObject.PODMIOT?.cdata && invoiceData.invoiceName) {
+            invoiceObject.PODMIOT = {
+                cdata: invoiceData.invoiceName.replace(/ /g, '')
+            }
+        }
+
+        if (!invoiceObject.NAZWA1?.cdata.trim() && invoiceData.invoiceName) {
+            invoiceObject.NAZWA1 = {
+                cdata: invoiceData.invoiceName
+            }
+        }
+
         if (!invoiceObject.PLATNIK?.cdata && invoiceData.invoiceName) {
             invoiceObject.PLATNIK = {
                 cdata: invoiceData.invoiceName.replace(/ /g, '')
+            }
+        }
+
+        if (invoiceObject?.PLATNOSCI?.PLATNOSC) {
+            const platnosc = invoiceObject.PLATNOSCI.PLATNOSC;
+
+            if (!platnosc.PLATNOSC_PODMIOT.cdata && invoiceData.invoiceName) {
+                platnosc.PLATNOSC_PODMIOT = {
+                    cdata: invoiceData.invoiceName.replace(/ /g, '')
+                }
             }
         }
     } catch (error) {
