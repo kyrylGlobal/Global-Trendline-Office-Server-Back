@@ -75,7 +75,9 @@ const country: BaselinkerCountry[] = [
             { keyWord: 'cash', changeTo: 'GLS za pobraniem' },
             { keyWord: 'Płatność przy odbior', changeTo: 'PRAGMAGO' },
             { keyWord: 'Klarna', changeTo: 'Klarna' },
-            { keyWord: 'Allegro Finance', changeTo: 'Allegro Finance' }
+            { keyWord: 'Allegro Finance', changeTo: 'Allegro Finance' },
+            { keyWord: 'Gotówka', changeTo: 'Gotówka' },
+            { keyWord: 'Przelew własny', changeTo: 'Przelew własny' }
         ]
     },
     {
@@ -235,6 +237,7 @@ const country: BaselinkerCountry[] = [
             { keyWord: "Przelewy24", changeTo: "PayPro" },
             { keyWord: 'PayPro', changeTo: 'PayPro' },
             { keyWord: 'Allegro Finance', changeTo: 'Allegro Finance' },
+            { keyWord: 'Przelew własny', changeTo: 'Przelew własny' },
             { keyWord: 'Za pobraniem ALLEGRO', changeTo: 'Za pobraniem ALLEGRO' },
         ]
     },
@@ -727,6 +730,7 @@ const country: BaselinkerCountry[] = [
             { keyWord: 'PayPro', changeTo: 'PayPro' },
             { keyWord: 'Amazon', changeTo: 'Amazon' },
             { keyWord: 'Przelew własny', changeTo: 'Przelew własny' },
+            { keyWord: 'PayU - Allegro Finance', changeTo: 'PayU - Allegro Finance' },
         ]
     },
     {
